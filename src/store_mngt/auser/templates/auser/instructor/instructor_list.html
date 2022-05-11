@@ -1,0 +1,82 @@
+{% extends "layouts/main.html" %}
+{% load i18n static humanize auser %} 
+{% block content %}
+<ul class="nav nav-tabs mt-5 mb-3" id="UserDetail" role="tablist">
+  <li class="nav-item" role="presentation">
+      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#instructors" type="button" role="tab" aria-controls="instructors" aria-selected="true">{% translate "Instructors" %}</button>
+  </li>
+  <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#socialmedia" type="button" role="tab" aria-controls="socialmedia" aria-selected="true">{% translate "Social Medias" %}</button>
+  </li>
+</ul>
+<div class="tab-content" id="UserDetailContent">
+  <div class="tab-pane fade show" id="socialmedia" role="tabpanel" aria-labelledby="home-tab">
+    {% include "auser/instructor/social_media/list.html" with social_medias=social_medias %}
+  </div>
+<div class="tab-pane fade show active" id="instructors" role="tabpanel" aria-labelledby="instructors-tab">
+  <table class="table shadow-lg w-100" id="dt_table_staff">
+    <div class="d-flex justify-content-end">
+      <a href="{% url "auser:instructor_add" %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> {% translate "Add instructor" %}</a>
+      {% include "layouts/import_data.html" with ctype=view|ctype %}
+    </div>
+  <hr>
+      <thead>
+          <tr>
+              <th></th>
+              <th class="d-none"></th>
+              <th>{% translate "First name" %}</th>
+              <th>{% translate "Last name" %}</th>
+              <th>{% translate "Email" %}</th>
+              <th>{% translate "Gender" %}</th>
+              <th>{% translate "Phone number" %}</th>
+              <th></th>
+              <th>{% translate "Is visible" %}</th>
+              <th>{% translate "Date joined" %}</th>
+              <th>{% translate "Manage" %}</th>
+          </tr>
+      </thead>
+      <tbody class="w-100">
+          {% for instructor in instructors %}
+              <tr>
+                  <td class="details-control px-3"></td>
+                  <td class="d-none"></td>
+                  <td>{{ instructor.first_name }}</td>
+                  <td>{{ instructor.last_name }}</td>
+                  <td>{{ instructor.email }}</td>
+                  <td>{{ instructor.get_sex_display }}</td>
+                  <td>{{ instructor.phone_number }}</td>
+                  <td>{{ instructor.profile_picture.url }}</td>
+                  <td>{{ instructor.is_visible }}</td>
+                  <td>{{ instructor.date_joined }}</td>
+                  <td>
+                      <div class="btn-group rounded" role="group" aria-label="Management buttons">
+                        <a href="{% url "auser:instructor_detail_admin" instructor.pk %}" class="btn btn-md btn-outline-dark shadow-none">{% translate "Details" %}</a>
+                        {% if perms.auser.change_instructor %}<a href="{% url 'auser:instructor_update' instructor.pk %}" class="btn btn-md btn-outline-secondary shadow-none">{% translate "Update" %}</a>{% endif %}
+                        {% if perms.auser.delete_instructor %}<button class="btn btn-md btn-outline-danger shadow-none" data-bs-toggle="modal" data-bs-target="#delete-{{ instructor.username }}">{% translate "Delete" %}</button>{% endif %}
+                      </div>
+                  </td>
+                  {% if perms.auser.delete_instructor %}
+                  <div class="modal fade" id="delete-{{ staff_user.username }}" tabindex="-1" aria-labelledby="Delete Staff User" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-body">
+                          {% blocktranslate with first_name=instructor.first_name last_name=instructor.last_name %}Do you really wants to delete <strong>{{ first_name }} {{ last_name }}?</strong><span class="text-danger"> <h6>This action is irreversable.</span>{% endblocktranslate %}
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-sm btn-success shadow-none" data-bs-dismiss="modal" aria-label="Close">{% translate "Cancel" %}</button>
+                          <form action={% url 'auser:instructor_delete' instructor.pk %} method="post">{% csrf_token %}
+                              <input class="btn btn-danger btn-sm shadow-none" type="submit" value="{% translate "I understand, delete this user!" %}" />
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endif %}
+              </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+</div>
+{% endblock content %}
+
+

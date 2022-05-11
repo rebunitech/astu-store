@@ -1,0 +1,13 @@
+{% load i18n static %}
+    <header class="header d-flex flex-row justify-content-end align-items-center align-self-center w-100 p-1 mb-3">
+      <div class="dropdown mx-5">
+        <button class="btn dropdown-toggle rounded-pill shadow-none" type="button" id="ProfileMenu" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="{{ user.profile_picture.url }}" alt="profile-picture" class="img-fluid rounded-pill profile-img" />
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark p-0 " aria-labelledby="ProfileMenu">
+          <li><a class="dropdown-item p-2" href="{% url "auser:profile_edit" %}"><i data-feather="edit"></i> {% translate "Profile" %}</a></li>
+          <li><a class="dropdown-item p-2" href="{% url "auser:password_change" %}"><i data-feather="edit"></i> {% translate "Change password" %}</a></li>
+          <li><a class="dropdown-item p-2 text-light bg-danger" href="{% url "auser:logout" %}"><i data-feather="log-out"></i> {% translate "Logout" %}</a></li>
+        </ul>
+      </div>
+    </header>

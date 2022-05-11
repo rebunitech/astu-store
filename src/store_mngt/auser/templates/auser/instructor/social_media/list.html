@@ -1,0 +1,46 @@
+{% load i18n auser %}
+<table class="table shadow-lg w-100" id="dt_table_social_media">
+    <div class="d-flex justify-content-end">
+      <a href="{% url "auser:social_media_add" %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> {% translate "Add social media" %}</a>
+    </div>
+    <hr>
+     <thead>
+       <th></th>
+       <th>{% translate "Name" %}</th>
+        <th>{% translate "Link" %}</th>
+        <th>{% translate "Created At" %}</th>
+        <th>{% translate "Updated At" %}</th>
+        <th>{% translate "Actions" %}</th>
+     </thead>
+      <tbody>
+        {% for social_media in social_medias %}
+        <tr>
+          <td class="d-flex justify-content-center"><img src="{{ social_media.icon.url }}" alt="{{ social_media.name }}" class="img-fluid" style="width: 25px;"></td>
+          <td>{{ social_media.name }}</td>
+          <td><a href="{{ social_media.url }}">{{ social_media.url }}</a></td>
+          <td>{{ social_media.created_on }}</td>
+          <td>{{ social_media.updated_on }}</td>
+          <td>
+            <a href="{% url 'auser:social_media_update' social_media.pk %}" class="btn btn-sm btn-primary">{% translate "Update" %}</a>
+            {% if perms.auser.delete_socialmedia %}<button class="btn btn-sm btn-danger shadow-none" data-bs-toggle="modal" data-bs-target="#delete-{{ social_media.name }}">{% translate "Delete" %}</button>{% endif %}
+          </td>
+          {% if perms.auser.delete_socialmedia %}
+            <div class="modal fade" id="delete-{{ social_media.name }}" tabindex="-1" aria-labelledby="Delete Social Media" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-body">
+                    {% blocktranslate with name=social_media.name %}Do you really wants to delete <strong>{{ name }}?</strong><span class="text-danger"> <h6>This action is irreversable.</span>{% endblocktranslate %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-success shadow-none" data-bs-dismiss="modal" aria-label="Close">{% translate "Cancel" %}</button>
+                    <form action={% url 'auser:social_media_delete' social_media.pk %} method="post">{% csrf_token %}
+                        <input class="btn btn-danger btn-sm shadow-none" type="submit" value="{% translate "I understand, delete this user!" %}" />
+                    </form>
+                </div>
+                </div>
+            </div>
+            </div>
+            {% endif %}
+        </tr>
+        {% endfor %}
+   </table>

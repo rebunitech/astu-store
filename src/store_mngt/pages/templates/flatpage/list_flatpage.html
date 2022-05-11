@@ -1,0 +1,102 @@
+{% extends "layouts/main.html" %}
+{% load i18n static %}
+{% block content %}
+    <div class="main-content container-fluid">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>{% translate "Flatpage" %}</h3>
+                    <p class="text-subtitle text-muted">
+                        {% translate "Flatpages list." %}
+                    </p>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'auser:dashboard' %}">{% translate "Dashboard" %}</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">{% translate "Flatpages" %}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <section class="section">
+                <div class="card">
+                    <div class="card-header">
+                        Flatpages List 
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped" id="table1">
+                            <thead>
+                                <tr>
+                                    <th>{% translate "Url" %}</th>
+                                    <th>{% translate "Title" %}</th>
+                                    <th>{% translate "registration_required" %}</th>
+                                    <th>{% translate "Manage" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for flatpage in flatpages %}
+                                    <tr>
+                                        <td>{{ flatpage.url }}</td>
+                                        <td>{{ flatpage.title }}</td>
+                                        <td>{{ flatpage.registration_required }}</td>
+                                        <td>
+                                            {% if perms.pages.change_flatpage %}
+                                                <a href="{% url 'pages:update-flatpage' flatpage.pk %}"
+                                                   class="btn btn-primary btn-sm">{% translate "Update" %}</a>
+                                            {% endif %}
+                                            {% if perms.auser.delete_flatpage %}
+                                                <button class="btn btn-danger btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#delete-flatpage-{{ flatpage.pk }}">{% translate "Delete" %}</button>
+                                                <div class="modal fade text-left"
+                                                     id="delete-flatpage-{{ flatpage.pk }}"
+                                                     tabindex="-1"
+                                                     role="dialog"
+                                                     aria-labelledby="myModalLabel1"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">
+                                                                    {% blocktranslate %}Do you realy wants to delete <strong>{{ flatpage }}?</strong>{% endblocktranslate %}
+                                                                    {% translate "This action is irreversible!" %}
+                                                                </h5>
+                                                                <button type="button"
+                                                                        class="close rounded-pill"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <i data-feather="x"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form action={% url 'pages:delete-flatpage' flatpage.pk %} method="post">
+                                                                    {% csrf_token %}
+                                                                    <input class="btn btn-danger btn-sm" type="submit" value="{% translate "Delete" %}" />
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block styles %}
+    <link rel="stylesheet"
+          href="{% static "vendors/simple-datatables/style.css" %}"/>
+{% endblock styles %}
+{% block js %}
+    <script src="{% static "vendors/simple-datatables/simple-datatables.js" %}"></script>
+    <script src="{% static "js/vendors.js" %}"></script>
+{% endblock js %}

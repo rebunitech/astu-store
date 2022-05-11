@@ -1,0 +1,30 @@
+{% load static i18n %}
+<nav id="sidebar" class="col-auto collapse collapse-horizontal show pt-1 px-0 mx-0 sticky-md-top">
+    <div class="row sidebar-nav mx-0">
+        <div class="d-flex justify-content-center">
+            <a class="mx-auto mt-4 mb-5" href="{% url 'pages:dashboard' %} "><img src="{% static 'img/logo.svg' %} " alt="gradient info system logo " class="img-fluid rounded-circle logo-img " /></a>
+        </div>
+        {% if perms.auser.view_contentcreator or perms.auser.view_staff or perms.auser.view_student %}
+        <div class="text-dark px-4 fs-4 ">{% translate "Users " %}</div>{% endif %}
+        <ul class="px-0 ">{% if perms.auser.view_student %}
+            <li class="nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
+                <div class="col p-2 ps-3 text-center ">
+                    <img class="img-sidebar " src="{% static 'img/student.svg' %} "></div>
+                <div class="col-10 ">
+                    <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_student_list' %} ">{% translate "Students " %}</a></div>
+            </li>{% endif %}{% if perms.auser.view_staff %}
+            <li class="nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
+                <div class="col py-2 px-3 text-center "><i data-feather="user"></i></div>
+                <div class="col-10 ">
+                    <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_staff_list' %} ">{% translate "Staff Members " %}</a></div>
+            </li>{% endif %}
+        </ul>
+    </div>
+    <div class="row sidebar-nav mx-0 ">{% if perms.page.view_flatpage %}
+        <li class="nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
+            <div class="col py-2 px-3 text-center "><i data-feather="user"></i></div>
+            <div class="col-10 "><a class="nav-link px-0 text-reset text-decoration-none " href="$ ">{% translate "Not Working " %}</a></div>
+        </li>{% endif %}
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,43 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'vendors/bootstrap/css/bootstrap.min.css' %} ">
+    <link rel="stylesheet " href="{% static 'vendors/DataTables/datatables.min.css' %} ">
+    <link rel="stylesheet " href="{% static 'vendors/choices.js/choices.min.css' %} ">
+    <link rel="stylesheet " href="{% static 'css/styles.css' %} ">
+    <title>{{ title }} - {% translate "Gradient Info System " %}</title>
+</head>
+
+<body>
+    {% include "layouts/header.html" %}
+
+    <div class="container-fluid px-0 ">
+        <div class="row flex-nowrap mx-0 ">
+            {% include "layouts/sidebar.html" %}
+            <main class="col ps-md-2 pt-2 m--5 mx-5 ">
+                <a href="# " data-bs-target="#sidebar " data-bs-toggle="collapse " class="p-1 text-decoration-none text-dark rounded ">
+                    <i data-feather="menu"></i></a> {% if messages %}{% include "layouts/messages.html" with messages=messages %}{% endif %}
+                <div class="page-header pt-3 ">
+                    <h2>{{ title }}</h2>
+                </div>
+                {% block content %}{% endblock content %}
+            </main>
+        </div>
+    </div>
+
+    {% block firstJs %}{% endblock firstJs %}
+    <script src="{% static 'vendors/jquery/jquery-3.6.0.min.js' %} "></script>
+    <script src="{% static 'vendors/bootstrap/js/bootstrap.bundle.js' %} "></script>
+    <script src="{% static 'vendors/DataTables/datatables.js' %} "></script>
+    <script src="{% static 'vendors/choices.js/choices.min.js' %} "></script>
+    <script src="{% static 'vendors/feather/feather.min.js' %} "></script>
+    <script src="{% static 'js/main.js' %} "></script>
+    {% block js %}{% endblock js %}
+</body>
+
+</html>

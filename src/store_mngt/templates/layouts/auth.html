@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Gradient Info System</title>
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+    {% block styles %}{% endblock %}
+    <link rel="shortcut icon" href="{% static "images/favicon.svg" %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static "css/app.css" %}">
+</head>
+<body>
+    <div id="auth">
+        <div class="container">
+            <div class="row">
+              {% if messages %}{% include "layouts/messages.html" with messages=messages %}{% endif %}
+              {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    <script src="{% static "js/feather-icons/feather.min.js" %}"></script>
+    <script src="{% static "js/app.js" %}"></script>
+    {% block js %}{% endblock %}
+    <script src="{% static "js/main.js" %}"></script>
+</body>
+
+</html>

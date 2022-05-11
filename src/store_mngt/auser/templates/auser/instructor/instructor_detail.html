@@ -1,0 +1,38 @@
+{% extends "layouts/main.html" %}
+{% load i18n auser %}
+{% block content %}
+<ul class="nav nav-tabs mt-5 mb-3" id="UserDetail" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="home" aria-selected="true">{% translate "Profile" %}</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#experiece" type="button" role="tab" aria-controls="experiece" aria-selected="true">{% translate "Experieces" %}</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#educationbackground" type="button" role="tab" aria-controls="educationbackground" aria-selected="true">{% translate "Education Backgrounds" %}</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#socialmedia" type="button" role="tab" aria-controls="socialmedia" aria-selected="true">{% translate "Social Media Links" %}</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link"  data-bs-toggle="tab" data-bs-target="#hisotry" type="button" role="tab" aria-controls="hisotry" aria-selected="false">{% translate "Change History" %}</button>
+    </li>
+</ul>
+<div class="tab-content" id="UserDetailContent">
+<div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="home-tab">
+    {% include "auser/user/user_profile.html" with user=instructor update_link="auser:instructor_update"|reverse:instructor.pk %}
+</div>
+<div class="tab-pane fade" id="experiece" role="tabpanel" aria-labelledby="experiece-tab">
+    {% include "auser/instructor/experience/list.html" with experiences=instructor.experiences.iterator instructor_pk=instructor.pk %}
+</div>
+<div class="tab-pane fade" id="socialmedia" role="tabpanel" aria-labelledby="social-media-tab">
+    {% include "auser/instructor/social_link/list.html" with social_links=instructor.social_media_links.iterator instructor_pk=instructor.pk %}
+</div>
+<div class="tab-pane fade" id="educationbackground" role="tabpanel" aria-labelledby="educationbackground-tab">
+    {% include "auser/instructor/education_background/list.html" with education_backgrounds=instructor.education_backgrounds.iterator instructor_pk=instructor.pk %}
+</div>
+<div class="tab-pane fade" id="hisotry" role="tabpanel" aria-labelledby="history-tab">
+    {% include "auser/user/object_history.html" with user_history=object_history %}
+</div>
+</div>
+{% endblock content %}

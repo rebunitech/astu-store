@@ -1,0 +1,48 @@
+{% load i18n auser %}
+<table class="table shadow-lg w-100" id="dt_table_experience">
+    <div class="d-flex justify-content-end">
+      <a href="{% url "auser:instructor_experience_add" instructor_pk %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> {% translate "Add experience" %}</a>
+    </div>
+    <hr>
+     <thead>
+       <th></th>
+       <th>{% translate "Job title" %}</th>
+        <th>{% translate "Company name" %}</th>
+        <th>{% translate "Start year" %}</th>
+        <th>{% translate "Status" %}</th>
+        <th>{% translate "Description" %}</th>
+        <th>{% translate "Manage" %}</th>
+     </thead>
+      <tbody>
+        {% for experience in experiences %}
+        <tr>
+            <td class="details-control px-3"></td>
+          <td>{{ experience.job_title }}</td>
+          <td>{{ experience.company_name }}</td>
+          <td>{{ experience.start_year }}</td>
+          <td>{% if experience.end_year != None %}Presend {% else %} {{ experience.end_year }} {% endif %}</td>
+          <td>{{ experience.description }}</td>
+          <td>
+            <a href="{% url 'auser:instructor_experience_update' experience.pk %}" class="btn btn-sm btn-primary">{% translate "Update" %}</a>
+            {% if perms.auser.delete_experience %}<button class="btn btn-sm btn-danger shadow-none" data-bs-toggle="modal" data-bs-target="#delete-{{ experience.pk }}">{% translate "Delete" %}</button>{% endif %}
+          </td>
+          {% if perms.auser.delete_experience %}
+            <div class="modal fade" id="delete-{{ experience.pk }}" tabindex="-1" aria-labelledby="Delete experience" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-body">
+                    {% blocktranslate with job_title=experience.job_title  %}Do you really wants to delete <strong>{{ job_title }}?</strong><span class="text-danger"> <h6>This action is irreversable.</span>{% endblocktranslate %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-success shadow-none" data-bs-dismiss="modal" aria-label="Close">{% translate "Cancel" %}</button>
+                    <form action={% url 'auser:instructor_experience_delete' experience.pk %} method="post">{% csrf_token %}
+                        <input class="btn btn-danger btn-sm shadow-none" type="submit" value="{% translate "I understand, delete this object!" %}" />
+                    </form>
+                </div>
+                </div>
+            </div>
+            </div>
+            {% endif %}
+        </tr>
+        {% endfor %}
+   </table>

@@ -1,0 +1,10 @@
+{% extends "bases/main.html" %}
+
+{% block content %}
+
+    <form action={% url 'delete-flatpage' flatpage.pk %} method="Post">{% csrf_token %}
+        Are sure do you want to delete {{ flatpage.title }} )?
+        <input type="submit" value="Delete">
+    </form>
+
+{% endblock content %}
