@@ -22,8 +22,8 @@ from django.conf import settings
  
 urlpatterns = [ 
     path('admin/', admin.site.urls),
-    re_path(r"^auth/", include("auser.urls")),
-    re_path(r"", include("pages.urls")),
+    # re_path(r"^auth/", include("auser.urls")),
+    # re_path(r"", include("pages.urls")),
     *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT), 
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
     re_path(r"^item/", include("item.urls")),

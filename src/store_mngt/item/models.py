@@ -9,6 +9,11 @@ from django.utils.translation import gettext_lazy as _
 
 # class Item(models.Model):
 #     name = models.CharField(max_length=100, verbose_name=_("Name"))
-#     slug
+#     itemId = models.CharField(_("item id"), max_length=200)
+#     quantity = models.IntegerField(unique=True)
+#     dsn = models.CharField(_("DSN"), max_length=200)
+    
+
+
 
 

@@ -54,8 +54,8 @@ INSTALLED_APPS = [
     "django_filters",
 
     # Local
-    'auser',
-    'pages',  # dont forget after everything is okay
+    # 'auser',
+    # 'pages',  # dont forget after everything is okay
     'item',
 ]  
 
@@ -156,24 +156,24 @@ MEDIA_ROOT = BASE_DIR / "uploads"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # The model to use to represent a current User.
-AUTH_USER_MODEL = "auser.User"
+# AUTH_USER_MODEL = "auser.User"
 
 SITE_ID = 1
 
 # The URL or named URL pattern where requests are redirected for login
-LOGIN_URL = reverse_lazy("auser:login")
+# LOGIN_URL = reverse_lazy("auser:login")
 
 # The URL or named URL pattern where requests are redirected after login
-LOGIN_REDIRECT_URL = reverse_lazy("pages:dashboard")
+# LOGIN_REDIRECT_URL = reverse_lazy("pages:dashboard")
 
 # The URL or named URL pattern where requests are redirected after logout
-LOGOUT_REDIRECT_URL = LOGIN_URL
+# LOGOUT_REDIRECT_URL = LOGIN_URL
 
 # A list of authentication backend classes to use when attempting to authenticate a user.
-AUTHENTICATION_BACKENDS = [
-    "auser.backends.EmailBackend",
-    "django.contrib.auth.backends.ModelBackend",
-]
+# AUTHENTICATION_BACKENDS = [
+#     "auser.backends.EmailBackend",
+#     "django.contrib.auth.backends.ModelBackend",
+# ]
 
 # A mapping of message level to message tag,
 MESSAGE_TAGS = {
