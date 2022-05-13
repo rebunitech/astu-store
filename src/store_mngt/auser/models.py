@@ -48,7 +48,7 @@ class Address(models.Model):
         abstract = True
     
 
-class User(models.Model):
+class User(Address, models.Model):
     """ Custom user model used as primary user in the platform. """
 
     username_validator = UnicodeUsernameValidator()
@@ -105,26 +105,26 @@ class User(models.Model):
 
 
 class SchoolHead(User):
-    """ School head are users responsible for managing items belong school and others"""
+    """ School head are users responsible for managing departments and department head"""
     class Meta:
-        verbose_name = _("content creator")
-        verbose_name_plural = _("content creators")
-        db_table = "content_creator"
+        verbose_name = _("school head")
+        verbose_name_plural = _("school heads")
+        db_table = "school_head"
         permissions = [
-            ("can_deactivate_content_creator", "Can deactivate content creator"),
-            ("can_activate_content_creator", "Can activate content creator"),
+            ("can_deactivate_school_head", "Can deactivate school head"),
+            ("can_activate_school_head", "Can activate school head"),
         ]
 
 class DepartmentHead(User):
     """ Department head are users mainly responsible for approve item requist, add item, add store and others"""
 
     class Meta:
-        verbose_name = _("content creator")
-        verbose_name_plural = _("content creators")
-        db_table = "content_creator"
+        verbose_name = _("department head")
+        verbose_name_plural = _("department heads")
+        db_table = "department_head"
         permissions = [
-            ("can_deactivate_content_creator", "Can deactivate content creator"),
-            ("can_activate_content_creator", "Can activate content creator"),
+            ("can_deactivate_department_head", "Can deactivate department head"),
+            ("can_activate_department_head", "Can activate department head"),
         ]
 
 
@@ -141,4 +141,52 @@ class Staffmember(User):
         ]
 
 
-  
+class Storekeeper(User):
+    """ Store keeper are users responsible for store that belong to them and request for meintanance item. """
+
+    class Meta:
+        verbose_name = _("store keeper")
+        verbose_name_prular = _("store keepers")
+        db_name = "storekeeper"
+        permissions = [
+            ("can_deactivate_store_keeper", "Can deactivate store keeper"),
+            ("can_activate_store_keeper", "Can activate store keeper"),
+        ]
+
+
+class School(Address, models.Model):
+    """ School contains some departments. """
+    name = models.CharField( _("name"),
+                            max_length=200,
+                            null= False,
+                            unique=True
+                        
+    )
+    abbr_name = models.CharField(_("abbribation name"),
+                                 max_length = 50,
+                                 unique=True,
+                                 null = False
+
+    )
+
+    class Meta:
+        pass
+
+class Department(Address ,models.Model):
+    """ Department .... """
+    name = models.CharField(_("name"),
+                            max_length=200,
+                            null = False,
+                            unique=True)
+
+    abbr_name = models.CharField(_("abbribation name"),
+                                    max_length = 50,
+                                    unique=True,
+                                    null = False)
+    school_of_dept = models.ForeignKey(School,
+                                        on_delete=models.SET_NULL,
+                                        verbose_name=_("dpartment belongs to school"),
+                                        null=True)
+
+    class Meta:
+        pass
