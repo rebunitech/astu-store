@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     "django_filters",
 
     # Local
-    # 'auser',
+    'auser',
     # 'pages',  # dont forget after everything is okay
     'item',
 ]  
