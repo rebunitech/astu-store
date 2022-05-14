@@ -24,7 +24,7 @@ class AddDepartmenHead(CreateView, SuccessMessageMixin, PermissionRequiredMixin)
         "location",
         "po_box",
     )
-    permission_required = ("auser.add_departmenthead",)
+    permission_required = ("auser.add_department_head",)  #TODO:
     template_name = "auser/departmentHead/add_department_head.html"
     success_message = _("%(first_name)s %(last_name)s added successfully")
     # success_url = reverse_lazy("auser:active_department_head_list")
@@ -52,7 +52,7 @@ class UpdateDepartmentHead( PermissionRequiredMixin,
         "profile_picture",
         "bio",
     )
-    permission_required = ("auser.change_departmentHead",)
+    permission_required = ("auser.change_department_head",)
     # success_url = reverse_lazy("auser:active_department_head_list")
     template_name = "auser/departmentHead/update_department_head.html"
     success_message = _("%(first_name)s %(last_name)s updated successfully")
