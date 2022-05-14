@@ -48,7 +48,36 @@ class Address(models.Model):
         abstract = True
     
 
-class User(Address):
+class AbstractUser(models.Model):
+    """Abstract model need to user for both user and instructors"""
+
+    class SexChoices(models.TextChoices):
+        MALE = "M", _("MALE")
+        FEMALE = "F", _("FEMALE")
+
+    first_name = models.CharField(_("first name"), max_length=150)
+    last_name = models.CharField(_("last name"), max_length=150)
+    sex = models.CharField(_("Gender"), max_length=2, choices=SexChoices.choices)
+    bio = RichTextField(
+        _("Bio"), help_text=_("Tell us about your self"), null=True, blank=True
+    )
+    profile_picture = models.ImageField(
+        _("Profile picture"), upload_to="profile_pictures/", default="default.svg"
+    )
+    date_joined = models.DateTimeField(_("date joined"), auto_now_add=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+    def get_full_name(self):
+        """Return the first_name plus the last_name, with a space in between."""
+        full_name = f"{self.first_name} {self.last_name}"
+        return full_name.strip()
+
+class User(AbstractUser, AbstractBaseUser, Address):
     """ Custom user model used as primary user in the platform. """
 
     username_validator = UnicodeUsernameValidator()
