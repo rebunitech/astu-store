@@ -48,7 +48,7 @@ class Address(models.Model):
         abstract = True
     
 
-class User(Address, models.Model):
+class User(Address):
     """ Custom user model used as primary user in the platform. """
 
     username_validator = UnicodeUsernameValidator()
@@ -64,8 +64,8 @@ class User(Address, models.Model):
         "unique": _("A user with that username already exists."),
     },
     )
-    is_staff = models.BooleanField(
-        _("staff status"),
+    is_schoolHead = models.BooleanField(
+        _("schoolHead status"),
         default=False,
         help_text=_("Designates whether the user can log into this admin site."),
     )
@@ -96,8 +96,8 @@ class User(Address, models.Model):
         permissions = [  
             ("can_deactivate_user", "Can deactivate user"),
             ("can_activate_user", "Can activate user"),
-            ("can_view_staff", "Can view staff"),
-            ("can_change_staff", "Can change staff"),
+            ("can_view_schoolHead", "Can view schoolHead"),
+            ("can_change_schoolHead", "Can change schoolHead"),
             ("can_add_staff", "Can add staff"),
             ("can_delete_staff", "Can delete staff"),
             ("can_change_user_permissions", "Can change user permissions"),
@@ -133,7 +133,7 @@ class Staffmember(User):
 
     class Meta:
         verbose_name = _("staff member")
-        verbose_name_plural = _("staffmembers")
+        verbose_name_plural = _("staff members")
         db_table = "staffmember"
         permissions = [
             ("can_deactivate_staffmember", "Can deactivate staff member"),
@@ -146,8 +146,8 @@ class Storekeeper(User):
 
     class Meta:
         verbose_name = _("store keeper")
-        verbose_name_prular = _("store keepers")
-        db_name = "storekeeper"
+        verbose_name_plural = _("store keepers")
+        db_table = "store_keeper"
         permissions = [
             ("can_deactivate_store_keeper", "Can deactivate store keeper"),
             ("can_activate_store_keeper", "Can activate store keeper"),
@@ -169,8 +169,7 @@ class School(Address, models.Model):
 
     )
 
-    class Meta:
-        pass
+    
 
 class Department(Address ,models.Model):
     """ Department .... """
@@ -188,5 +187,4 @@ class Department(Address ,models.Model):
                                         verbose_name=_("dpartment belongs to school"),
                                         null=True)
 
-    class Meta:
-        pass
+    
