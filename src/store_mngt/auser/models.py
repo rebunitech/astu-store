@@ -98,22 +98,11 @@ class User(Address):
             ("can_activate_user", "Can activate user"),
             ("can_view_schoolHead", "Can view schoolHead"),
             ("can_change_schoolHead", "Can change schoolHead"),
-            ("can_add_staff", "Can add staff"),
-            ("can_delete_staff", "Can delete staff"),
+            ("can_add_schoolHead", "Can add schoolHead"),
+            ("can_delete_schoolHead", "Can delete schoolHead"),
             ("can_change_user_permissions", "Can change user permissions"),
         ]
 
-
-class SchoolHead(User):
-    """ School head are users responsible for managing departments and department head"""
-    class Meta:
-        verbose_name = _("school head")
-        verbose_name_plural = _("school heads")
-        db_table = "school_head"
-        permissions = [
-            ("can_deactivate_school_head", "Can deactivate school head"),
-            ("can_activate_school_head", "Can activate school head"),
-        ]
 
 class DepartmentHead(User):
     """ Department head are users mainly responsible for approve item requist, add item, add store and others"""

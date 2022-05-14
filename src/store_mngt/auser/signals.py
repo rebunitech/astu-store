@@ -9,7 +9,7 @@ from django.dispatch import Signal, receiver
 
 from auser.models import DepartmentHead, Staffmember
 
-staff_user_created = Signal()
+school_head_created = Signal()
 log_entry_adition = Signal()
 log_entry_change = Signal()
 log_entry_deletion = Signal()
@@ -17,80 +17,95 @@ log_entry_deletion = Signal()
 
 def create_permission_groups(sender, plan, *args, **kwargs):
     Group = apps.get_model("auth", "Group")
-    if plan and not Group.objects.filter(name="user").exists():
+    if plan and not Group.objects.filter(name="user").exists(): # TODO: check wende
         Permission = apps.get_model("auth", "Permission")
-        user_group = Group.objects.create(name="user")
-        user_permissions = Permission.objects.filter(
+        staffmember_group = Group.objects.create(name="user")
+        staffmember_permissions = Permission.objects.filter(
             Q(codename="view_user")
             | Q(codename="change_user")
-            | Q(codename="like_post")
         )
-        user_group.permissions.set(user_permissions)
+        staffmember_group.permissions.set(staffmember_permissions)
 
-    if plan and not Group.objects.filter(name="staff").exists():
-        staff_group = Group.objects.create(name="staff")
-        staff_permissions = Permission.objects.filter(
-            Q(codename="add_departmentHead")
+    if plan and not Group.objects.filter(name="schoolHead").exists():
+        schoolHead_group = Group.objects.create(name="schoolHead")
+        schoolHead_permissions = Permission.objects.filter(
+            Q(codename="add_department_head")  # TODO: department == contentCreator
             | Q(codename="activate_department_head")
             | Q(codename="deactivate_department_head")
-            | Q(codename="change_departmentHead")
-            | Q(codename="view_departmentHead")
-            | Q(codename="delete_departmentHead")
+            | Q(codename="change_department_head")
+            | Q(codename="view_department_head")
+            | Q(codename="delete_department_head")
+            | Q(codename="add_store_keeper")
+            | Q(codename="change_store_keeper")
+            | Q(codename="view_store_keeper")
+            | Q(codename="activate_store_keeper")
+            | Q(codename="deactivate_store_keeper")
+            | Q(codename="delete_store_keeper")
+            | Q(codename="add_store")
+            | Q(codename="change_store")
+            | Q(codename="view_store")
+            | Q(codename="activate_store")
+            | Q(codename="deactivate_store")
+            | Q(codename="delete_store")
             | Q(codename="view_staffmember") 
             | Q(codename="change_staffmember")
             | Q(codename="deactivate_staffmember")
             | Q(codename="activate_staffmember")
             | Q(codename="delete_staffmember")
-            | Q(codename="add_service")
-            | Q(codename="change_service")
-            | Q(codename="view_service")
-            | Q(codename="delete_service")
+            | Q(codename="add_staffmember")
         )
-        staff_group.permissions.set(staff_permissions)
+        schoolHead_group.permissions.set(schoolHead_permissions)
 
     if plan and not Group.objects.filter(name="department_head").exists():
         department_head_group = Group.objects.create(name="department_head")
         department_head_permissions = Permission.objects.filter(
-            Q(codename="add_post")
-            | Q(codename="change_post")
-            | Q(codename="view_post")
-            | Q(codename="delete_blog")
-            | Q(codename="add_category")
-            | Q(codename="change_category")
-            | Q(codename="view_category")
-            | Q(codename="delete_category")
-            | Q(codename="add_tag")
-            | Q(codename="change_tag")
-            | Q(codename="view_tag")
-            | Q(codename="delete_tag")
+            Q(codename="add_store_keeper")
+            | Q(codename="change_store_keeper")
+            | Q(codename="view_store_keeper")
+            | Q(codename="activate_store_keeper")
+            | Q(codename="deactivate_store_keeper")
+            | Q(codename="delete_store_keeper")
+            | Q(codename="add_store")
+            | Q(codename="change_store")
+            | Q(codename="view_store")
+            | Q(codename="activate_store")
+            | Q(codename="deactivate_store")
+            | Q(codename="delete_store")
+            | Q(codename="view_staffmember") 
+            | Q(codename="change_staffmember")
+            | Q(codename="deactivate_staffmember")
+            | Q(codename="activate_staffmember")
+            | Q(codename="delete_staffmember")
+            | Q(codename="add_staffmember")
         )
 
+# TODO: what is the difference between user and student in former GIS proj....wende???
     if plan and not Group.objects.filter(name="staffmember").exists():
         staffmember_group = Group.objects.create(name="staffmember")
         staffmember_permissions = Permission.objects.filter(**{})
 
 
-@receiver(staff_user_created)
-def add_permissions_to_staff(sender, instance=None, created=None, **kwargs):
+@receiver(school_head_created)
+def add_permissions_to_school_head(sender, instance=None, created=None, **kwargs):
     if created:
         user_group = G.objects.get(name="user")
-        staff_group = G.objects.get(name="staff")
-        content_creator_group = G.objects.get(name="content_creator")
+        school_head_group = G.objects.get(name="school_head")
+        department_head_group = G.objects.get(name="department_head")
         permissions = (
             user_group.permissions.all()
-            .union(staff_group.permissions.all())
-            .union(content_creator_group.permissions.all())
+            .union(school_head_group.permissions.all())
+            .union(department_head_group.permissions.all())
         )
         instance.user_permissions.set(permissions)
 
 
 @receiver(post_save, sender=DepartmentHead)
-def add_content_creator_group(sender, instance=None, created=None, **kwargs):
+def add_department_head_group(sender, instance=None, created=None, **kwargs):
     if created:
-        user_group = G.objects.get(name="user")
-        content_creator_group = G.objects.get(name="department_head")
+        user_group = G.objects.get(name="user") # TODO: check name=user
+        department_head_group = G.objects.get(name="department_head")
         permissions = user_group.permissions.all().union(
-            content_creator_group.permissions.all()
+            department_head_group.permissions.all()
         )
         instance.user_permissions.set(permissions)
 
@@ -107,7 +122,7 @@ def add_staffmember_group(sender, instance=None, created=None, **kwargs):
 
 
 @receiver(log_entry_adition)
-def save_addtion_log_entry(sender, instance=None, user_id=None, created=None, **kwargs):
+def save_addition_log_entry(sender, instance=None, user_id=None, created=None, **kwargs):
     if created:
         LogEntry.objects.log_action(
             user_id=user_id,
