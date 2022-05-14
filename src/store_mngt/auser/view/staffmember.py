@@ -35,6 +35,33 @@ class AddStaffMember(CreateView, SuccessMessageMixin, PermissionRequiredMixin):
             self.object.save()
             return super().form_valid(form)
 
+class UpdateStaffMember( PermissionRequiredMixin, 
+                            SuccessMessageMixin, UpdateView 
+                            ):
+    """Generic view used to update staff member. """
+
+    model = Staffmember
+    fields = (
+        "email",
+        "first_name",
+        "last_name",
+        "phone_number",
+        "sex",
+        "location",
+        "po_box",
+        "profile_picture",
+        "bio",
+    )
+    permission_required = ("auser.change_staffmember",)
+    # success_url = reverse_lazy("auser:active_staff_member_list")
+    template_name = "auser/staffmember/update_staff_member.html"
+    success_message = _("%(first_name)s %(last_name)s updated successfully")
+    extra_context = {"title": _("Update Staff Member")}
+
+    def get_queryset(self):
+        return self.model.objects.filter(is_active=True)
+
+
 class ListActiveStaffMembersView(PermissionRequiredMixin, ListView):
     model = Staffmember
     template_name = "auser/staffmember/list_staff_members.html"
