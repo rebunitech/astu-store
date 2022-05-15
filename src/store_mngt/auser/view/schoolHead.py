@@ -138,13 +138,13 @@ class ListDeactivatedSchoolHeadsView(ListView):
 
 
 
-class ActivateStaffUserView( SuccessMessageMixin,  UpdateView
+class ActivateSchoolHeadView( SuccessMessageMixin,  UpdateView
 ):
-    """Generic view used to activate staff user"""
+    """Generic view used to activate school head"""
 
     model = UserModel
     fields = ("is_active",)
-    success_url = reverse_lazy("auser:deactivated_staff_list")
+    success_url = reverse_lazy("auser:deactivated_school_head")
     success_message = _("%(first_name)s %(last_name)s activated successfully")
     http_method_names = ["post"]
 

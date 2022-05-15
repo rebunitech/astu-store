@@ -77,7 +77,7 @@ class AbstractUser(models.Model):
         full_name = f"{self.first_name} {self.last_name}"
         return full_name.strip()
 
-class User(AbstractUser, AbstractBaseUser, Address):
+class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
     """ Custom user model used as primary user in the platform. """
 
     username_validator = UnicodeUsernameValidator()

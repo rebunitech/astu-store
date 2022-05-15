@@ -1,7 +1,6 @@
 """gradient_infosys auser URL Configuration
 	
-    Created by: Wendirad Demelash
-    Last modified by: Wendirad Demelash
+    Created by: Ashenafi Zenebe
 """
 
 from django import forms
@@ -11,7 +10,6 @@ from django.contrib.auth.forms import (AuthenticationForm, UserCreationForm,
 from django.contrib.auth.models import Permission
 from django.utils.translation import gettext_lazy as _
 
-from auser.models import EducationBackground, Student, Experience
 
 UserModel = get_user_model()
 
