@@ -1,0 +1,22 @@
+{% load i18n %}
+<table class="table shadow-lg w-100" id="dt_table_user_history">
+    <hr>
+    <thead>
+        <tr>
+            <th></th>
+            <th>{% translate "Date/time" %}</th>
+            <th>{% translate "User" %}</th>
+            <th>{% translate "Action" %}</th>
+        </tr>
+    </thead>
+    <tbody class="w-100">
+        {% for user_action in user_history %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ user_action.action_time }}</td>
+            <td>{{ user_action.user }}</td>
+            <td>{{ user_action.get_change_message }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
