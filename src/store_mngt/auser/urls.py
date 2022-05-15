@@ -11,6 +11,7 @@ from auser.view.departmentHead import AddDepartmenHead
 from auser import view  
 from auser.forms import LoginForm
 
+app_name = "auser"
 
 django_auth_urlpattern = [
     re_path(
