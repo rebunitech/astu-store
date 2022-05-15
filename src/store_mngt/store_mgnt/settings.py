@@ -156,12 +156,12 @@ MEDIA_ROOT = BASE_DIR / "uploads"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # The model to use to represent a current User.
-# AUTH_USER_MODEL = "auser.User"
+AUTH_USER_MODEL = "auser.User"
 
 SITE_ID = 1
 
 # The URL or named URL pattern where requests are redirected for login
-# LOGIN_URL = reverse_lazy("auser:login")
+LOGIN_URL = reverse_lazy("auser:login")
 
 # The URL or named URL pattern where requests are redirected after login
 # LOGIN_REDIRECT_URL = reverse_lazy("pages:dashboard")
