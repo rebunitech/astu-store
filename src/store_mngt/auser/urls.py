@@ -81,7 +81,7 @@ schoolHead_urlpatterns = [
     re_path(
         r"^add/$",
         view.AddSchoolHeadView.as_view(),
-        name="add_shool_head"
+        name="add_school_head"
     ),
     re_path(
         r"^deactivated/$",
@@ -238,10 +238,12 @@ staffmember_urlpatterns = [
 urlpatterns = [
     re_path(r"", include(django_auth_urlpattern)),
     re_path(r"", include(user_urlpatterns)),
-    re_path(r"^schoolhead/$", include(schoolHead_urlpatterns)),
-    re_path(r"^departmenthead/$", include(department_head_urlpatterns)),
-    re_path(r"^storekeeper/$", include(store_keeper_urlpatterns)),
-    re_path(r"^staffmember/$", include(staffmember_urlpatterns)),
+    re_path(r"^register/$", view.SignUpView.as_view(), name="register"),
+
+    re_path(r"^schoolhead/", include(schoolHead_urlpatterns)),
+    re_path(r"^departmenthead/", include(department_head_urlpatterns)),
+    re_path(r"^storekeeper/", include(store_keeper_urlpatterns)),
+    re_path(r"^staffmember/", include(staffmember_urlpatterns)),
     re_path(r"^import/(?P<pk>\d+)/$", view.ImportView.as_view(), name="import_data"),
     re_path(r"", include("django.contrib.auth.urls")),
 
