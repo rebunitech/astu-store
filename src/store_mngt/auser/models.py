@@ -76,7 +76,42 @@ class AbstractUser(models.Model):
         """Return the first_name plus the last_name, with a space in between."""
         full_name = f"{self.first_name} {self.last_name}"
         return full_name.strip()
+class School(Address, models.Model):
+    """ School contains some departments. """
+    name = models.CharField( _("name"),
+                            max_length=200,
+                            null= False,
+                            unique=True
+                        
+    )
+    abbr_name = models.CharField(_("abbribation name"),
+                                 max_length = 50,
+                                 unique=True,
+                                 null = False
 
+    )
+
+    
+
+class Department(Address ,models.Model):
+    """ Department .... """
+    name = models.CharField(_("name"),
+                            max_length=200,
+                            null = False,
+                            unique=True)
+
+    abbr_name = models.CharField(_("abbribation name"),
+                                    max_length = 50,
+                                    unique=True,
+                                    null = False)
+    school = models.ForeignKey(School,
+                                on_delete=models.CASCADE,
+                                verbose_name=_("school"),
+                                related_name='departments',
+                                # default="ece"
+                               )
+
+    
 class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
     """ Custom user model used as primary user in the platform. """
 
@@ -93,7 +128,7 @@ class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
         "unique": _("A user with that username already exists."),
     },
     )
-    is_schoolHead = models.BooleanField(
+    is_staff = models.BooleanField(
         _("schoolHead status"),
         default=False,
         help_text=_("Designates whether the user can log into this admin site."),
@@ -136,6 +171,13 @@ class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
 class DepartmentHead(User):
     """ Department head are users mainly responsible for approve item requist, add item, add store and others"""
 
+    department = models.ForeignKey(
+                            Department,
+                            on_delete=models.CASCADE,
+                            related_name="departmentheads",
+                            verbose_name="department_heads",
+                            # default="cse"
+                            )
     class Meta:
         verbose_name = _("department head")
         verbose_name_plural = _("department heads")
@@ -162,6 +204,13 @@ class Staffmember(User):
 class Storekeeper(User):
     """ Store keeper are users responsible for store that belong to them and request for meintanance item. """
 
+    department = models.ForeignKey(
+                            Department,
+                            on_delete=models.CASCADE,
+                            related_name="store_keepers",
+                            verbose_name="storekeepers",
+                            # default="123"
+    )
     class Meta:
         verbose_name = _("store keeper")
         verbose_name_plural = _("store keepers")
@@ -171,38 +220,3 @@ class Storekeeper(User):
             ("can_activate_store_keeper", "Can activate store keeper"),
         ]
 
-
-class School(Address, models.Model):
-    """ School contains some departments. """
-    name = models.CharField( _("name"),
-                            max_length=200,
-                            null= False,
-                            unique=True
-                        
-    )
-    abbr_name = models.CharField(_("abbribation name"),
-                                 max_length = 50,
-                                 unique=True,
-                                 null = False
-
-    )
-
-    
-
-class Department(Address ,models.Model):
-    """ Department .... """
-    name = models.CharField(_("name"),
-                            max_length=200,
-                            null = False,
-                            unique=True)
-
-    abbr_name = models.CharField(_("abbribation name"),
-                                    max_length = 50,
-                                    unique=True,
-                                    null = False)
-    school_of_dept = models.ForeignKey(School,
-                                        on_delete=models.SET_NULL,
-                                        verbose_name=_("dpartment belongs to school"),
-                                        null=True)
-
-    
