@@ -1,8 +1,8 @@
 {% extends "layouts/main.html" %} {% load i18n static humanize %} {% block content %}
-<table class="table shadow-lg" id="dt_table_content_creator">
+<table class="table shadow-lg" id="dt_table_department_head">
     <div class="float-end">
-        <a href="{% url " auser:content_creator_add " %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> {% translate "Add Content Creator user" %}</a>
-        <a href="{% url " auser:active_content_creator_list " %}" class="mx-2 btn btn-sm btn-warning shadow-none"><i data-feather="list"></i> {% translate "Active Content Creator users" %}</a>
+        <a href="{% url 'auser:department_head_add' %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> {% translate "Add Department Head user" %}</a>
+        <a href="{% url 'auser:active_department_head_list' %}" class="mx-2 btn btn-sm btn-warning shadow-none"><i data-feather="list"></i> {% translate "Active Department Head users" %}</a>
     </div>
     <hr>
     <thead>
@@ -21,36 +21,36 @@
         </tr>
     </thead>
     <tbody class="w-100">
-        {% for content_creator in deactivated_content_creators %}
+        {% for department_head in deactivated_department_heads %}
         <tr>
             <td class="details-control px-3"></td>
-            <td>{{ content_creator.username }}</td>
-            <td>{{ content_creator.first_name }}</td>
-            <td>{{ content_creator.last_name }}</td>
-            <td>{{ content_creator.email }}</td>
-            <td>{{ content_creator.get_sex_display }}</td>
-            <td>{{ content_creator.phone_number }}</td>
-            <td>{{ content_creator.profile_picture.url }}</td>
-            <td>{{ content_creator.last_login|default:"Never" }}</td>
-            <td>{{ content_creator.date_joined }}</td>
+            <td>{{ department_head.username }}</td>
+            <td>{{ department_head.first_name }}</td>
+            <td>{{ department_head.last_name }}</td>
+            <td>{{ department_head.email }}</td>
+            <td>{{ department_head.get_sex_display }}</td>
+            <td>{{ department_head.phone_number }}</td>
+            <td>{{ department_head.profile_picture.url }}</td>
+            <td>{{ department_head.last_login|default:"Never" }}</td>
+            <td>{{ department_head.date_joined }}</td>
             <td>
                 <div class="btn-group rounded" role="group" aria-label="Management buttons">
-                    <a href="{% url " auser:content_creator_detail " content_creator.pk %}" class="btn btn-md btn-outline-dark shadow-none">{% translate "Details" %}</a> {% if perms.auser.activate_user %}<button class="btn btn-md btn-outline-success shadow-none"
-                        data-bs-toggle="modal" data-bs-target="#activate-{{ content_creator.username }}"><i data-feather="activity"></i> {% translate "Activate" %}</button>{% endif %} {% if perms.auser.delete_user %}<button class="btn btn-md btn-outline-danger shadow-none"
-                        data-bs-toggle="modal" data-bs-target="#delete-{{ content_creator.username }}"><i data-feather="trash-2"></i> {% translate "Delete" %}</button>{% endif %}
+                    <a href="{% url 'auser:department_head_detail' department_head.pk %}" class="btn btn-md btn-outline-dark shadow-none">{% translate "Details" %}</a> {% if perms.auser.activate_user %}<button class="btn btn-md btn-outline-success shadow-none"
+                        data-bs-toggle="modal" data-bs-target="#activate-{{ department_head.username }}"><i data-feather="activity"></i> {% translate "Activate" %}</button>{% endif %} {% if perms.auser.delete_user %}<button class="btn btn-md btn-outline-danger shadow-none"
+                        data-bs-toggle="modal" data-bs-target="#delete-{{ department_head.username }}"><i data-feather="trash-2"></i> {% translate "Delete" %}</button>{% endif %}
                 </div>
             </td>
             {% if perms.auser.activate_user %}
-            <div class="modal fade" id="activate-{{ content_creator.username }}" tabindex="-1" aria-labelledby="Activate content_creator User" aria-hidden="true">
+            <div class="modal fade" id="activate-{{ department_head.username }}" tabindex="-1" aria-labelledby="Activate department_head User" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-body">
-                            {% blocktranslate with first_name=content_creator.first_name last_name=content_creator.last_name %}Do you really wants to activate <strong>{{ first_name }} {{ last_name }}?</strong> User will able to login.{% endblocktranslate
-                            %}
+                            {% blocktranslate with first_name=department_head.first_name last_name=department_head.last_name %}Do you really wants to activate
+                            <strong>{{ first_name }} {{ last_name }}?</strong> User will able to login.{% endblocktranslate %}
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-primary shadow-none" data-bs-dismiss="modal" aria-label="Close">{% translate "Cancel" %}</button>
-                            <form action={% url 'auser:activate_content_creator' content_creator.pk %} method="post">{% csrf_token %}
+                            <form action={% url 'auser:activate_department_head' department_head.pk %} method="post">{% csrf_token %}
                                 <input class="btn btn-success btn-sm shadow-none" type="submit" value="{% translate " Acticate! " %}" />
                             </form>
                         </div>
@@ -58,16 +58,17 @@
                 </div>
             </div>
             {% endif %} {% if perms.auser.delete_user %}
-            <div class="modal fade" id="delete-{{ content_creator.username }}" tabindex="-1" aria-labelledby="Delete content_creator User" aria-hidden="true">
+            <div class="modal fade" id="delete-{{ department_head.username }}" tabindex="-1" aria-labelledby="Delete department_head User" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-body">
-                            {% blocktranslate with first_name=content_creator.first_name last_name=content_creator.last_name %}Do you really wants to delete <strong>{{ first_name }} {{ last_name }}?</strong><span class="text-danger"> <h6>This action is irreversable.</span>{%
-                            endblocktranslate %}
+                            {% blocktranslate with first_name=department_head.first_name last_name=department_head.last_name %} Do you really wants to delete
+                            <strong>{{ first_name }} {{ last_name }}?</strong>
+                            <span class="text-danger"> <h6>This action is irreversable.</span>{% endblocktranslate %}
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-success shadow-none" data-bs-dismiss="modal" aria-label="Close">{% translate "Cancel" %}</button>
-                            <form action={% url 'auser:delete_content_creator' content_creator.pk %} method="post">{% csrf_token %}
+                            <form action={% url 'auser:delete_department_head' department_head.pk %} method="post">{% csrf_token %}
                                 <input class="btn btn-danger btn-sm shadow-none" type="submit" value="{% translate " I understand, delete this user! " %}" />
                             </form>
                         </div>

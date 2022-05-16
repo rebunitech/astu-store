@@ -1,9 +1,9 @@
 {% extends "layouts/main.html" %} {% load i18n static humanize auser %} {% block content %}
 <table class="table shadow-lg w-100" id="dt_table_content_creator">
     <div class="float-end">
-        <a href="{% url " auser:content_creator_add " %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> {% translate "Add content creator" %}</a>
-        <a href="{% url " auser:deactivated_content_creator_list " %}" class="mx-2 btn btn-sm btn-warning shadow-none"><i data-feather="list"></i> {% translate "Deactivated content creator" %}</a> {% include "layouts/import_data.html" with ctype=view|ctype
-        %}
+        <a href="{% url 'auser:department_head_add' %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> {% translate "Add Department head" %}</a>
+        <a href="{% url 'auser:deactivated_department_head_list' %}" class="mx-2 btn btn-sm btn-warning shadow-none">
+            <i data-feather="list"></i> {% translate "Deactivated Department head" %}</a> {% include "layouts/import_data.html" with ctype=view|ctype %}
     </div>
     <hr>
     <thead>
@@ -22,38 +22,38 @@
         </tr>
     </thead>
     <tbody class="w-100">
-        {% for content_creator in content_creators %}
+        {% for department_head in department_heads %}
         <tr>
             <td class="details-control px-3"></td>
-            <td>{{ content_creator.username }}</td>
-            <td>{{ content_creator.first_name }}</td>
-            <td>{{ content_creator.last_name }}</td>
-            <td>{{ content_creator.email }}</td>
-            <td>{{ content_creator.get_sex_display }}</td>
-            <td>{{ content_creator.phone_number }}</td>
-            <td>{{ content_creator.profile_picture.url }}</td>
-            <td>{{ content_creator.last_login|default:"Never" }}</td>
-            <td>{{ content_creator.date_joined }}</td>
+            <td>{{ department_head.username }}</td>
+            <td>{{ department_head.first_name }}</td>
+            <td>{{ department_head.last_name }}</td>
+            <td>{{ department_head.email }}</td>
+            <td>{{ department_head.get_sex_display }}</td>
+            <td>{{ department_head.phone_number }}</td>
+            <td>{{ department_head.profile_picture.url }}</td>
+            <td>{{ department_head.last_login|default:"Never" }}</td>
+            <td>{{ department_head.date_joined }}</td>
             <td>
                 <div class="btn-group rounded" role="group" aria-label="Management buttons">
-                    <a href="{% url " auser:content_creator_detail " content_creator.pk %}" class="btn btn-md btn-outline-dark shadow-none">{% translate "Details" %}</a> {% if perms.auser.change_contentcreator %}<a href="{% url 'auser:content_creator_update' content_creator.pk %}"
-                        class="btn btn-md btn-outline-secondary shadow-none">{% translate "Update" %}</a>{% endif %} {% if perms.auser.change_user_permissions %}<a href="{% url 'auser:change_permission' content_creator.pk %}" class="btn btn-md btn-outline-success shadow-none">{% translate "Permissions" %}</a>{%
-                    endif %} {% if perms.auser.deactivate_user %}<button class="btn btn-md btn-outline-danger shadow-none" data-bs-toggle="modal" data-bs-target="#deactivate-{{ content_creator.username }}">{% translate "Deactivate" %}</button>{% endif
-                    %}
+                    <a href="{% url 'auser:department_head_detail' department_head.pk %} " class="btn btn-md btn-outline-dark shadow-none ">{% translate "Details " %}</a> {% if perms.auser.change_departmenthead %}<a href="{% url 'auser:department_head_update' department_head.pk %} "
+                        class="btn btn-md btn-outline-secondary shadow-none ">{% translate "Update " %}</a>{% endif %} {% if perms.auser.change_user_permissions %}
+                    <a href="{% url 'auser:change_permission' department_head.pk %} " class="btn btn-md btn-outline-success shadow-none ">{% translate "Permissions" %}</a>{% endif %} {% if perms.auser.deactivate_user %}
+                    <button class="btn btn-md btn-outline-danger shadow-none " data-bs-toggle="modal " data-bs-target="#deactivate-{{ department_head.username }} ">{% translate "Deactivate" %}</button>{% endif %}
                 </div>
             </td>
             {% if perms.auser.deactivate_user %}
-            <div class="modal fade" id="deactivate-{{ content_creator.username }}" tabindex="-1" aria-labelledby="Deactivate Content Creator" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            {% blocktranslate with first_name=content_creator.first_name last_name=content_creator.last_name %}Do you really wants to deactivate <strong>{{ first_name }} {{ last_name }}?</strong> User will not able to login.{% endblocktranslate
-                            %}
+            <div class="modal fade " id="deactivate-{{ department_head.username }} " tabindex="-1 " aria-labelledby="Deactivate Department Head " aria-hidden="true ">
+                <div class="modal-dialog ">
+                    <div class="modal-content ">
+                        <div class="modal-body ">
+                            {% blocktranslate with first_name=department_head.first_name last_name=department_head.last_name %}Do you really wants to deactivate
+                            <strong>{{ first_name }} {{ last_name }}?</strong> User will not able to login.{% endblocktranslate %}
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-success shadow-none" data-bs-dismiss="modal" aria-label="Close">{% translate "Cancel" %}</button>
-                            <form action={% url 'auser:deactivate_content_creator' content_creator.pk %} method="post">{% csrf_token %}
-                                <input class="btn btn-danger btn-sm shadow-none" type="submit" value="{% translate " I understand, deactivate! " %}" />
+                        <div class="modal-footer ">
+                            <button type="button " class="btn btn-sm btn-success shadow-none " data-bs-dismiss="modal " aria-label="Close ">{% translate "Cancel " %}</button>
+                            <form action={% url 'auser:deactivate_department_head' department_head.pk %} method="post ">{% csrf_token %}
+                                <input class="btn btn-danger btn-sm shadow-none " type="submit " value="{% translate 'I understand, deactivate!' %} " />
                             </form>
                         </div>
                     </div>
