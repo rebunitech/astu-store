@@ -1,0 +1,67 @@
+{% extends "layouts/main.html" %} {% load i18n static humanize auser %} {% block content %}
+<table class="table shadow-lg w-100" id="dt_table_content_creator">
+    <div class="float-end">
+        <a href="{% url 'auser:staffmember_add' %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> {% translate "Add Staff Member" %}</a>
+        <a href="{% url 'auser:deactivated_staffmember_list' %}" class="mx-2 btn btn-sm btn-warning shadow-none">
+            <i data-feather="list"></i> {% translate "Deactivated Staff member" %}</a> {% include "layouts/import_data.html" with ctype=view|ctype %}
+    </div>
+    <hr>
+    <thead>
+        <tr>
+            <th></th>
+            <th>{% translate "Username" %}</th>
+            <th>{% translate "First name" %}</th>
+            <th>{% translate "Last name" %}</th>
+            <th>{% translate "Email" %}</th>
+            <th>{% translate "Gender" %}</th>
+            <th>{% translate "Phone number" %}</th>
+            <th></th>
+            <th>{% translate "Last login" %}</th>
+            <th>{% translate "Date joined" %}</th>
+            <th>{% translate "Manage" %}</th>
+        </tr>
+    </thead>
+    <tbody class="w-100">
+        {% for staffmember in staffmembers %}
+        <tr>
+            <td class="details-control px-3"></td>
+            <td>{{ staffmember.username }}</td>
+            <td>{{ staffmember.first_name }}</td>
+            <td>{{ staffmember.last_name }}</td>
+            <td>{{ staffmember.email }}</td>
+            <td>{{ staffmember.get_sex_display }}</td>
+            <td>{{ staffmember.phone_number }}</td>
+            <td>{{ staffmember.profile_picture.url }}</td>
+            <td>{{ staffmember.last_login|default:"Never" }}</td>
+            <td>{{ staffmember.date_joined }}</td>
+            <td>
+                <div class="btn-group rounded" role="group" aria-label="Management buttons">
+                    <a href="{% url 'auser:staffmember_detail' staffmember.pk %} " class="btn btn-md btn-outline-dark shadow-none ">{% translate "Details " %}</a> {% if perms.auser.change_staffmember %}
+                    <a href="{% url 'auser:staffmember_update' staffmember.pk %} " class="btn btn-md btn-outline-secondary shadow-none ">{% translate "Update " %}</a>{% endif %} {% if perms.auser.change_user_permissions %}
+                    <a href="{% url 'auser:change_permission' staffmember.pk %} " class="btn btn-md btn-outline-success shadow-none ">{% translate "Permissions" %}</a>{% endif %} {% if perms.auser.deactivate_user %}
+                    <button class="btn btn-md btn-outline-danger shadow-none " data-bs-toggle="modal " data-bs-target="#deactivate-{{ staffmember.username }} ">{% translate "Deactivate" %}</button>{% endif %}
+                </div>
+            </td>
+            {% if perms.auser.deactivate_user %}
+            <div class="modal fade " id="deactivate-{{ staffmember.username }} " tabindex="-1 " aria-labelledby="Deactivate Staff member " aria-hidden="true ">
+                <div class="modal-dialog ">
+                    <div class="modal-content ">
+                        <div class="modal-body ">
+                            {% blocktranslate with first_name=staffmember.first_name last_name=staffmember.last_name %}Do you really wants to deactivate
+                            <strong>{{ first_name }} {{ last_name }}?</strong> User will not able to login.{% endblocktranslate %}
+                        </div>
+                        <div class="modal-footer ">
+                            <button type="button " class="btn btn-sm btn-success shadow-none " data-bs-dismiss="modal " aria-label="Close ">{% translate "Cancel " %}</button>
+                            <form action={% url 'auser:deactivate_staffmember' staffmember.pk %} method="post ">{% csrf_token %}
+                                <input class="btn btn-danger btn-sm shadow-none " type="submit " value="{% translate 'I understand, deactivate!' %} " />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
