@@ -9,7 +9,23 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 
 from auser.models import Staffmember
 from auser.utils import generate_username
+from auser.forms import StaffMemberRegistrationForm
+from auser.mixins import ( CurrentUserMixin,
+                           LogEntryChangeMixin,
+                           LogEntryAdditionMixin,
+                           LogEntryDeletionMixin
+)
 
+
+# TODO: to check signup
+
+class SignUpView(SuccessMessageMixin, CreateView):
+    model = Staffmember
+    template_name = "auser/signup.html"
+    form_class = StaffMemberRegistrationForm
+    success_url = reverse_lazy("auser:login")
+    success_message = _("Your account was created successfully. Please login.")
+    extra_context = {"title": _("Sign Up")}
 
 class AddStaffMember(CreateView, SuccessMessageMixin, PermissionRequiredMixin):
     """Generic view used to add staff member"""
@@ -21,13 +37,14 @@ class AddStaffMember(CreateView, SuccessMessageMixin, PermissionRequiredMixin):
         "last_name",
         "phone_number",
         "sex",
+        "department",
         "location",
         "po_box",
     )
     permission_required = ("auser.add_staffmember",)  #TODO:
     template_name = "auser/staffmember/add_staff_member.html"
     success_message = _("%(first_name)s %(last_name)s added successfully")
-    # success_url = reverse_lazy("auser:active_staff_member_list")
+    success_url = reverse_lazy("auser:active_staffmember_list")
     extra_context = {"title": _("Add Staff Member")}
     def form_valid(self, form):
             self.object = form.save(commit=False)
@@ -53,7 +70,7 @@ class UpdateStaffMember( PermissionRequiredMixin,
         "bio",
     )
     permission_required = ("auser.change_staffmember",)
-    # success_url = reverse_lazy("auser:active_staff_member_list")
+    success_url = reverse_lazy("auser:active_staffmember_list")
     template_name = "auser/staffmember/update_staff_member.html"
     success_message = _("%(first_name)s %(last_name)s updated successfully")
     extra_context = {"title": _("Update Staff Member")}
@@ -64,7 +81,7 @@ class UpdateStaffMember( PermissionRequiredMixin,
 
 class ListActiveStaffMembersView(PermissionRequiredMixin, ListView):
     model = Staffmember
-    template_name = "auser/staffmember/list_staff_members.html"
+    template_name = "auser/staffmember/list_active_staff_members.html"
     permission_required = ("auser.view_staffmember",)
     extra_context = {"title": _("Active Staff Members")}
     context_object_name = "staffmembers"
@@ -84,15 +101,15 @@ class ListDeactivatedStaffMembersView(PermissionRequiredMixin, ListView):
 
 
 class ActivateStaffMemberView(
-                             PermissionRequiredMixin,
-                              SuccessMessageMixin,
-                              # LogEntryChangeMixin,
-                               UpdateView ):
+                               PermissionRequiredMixin,
+                               SuccessMessageMixin,
+                             LogEntryChangeMixin,
+                               UpdateView 
+                               ):
     model = Staffmember
-    template_name = "auser/staffmember/activate_staff_member.html"
     fields = ("is_active",)
     permission_required = ("auser.activate_staffmember",)
-    # success_url = reverse_lazy("auser:deactivated_staff_member_list")
+    success_url = reverse_lazy("auser:deactivated_staffmember_list")
     success_message = _("%(first_name)s %(last_name)s activated successfully")
     http_method_names = ["post"]
 
@@ -116,13 +133,12 @@ class ActivateStaffMemberView(
 class DeactivateStaffMemberView(
                              PermissionRequiredMixin,
                               SuccessMessageMixin,
-                              # LogEntryChangeMixin,
+                              LogEntryChangeMixin,
                                UpdateView ):
     model = Staffmember
-    template_name = "auser/staffmember/deactivate_staff_member.html"
     permission_required = ("auser.deactivate_staffmember",)
     fields = ("is_active",)
-    # success_url = reverse_lazy("auser:active_staff_member_list")
+    success_url = reverse_lazy("auser:active_staffmember_list")
     success_message = _("%(first_name)s %(last_name)s deactivated successfully")
     http_method_names = ["post"]
 
@@ -147,10 +163,9 @@ class DeactivateStaffMemberView(
 class DeleteStaffMemberView(
                             PermissionRequiredMixin,
                              SuccessMessageMixin,
-                             # LogEntryDeletionMixin,
+                             LogEntryDeletionMixin,
                               DeleteView  ):
     model = Staffmember
-    template_name = "auser/staffmember/confirm_delete_staff_member.html"
     permission_required = (
         "auser.view_staffmember",
         "auser.delete_staffmember",
