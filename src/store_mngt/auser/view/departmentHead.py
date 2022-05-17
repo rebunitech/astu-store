@@ -23,11 +23,12 @@ class AddDepartmenHead(CreateView, SuccessMessageMixin, PermissionRequiredMixin)
         "sex",
         "location",
         "po_box",
+        "department",
     )
     permission_required = ("auser.add_department_head",)  #TODO:
     template_name = "auser/departmentHead/add_department_head.html"
     success_message = _("%(first_name)s %(last_name)s added successfully")
-    # success_url = reverse_lazy("auser:active_department_head_list")
+    success_url = reverse_lazy("auser:active_department_head_list")
     extra_context = {"title": _("Add Department Head")}
     def form_valid(self, form):
             self.object = form.save(commit=False)
@@ -46,6 +47,7 @@ class UpdateDepartmentHead( PermissionRequiredMixin,
         "first_name",
         "last_name",
         "phone_number",
+        "department",
         "sex",
         "location",
         "po_box",
@@ -53,7 +55,7 @@ class UpdateDepartmentHead( PermissionRequiredMixin,
         "bio",
     )
     permission_required = ("auser.change_department_head",)
-    # success_url = reverse_lazy("auser:active_department_head_list")
+    success_url = reverse_lazy("auser:active_department_head_list")
     template_name = "auser/departmentHead/update_department_head.html"
     success_message = _("%(first_name)s %(last_name)s updated successfully")
     extra_context = {"title": _("Update Department Head")}
@@ -99,7 +101,7 @@ class DeactivateDepartmentHeadView(
     model = DepartmentHead
     fields = ("is_active",)
     permission_required = ("auser.deactivate_department_head",)
-    # success_url = reverse_lazy("auser:active_department_head_list")
+    success_url = reverse_lazy("auser:active_department_head_list")
     success_message = _("%(first_name)s %(last_name)s deactivated successfully")
     http_method_names = ["post"]
 
@@ -154,8 +156,8 @@ class DeleteDepartmentHead(PermissionRequiredMixin, DeleteView):
     """Generic view used to delete department head. """
 
     model = DepartmentHead
-    permission_required = ("auser.delete_department_head",)
-    # success_url = reverse_lazy("auser:deactivated_department_head_list")
+    permission_required = ("auser.delete_departmenthead",)
+    success_url = reverse_lazy("auser:deactivated_department_head_list")
     http_method_names = ["post"]
 
     def get_queryset(self):
