@@ -7,6 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
+from auser.mixins import (LogEntryAdditionMixin, LogEntryChangeMixin,
+                          LogEntryDeletionMixin, SuperuserRequiredMixin)
 from auser.utils import generate_username
 
 UserModel = get_user_model()
@@ -16,15 +18,15 @@ from auser.signals import school_head_created
 
 
 class AddSchoolHeadView(
-                         SuccessMessageMixin,  
+                         SuccessMessageMixin,  SuperuserRequiredMixin, LogEntryAdditionMixin,
                          CreateView
                         ):
                         #  TODO: SuperuserRequiredMixin, LogEntryAdditionMixin,
     """Generic view used to add school head"""
 
     model = UserModel
-    fields = ("first_name", "last_name", "email", "phone_number", "sex")
-    success_url = reverse_lazy("auser:active_school_head")
+    fields = ("first_name", "last_name", "email", "phone_number", "sex", "school")
+    success_url = reverse_lazy("auser:active_school_head_list")
     success_message = _("%(first_name)s %(last_name)s added successfully")
     template_name = "auser/schoolHead/add_school_head.html"
     extra_context = {"title": _("Add School Head")}
@@ -44,7 +46,8 @@ class AddSchoolHeadView(
         return super().form_valid(form)
 
 
-class UpdateSchoolHeadView( 
+class UpdateSchoolHeadView( SuperuserRequiredMixin, 
+                            LogEntryChangeMixin,
                             SuccessMessageMixin,
                              UpdateView 
                              ):
@@ -60,9 +63,9 @@ class UpdateSchoolHeadView(
         "po_box",
         "location",
         "profile_picture",
-        "bio",
+        "bio", # TODO: for foriegn key --school
     )
-    # success_url = reverse_lazy("auser:active_school_head_list")
+    success_url = reverse_lazy("auser:active_school_head_list")
     success_message = _("%(first_name)s %(last_name)s updated successfully")
     template_name = "auser/schoolHead/update_school_head.html"
     extra_context = {"title": _("Update School Head")}
@@ -74,12 +77,12 @@ class UpdateSchoolHeadView(
             is_staff=True, is_active=True, is_superuser=False
         )
 
-class ListActiveSchoolHeadsView( ListView):
+class ListActiveSchoolHeadsView( SuperuserRequiredMixin, ListView):
     """Generic view used to list all school heads"""
 
     model = UserModel
     template_name = "auser/schoolHead/list_active_school_head.html"
-    context_object_name = "staff_users"
+    context_object_name = "school_heads"
     extra_context = {"title": _("Active School Heads")}
 
     def get_queryset(self):
@@ -91,7 +94,7 @@ class ListActiveSchoolHeadsView( ListView):
 
 
 
-class SchoolHeadDetailView( DetailView):
+class SchoolHeadDetailView(SuperuserRequiredMixin, DetailView):
     model = UserModel
     template_name = "auser/schoolHead/school_head_detail.html"
     extra_context = {"title": _("School Head Detail")}
@@ -108,7 +111,7 @@ class SchoolHeadDetailView( DetailView):
     def get_object_hisotry(self):
         """Return log entries for the object"""
 
-        return LogEntry.objects.filter(     #LogEntryChangeMixin, TODO: check this
+        return LogEntry.objects.filter(   LogEntryChangeMixin, # TODO: check this
             content_type_id=self.get_content_type(), object_id=self.object.pk
         )
 
@@ -169,9 +172,9 @@ class ActivateSchoolHeadView( SuccessMessageMixin,  UpdateView
         )
 
 
-class DeactivateSchoolHeadView(    # SuperuserRequiredMixin, 
+class DeactivateSchoolHeadView( SuperuserRequiredMixin, 
                                 SuccessMessageMixin, 
-                                # LogEntryChangeMixin,
+                                LogEntryChangeMixin,
                                  UpdateView 
                                  ):
     """Generic view used to deactivate school head"""
@@ -203,8 +206,8 @@ class DeactivateSchoolHeadView(    # SuperuserRequiredMixin,
         )
 
 
-class DeleteSchoolHeadView( #SuperuserRequiredMixin,
-                            # LogEntryDeletionMixin,
+class DeleteSchoolHeadView( SuperuserRequiredMixin,
+                             LogEntryDeletionMixin,
                              DeleteView):
     """Generic view used to delete school head"""
 
