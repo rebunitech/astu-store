@@ -9,6 +9,8 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 
 from auser.models import Storekeeper
 from auser.utils import generate_username
+from auser.mixins import ( CurrentUserMixin, LogEntryChangeMixin,
+                           LogEntryDeletionMixin, LogEntryAdditionMixin )
 
 
 class AddStoreKeeper(CreateView, SuccessMessageMixin, PermissionRequiredMixin):
@@ -23,12 +25,14 @@ class AddStoreKeeper(CreateView, SuccessMessageMixin, PermissionRequiredMixin):
         "sex",
         "location",
         "po_box",
+        "department",
     )
-    permission_required = ("auser.add_store_keeper",)  #TODO:
+    permission_required = ("auser.add_storekeeper",)  #TODO:
     template_name = "auser/storekeeper/add_store_keeper.html"
     success_message = _("%(first_name)s %(last_name)s added successfully")
-    # success_url = reverse_lazy("auser:active_store_keeper_list")
+    success_url = reverse_lazy("auser:active_store_keeper_list")
     extra_context = {"title": _("Add Store Keeper")}
+    
     def form_valid(self, form):
             self.object = form.save(commit=False)
             self.object.username = generate_username()
@@ -52,9 +56,9 @@ class UpdateStoreKeeper( PermissionRequiredMixin,
         "profile_picture",
         "bio",
     )
-    permission_required = ("auser.change_store_keeper",)
-    # success_url = reverse_lazy("auser:active_store_keeper_list")
-    template_name = "auser/staffmember/update_store_keeper.html"
+    permission_required = ("auser.change_storekeeper",)
+    success_url = reverse_lazy("auser:active_store_keeper_list")
+    template_name = "auser/storekeeper/update_store_keeper.html"
     success_message = _("%(first_name)s %(last_name)s updated successfully")
     extra_context = {"title": _("Update Store Keeper")}
 
@@ -86,13 +90,12 @@ class ListDeactivatedStoreKeepersView(PermissionRequiredMixin, ListView):
 class ActivateStoreKeeperView(
                              PermissionRequiredMixin,
                               SuccessMessageMixin,
-                              # LogEntryChangeMixin,
+                              LogEntryChangeMixin,
                                UpdateView ):
     model = Storekeeper
-    template_name = "auser/storekeeper/activate_store_keeper.html"
     fields = ("is_active",)
     permission_required = ("auser.activate_store_keeper",)
-    # success_url = reverse_lazy("auser:deactivated_store_keeper_list")
+    success_url = reverse_lazy("auser:deactivated_store_keeper_list")
     success_message = _("%(first_name)s %(last_name)s activated successfully")
     http_method_names = ["post"]
 
@@ -116,13 +119,12 @@ class ActivateStoreKeeperView(
 class DeactivateStoreKeeperView(
                              PermissionRequiredMixin,
                               SuccessMessageMixin,
-                              # LogEntryChangeMixin,
+                              LogEntryChangeMixin,
                                UpdateView ):
     model = Storekeeper
-    template_name = "auser/storekeeper/deactivate_store_keeper.html"
     permission_required = ("auser.deactivate_store_keeper",)
     fields = ("is_active",)
-    # success_url = reverse_lazy("auser:active_store_keeper_list")
+    success_url = reverse_lazy("auser:active_store_keeper_list")
     success_message = _("%(first_name)s %(last_name)s deactivated successfully")
     http_method_names = ["post"]
 
@@ -147,13 +149,12 @@ class DeactivateStoreKeeperView(
 class DeleteStoreKeeprView(
                             PermissionRequiredMixin,
                              SuccessMessageMixin,
-                             # LogEntryDeletionMixin,
+                             LogEntryDeletionMixin,
                               DeleteView  ):
     model = Storekeeper
-    template_name = "auser/storekeeper/confirm_delete_store_keeper.html"
-    permission_required = (
-        "auser.view_store_keeper",
-        "auser.delete_store_keeper",
+    permission_required = ( 
+        "auser.view_storekeeper",
+        "auser.delete_storekeeper",
     )
     success_url = reverse_lazy("auser:deactivated_store_keeper_list")
     http_method_names = ["post"]
@@ -168,7 +169,7 @@ class StoreKeeperDetailView(PermissionRequiredMixin, DetailView):
     template_name = "auser/storekeeper/store_keeper_detail.html"
     extra_context = {"title": _("Store Keeper Detail")}
     permission_required = ("auser.view_store_keeper",)
-    context_object_name = "store_keeper"
+    context_object_name = "store_keepers"
 
     def get_content_type(self):
         """Return content type for LogEntry"""
