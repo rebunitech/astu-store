@@ -2,28 +2,38 @@
 <nav id="sidebar" class="col-auto collapse collapse-horizontal show pt-1 px-0 mx-0 sticky-md-top">
     <div class="row sidebar-nav mx-0">
         <div class="d-flex justify-content-center">
-            <a class="mx-auto mt-4 mb-5" href="{% url 'pages:dashboard' %} "><img src="{% static 'img/logo.svg' %} " alt="gradient info system logo " class="img-fluid rounded-circle logo-img " /></a>
+            <a class="mx-auto mt-4 mb-5" href="{% url 'auser:dashboard' %} "><img src="{% static 'img/logo.svg' %} " alt="ASTU store management Logo " class="img-fluid rounded-circle logo-img " /></a>
         </div>
-        {% if perms.auser.view_contentcreator or perms.auser.view_staff or perms.auser.view_student %}
+        {% if perms.auser.view_departmentead or perms.auser.view_schoolhead or perms.auser.view_staffmember or perms.auser.view_storekeeper %}
         <div class="text-dark px-4 fs-4 ">{% translate "Users " %}</div>{% endif %}
-        <ul class="px-0 ">{% if perms.auser.view_student %}
+        <ul class="px-0 ">{% if perms.auser.view_schoolhead %}
             <li class="nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
                 <div class="col p-2 ps-3 text-center ">
                     <img class="img-sidebar " src="{% static 'img/student.svg' %} "></div>
                 <div class="col-10 ">
-                    <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_student_list' %} ">{% translate "Students " %}</a></div>
-            </li>{% endif %}{% if perms.auser.view_staff %}
+                    <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_school_head_list' %} ">{% translate "School heads " %}</a></div>
+            </li>{% endif %}{% if perms.auser.view_departmenthead %}
             <li class="nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
                 <div class="col py-2 px-3 text-center "><i data-feather="user"></i></div>
                 <div class="col-10 ">
-                    <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_staff_list' %} ">{% translate "Staff Members " %}</a></div>
+                    <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_department_head_list' %} ">{% translate "Department Heads " %}</a></div>
+            </li>{% endif %} {% if perms.auser.view_storeeper %}
+            <li class="nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
+                <div class="col py-2 px-3 text-center "><i data-feather="user"></i></div>
+                <div class="col-10 ">
+                    <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_store_keeper_list' %} ">{% translate "Store Keepers " %}</a></div>
+            </li>{% endif %} {% if perms.auser.view_staffmember %}
+            <li class="nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
+                <div class="col py-2 px-3 text-center "><i data-feather="user"></i></div>
+                <div class="col-10 ">
+                    <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_staffmember_list' %} ">{% translate "Staff Members " %}</a></div>
             </li>{% endif %}
         </ul>
     </div>
-    <div class="row sidebar-nav mx-0 ">{% if perms.page.view_flatpage %}
+    <div class="row sidebar-nav mx-0 ">{% if perms.page.view_item %}
         <li class="nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
-            <div class="col py-2 px-3 text-center "><i data-feather="user"></i></div>
-            <div class="col-10 "><a class="nav-link px-0 text-reset text-decoration-none " href="$ ">{% translate "Not Working " %}</a></div>
+            <div class="col py-2 px-3 text-center "><i data-feather="item"></i></div>
+            <div class="col-10 "><a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'core:list_items' %}">{% translate "Item " %}</a></div>
         </li>{% endif %}
         </ul>
     </div>
