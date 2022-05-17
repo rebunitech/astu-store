@@ -12,10 +12,10 @@
 </ul>
 <div class="tab-content" id="UserDetailContent">
     <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="home-tab">
-        {% include "auser/user/user_profile.html" with user=staff_user update_link="auser:staff_update"|reverse:staff_user.pk %}
+        {% include "auser/user/user_profile.html" with user=school_head update_link="auser:school_head_update"|reverse:school_head.pk %}
     </div>
     <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="profile-tab">
-        {% include "auser/user/user_actions_list.html" with user_actions=staff_user.logentry_set.iterator %}
+        {% include "auser/user/user_actions_list.html" with user_actions=school_head.logentry_set.iterator %}
     </div>
     <div class="tab-pane fade" id="hisotry" role="tabpanel" aria-labelledby="contact-tab">
         {% include "auser/user/object_history.html" with user_history=object_history %}
