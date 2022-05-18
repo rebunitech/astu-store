@@ -90,6 +90,14 @@ class School(Address, models.Model):
                                  null = False
 
     )
+    is_active = models.BooleanField(
+        _("active"),
+        default=True,
+        help_text=_("Designates whether this school is active or not")
+    )
+
+    def __str__(self) -> str:
+        return self.name
 
     
 
@@ -108,9 +116,16 @@ class Department(Address ,models.Model):
                                 on_delete=models.CASCADE,
                                 verbose_name=_("school"),
                                 related_name='departments',
-                                # default="ece"
+                                help_text=_("Please insert exist school"),
                                )
+    is_active = models.BooleanField(
+        _("is active"),
+        default=True,
+        help_text=_("Designates whether this department is active or not"),
+    )
 
+    def __str__(self) -> str:
+        return self.abbr_name
     
 class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
     """ Custom user model used as primary user in the platform. """
@@ -175,8 +190,8 @@ class DepartmentHead(User):
                             Department,
                             on_delete=models.CASCADE,
                             related_name="departmentheads",
-                            verbose_name="department_heads",
-                            # default="cse"
+                            verbose_name="department",
+                            
                             )
     class Meta:
         verbose_name = _("department head")
@@ -190,6 +205,14 @@ class DepartmentHead(User):
 
 class Staffmember(User):
     """ Staffmember are requesting items users. """
+
+    department = models.ForeignKey(
+                            Department,
+                            on_delete=models.CASCADE,
+                            related_name="staffmembers",
+                            verbose_name="department",
+                            
+                            )
 
     class Meta:
         verbose_name = _("staff member")
@@ -208,8 +231,7 @@ class Storekeeper(User):
                             Department,
                             on_delete=models.CASCADE,
                             related_name="store_keepers",
-                            verbose_name="storekeepers",
-                            # default="123"
+                            verbose_name="department",
     )
     class Meta:
         verbose_name = _("store keeper")
