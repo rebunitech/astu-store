@@ -1,4 +1,4 @@
-"""gradient_infosys auser URL Configuration
+"""ASTU store management auser form
 	
     Created by: Ashenafi Zenebe
 """
@@ -10,8 +10,16 @@ from django.contrib.auth.forms import (AuthenticationForm, UserCreationForm,
 from django.contrib.auth.models import Permission
 from django.utils.translation import gettext_lazy as _
 
+from auser.models import Staffmember
+
 
 UserModel = get_user_model()
+
+# TODO: check this also
+class StaffMemberRegistrationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = Staffmember
+        fields = ("username", "email", "first_name", "last_name", "phone_number", "sex")
 
 
 class UserChangeForm(forms.ModelForm):
