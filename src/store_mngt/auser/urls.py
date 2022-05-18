@@ -7,13 +7,14 @@ from django.urls import re_path, include, reverse_lazy, path
 from django.contrib.auth.views import (LoginView, PasswordChangeView,
                                        PasswordResetConfirmView,
                                        PasswordResetView)
-from auser.view.departmentHead import AddDepartmenHead
 from auser import view  
 from auser.forms import LoginForm
 
 app_name = "auser"
 
 django_auth_urlpattern = [
+    re_path(r"^dashboard/$", view.DashboardView.as_view(), name="dashboard"),
+
     re_path(
         r"^login/$",
         LoginView.as_view(
@@ -26,7 +27,7 @@ django_auth_urlpattern = [
     re_path(
         r"^password_change/$",
         PasswordChangeView.as_view(
-            success_url=reverse_lazy("pages:dashboard"),
+            success_url=reverse_lazy("auser:dashboard"),
             extra_context = {"title": "Change Password"},
         ),
         name = "password_change",
@@ -207,6 +208,16 @@ staffmember_urlpatterns = [
             view.ListActiveStaffMembersView.as_view(),
             name="active_staffmember_list"),
     re_path(
+        r"^add/$", 
+        view.AddStaffMember.as_view(),
+        name="staffmember_add"
+    ),
+    re_path(
+        r"^update/(?P<pk>\d+)/$",
+        view.UpdateStaffMember.as_view(),
+        name="staffmember_update",
+    ),
+    re_path(
         r"^deactivated/$",
         view.ListDeactivatedStaffMembersView.as_view(),
         name="deactivated_staffmember_list",
@@ -234,6 +245,88 @@ staffmember_urlpatterns = [
 ]
 
 
+department_urlpatterns = [
+    re_path(r"^$",  
+                view.ListActiveDepartmentView.as_view(), 
+                name="active_department_list"
+                ),
+    re_path(
+        r"deactivated/$",
+        view.ListDeactiveDepartmentView.as_view(),
+        name="list_deactivate_department",
+    ),
+    re_path(
+        r"^add/$",
+        view.AddDepartmentView.as_view(),
+        name="add_department",
+    ),
+    re_path(
+        r"^delete/(?P<pk>\d+)/$",
+        view.DeleteDepartment.as_view(),
+        name="delete_department",
+    ),
+    re_path(
+        r"^update/(?P<pk>\d+)/$",
+        view.UpdateDepartmentView.as_view(),
+        name="update_department",
+    ),
+    re_path(
+        r"^deactivate/(?P<pk>\d+)/$",
+        view.DeactivateDepartmentView.as_view(),
+        name="deactivate_department",
+    ),
+    re_path(
+        r"^activate/(?P<pk>\d+)/$",
+        view.ActivateDepartmentView.as_view(),
+        name="activate_department",
+    ),
+    re_path(
+        r"^detail/(?P<pk>\d+)/$",
+        view.DepartmentDetailView.as_view(),
+        name="department_detail",
+    ),
+]
+
+school_urlpatterns = [
+    re_path( r"^$",
+            view.ListActiveSchoolView.as_view(),
+            name="active_school_list",
+    ),
+    re_path(
+        r"^deactivated/$",
+        view.ListDeactivatedSchoolView.as_view(),
+        name="list_deactivated_school",
+    ),
+    re_path(
+        r"^add/$",
+        view.AddSchoolView.as_view(),
+        name="add_school"
+    ),
+    re_path(
+        r"^update/(?P<pk>\d+)/$",
+        view.UpdateSchoolView.as_view(),
+        name="update_school",
+    ),
+    re_path(
+        r"^deactivate/(?P<pk>\d+)/$",
+        view.DeactivateSchoolView.as_view(),
+        name="deactivate_school",
+    ),
+    re_path(
+        r"^activate/(?P<pk>\d+)/$",
+        view.ActivateSchoolView.as_view(),
+        name="activate_school",
+    ),
+    re_path(
+        r"^delete/(?P<pk>\d+)/$",
+        view.DeleteSchool.as_view(),
+        name="delete_school",),
+    re_path(
+        r"^detail/(?P<pk>\d+)/$",
+        view.SchoolDetailView.as_view(),
+        name="school_detail",),
+    
+]
 
 urlpatterns = [
     re_path(r"", include(django_auth_urlpattern)),
@@ -246,6 +339,8 @@ urlpatterns = [
     re_path(r"^staffmember/", include(staffmember_urlpatterns)),
     re_path(r"^import/(?P<pk>\d+)/$", view.ImportView.as_view(), name="import_data"),
     re_path(r"", include("django.contrib.auth.urls")),
+    re_path(r"^department/", include(department_urlpatterns)),
+    re_path(r"^school/", include(school_urlpatterns)),
 
 ]
 
