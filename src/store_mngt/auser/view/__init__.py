@@ -16,8 +16,8 @@ from .departmentHead import ( AddDepartmenHead, DeleteDepartmentHead,
 from .staffmember import ( AddStaffMember, DeleteStaffMemberView,
                            StaffMemberDetailView, UpdateStaffMember,
                            ActivateStaffMemberView, DeactivateStaffMemberView,
-                           ListActiveStaffMembersView, ListDeactivatedStaffMembersView
-                           )
+                           ListActiveStaffMembersView, ListDeactivatedStaffMembersView,
+                           SignUpView,)
 from .storekeeper import (  AddStoreKeeper,  DeleteStoreKeeprView, 
                            StoreKeeperDetailView, UpdateStoreKeeper ,
                            ActivateStoreKeeperView, DeactivateStoreKeeperView,
@@ -25,10 +25,20 @@ from .storekeeper import (  AddStoreKeeper,  DeleteStoreKeeprView,
 from .user import (UserActionsListView, ProfileEditView,
                     ChangePermissionView, PasswordResetDoneView
                     )
+from .department import (AddDepartmentView, UpdateDepartmentView,
+                         ListActiveDepartmentView, ListDeactiveDepartmentView,
+                         DeleteDepartment,DepartmentDetailView,
+                         DeactivateDepartmentView, ActivateDepartmentView)
 
+from .school import (AddSchoolView, UpdateSchoolView,
+                     ListActiveSchoolView, ListDeactivatedSchoolView,
+                     DeactivateSchoolView, ActivateSchoolView, 
+                     DeleteSchool, SchoolDetailView
+                     )
 from .views import ( DashboardView, ImportView)
 
 __all__ = [
+    "SignUpView",
     "AddSchoolHeadView",  
     "DeleteSchoolHeadView",
     "ListActiveSchoolHeadsView", 
@@ -39,7 +49,7 @@ __all__ = [
     "UpdateSchoolHeadView",
     "AddDepartmenHead", 
     "DeleteDepartmentHead",
-    "DepartmentHeadDetailView",
+    "DepaDepartmentDetailViewrtmentHeadDetailView",
     "UpdateDepartmentHead",
     "ActivateDepartmentHeadView", 
     "DeactivateDepartmentHeadView",
@@ -66,4 +76,20 @@ __all__ = [
      "PasswordResetDoneView",
     "DashboardView", 
     "ImportView",
+    "AddDepartmentView",
+    "UpdateDepartmentView",
+    "ListActiveDepartmentView",
+    "ListDeactiveDepartmentView",
+    "DeleteDepartment",
+    "DepartmentDetailView",
+    "DeactivateDepartmentView",
+    "ActivateDepartmentView",
+    "AddSchoolView",
+    "UpdateSchoolView",
+    "ListActiveSchoolView",
+    "ListDeactivatedSchoolView",
+    "DeactivateSchoolView",
+    "ActivateSchoolView",
+    "DeleteSchool",
+    "SchoolDetailView",
 ]
