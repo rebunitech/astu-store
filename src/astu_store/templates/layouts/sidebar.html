@@ -1,0 +1,76 @@
+{% load static %} <nav id="sidebar" class="col-auto collapse d-md-block collapse-horizontal pt-1 px-0 mx-0 sticky-md-top shadow-md">
+  <div class="row sidebar-nav mx-0">
+    <div class="d-flex justify-content-center">
+      <a class="mx-auto mt-4 mb-5" href="{% url 'auser:dashboard' %}"><img src="{% static 'img/logo.svg' %}" alt="ASTU Store" class="img-fluid rounded-circle logo-img" /></a>
+    </div>
+    <div class="text-dark px-4 fs-4">Users</div>
+    <ul class="px-0">
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-bahai"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="/auth/student/">Students</a>
+        </div>
+      </li>
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center ">
+          <i class="fa-solid fa-car-tunnel"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="/auth/student/">Instructors</a>
+        </div>
+      </li>
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-chess-king"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="/auth/student/">Content Creators</a>
+        </div>
+      </li>
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-child-rifle"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="/auth/student/">Staff Members</a>
+        </div>
+      </li>
+      <li class="divider"></li>
+    </ul>
+    <div class="text-dark px-4 fs-4"></div>
+    <ul class="px-0">
+      {% if perms.store.view_store %}
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-store"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'store:list_stores' %}">Stores</a>
+        </div>
+      </li>
+      {% endif  %}
+      {% if perms.store.view_item %}
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-bars-staggered"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'store:list_items' %}">Items</a>
+        </div>
+      </li>
+      {% endif  %}
+      {% if perms.store.view_specificationtype %}
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-ruler-horizontal"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'store:list_specification_types' %}">Specification Types</a>
+        </div>
+      </li>
+      {% endif  %}
+    </ul>
+  </div>
+</nav>

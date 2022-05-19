@@ -1,0 +1,61 @@
+{% extends "layouts/main.html" %} {% block content %}
+<div class="row">
+    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
+        {% if perms.store.add_item %}<a href="{% url 'store:add_item' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Item</a>{% endif %}
+    </div>
+    <hr />
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="item_list" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0" style="max-width: 25px;"></th>
+                    <th class="border-bottom border-0">Name</th>
+                    <th class="border-bottom border-0">Total Quantity</th>
+                    <th class="border-bottom border-0">Dead Stock Number</th>
+                    <th class="border-bottom border-0">Store</th>
+                    <th class="border-bottom border-0">Shelf</th>
+                    <th class="border-bottom border-0">Year</th>
+                    <th class="border-bottom border-0">Supplier</th>
+                    <th class="border-bottom border-0">Status</th>
+                    <th class="border-bottom border-0"></th>
+                </tr>
+            </thead>
+            <tbody>{% if items %}{% for item in items %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.dead_stock_number }}</td>
+                    <td>{{ item.store }}</td>
+                    <td>{{ item.shelf|default:"On Store" }}</td>
+                    <td>{{ item.year|default:"-" }}</td>
+                    <td>{{ item.supplier|default:"-" }}</td>
+                    <td>{{ item.get_status_display }}</td>
+                    <td class="text-center">
+                        {% if perms.store.view_specification %}
+                        <a class="btn btn-sm btn-dark shadow-none px-2 mx-1" href="{% url 'store:list_specifications' item.pk %}"><i class="fa-solid fa-table-cells-large me-2"></i>Specifications</a>{% endif %} 
+                        {% if perms.store.change_item %}
+                        <a class="btn btn-sm btn-primary shadow-none px-2 mx-1" href="{% url 'store:update_item' item.pk %}"><i class="fa-solid fa-pen me-2"></i>Update</a>{% endif %} 
+                        {% if perms.store.delete_item %}<button class="btn btn-sm btn-danger shadow-none px-2 mx-1" data-bs-toggle="modal" data-bs-target="#delete-item-{{ item.pk }}"><i class="fa-solid fa-circle-minus me-2"></i>Delete</button>
+                        <div class="modal fade" id="delete-item-{{ item.pk }}" tabindex="-1" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-body">
+                               Do you really wants to delete <strong>{{ item }}</strong>? This action is irreversable.
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-primary shadow-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                <form action="{% url 'store:delete_item' item.pk %}" method="post">{% csrf_token %}
+                                  <input class="btn btn-danger btn-sm shadow-none" type="submit" value="I understand, delete!" />
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

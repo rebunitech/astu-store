@@ -3,6 +3,7 @@ import uuid
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from smart_selects.db_fields import ChainedForeignKey
 
 from auser.models import Department
 
@@ -19,7 +20,7 @@ class Store(models.Model):
         on_delete=models.CASCADE,
     )
     block = models.IntegerField(_("block"), validators=[MinValueValidator(1)])
-    room = models.IntegerField(_("number"), validators=[MinValueValidator(1)])
+    room = models.IntegerField(_("room"), validators=[MinValueValidator(1)])
     status = models.CharField(
         _("status"),
         max_length=3,
@@ -27,7 +28,7 @@ class Store(models.Model):
         default=StatusChoices.ACTIVE,
         help_text=_("Is the store on use?"),
     )
-    remark = models.CharField(_("remark"), max_length=255, blank=True)
+    remark = models.TextField(_("remark"), max_length=255, blank=True)
 
     class Meta:
         db_table = "store"
@@ -36,7 +37,11 @@ class Store(models.Model):
         unique_together = ("block", "room")
 
     def __str__(self):
-        return f"{self.department.short_name}-{self.block}-{self.room}"
+        return f"{self.department.short_name} B{self.block} R{self.room}"
+
+
+def uuid_hex():
+    return uuid.uuid4().hex
 
 
 class Shelf(models.Model):
@@ -44,19 +49,25 @@ class Shelf(models.Model):
         ACTIVE = "ACT", "Active"
         INACTIVE = "INA", "Inactive"
 
-    id = models.UUIDField(_("id"), primary_key=True, default=uuid.uuid4, editable=False)
+    shelf_id = models.CharField(
+        _("shelf ID"), max_length=50, unique=True, default=uuid_hex
+    )
     store = models.ForeignKey(
         Store, verbose_name="store", related_name="shelves", on_delete=models.CASCADE
     )
-    no_row = models.IntegerField(_("row"), validators=[MinValueValidator(1)])
-    no_column = models.IntegerField(_("column"), validators=[MinValueValidator(1)])
+    no_row = models.IntegerField(
+        _("Number of row(s)"), validators=[MinValueValidator(1)]
+    )
+    no_column = models.IntegerField(
+        _("Number of column(s)"), validators=[MinValueValidator(1)]
+    )
     status = models.CharField(
         _("status"),
         max_length=3,
         choices=StatusChoices.choices,
         default=StatusChoices.ACTIVE,
     )
-    remark = models.CharField(_("remark"), max_length=255, blank=True)
+    remark = models.TextField(_("remark"), max_length=255, blank=True)
 
     class Meta:
         db_table = "shelf"
@@ -64,7 +75,7 @@ class Shelf(models.Model):
         verbose_name_plural = _("shelves")
 
     def __str__(self):
-        return f"{self.store.block}-{self.store.room}-{self.no_row}-{self.no_column} [{self.id.hex}]"
+        return self.shelf_id
 
 
 class Item(models.Model):
@@ -75,29 +86,34 @@ class Item(models.Model):
     name = models.CharField(_("name"), max_length=255, db_index=True)
     description = models.TextField(_("description"), blank=True)
     quantity = models.IntegerField(_("quantity"), validators=[MinValueValidator(1)])
-    dead_stock_number = models.IntegerField(
-        _("dead stock number"), validators=[MinValueValidator(1)]
+    dead_stock_number = models.CharField(_("dead stock number"), max_length=50)
+    store = models.ForeignKey(
+        Store, verbose_name="store", related_name="items", on_delete=models.CASCADE
     )
-    shelf = models.ForeignKey(
+    shelf = ChainedForeignKey(
         Shelf,
+        chained_field="store",
+        chained_model_field="store",
         verbose_name="shelf",
         related_name="items",
+        show_all=False,
+        auto_choose=True,
+        sort=True,
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
     )
-    store = models.ForeignKey(
-        Store, verbose_name="store", related_name="items", on_delete=models.CASCADE
+    year = models.IntegerField(
+        _("year"), validators=[MinValueValidator(1900)], blank=True, null=True
     )
-    year = models.IntegerField(_("year"), validators=[MinValueValidator(1)])
-    supplier = models.CharField(_("supplier"), max_length=255)
+    supplier = models.CharField(_("supplier"), max_length=255, blank=True, null=True)
     status = models.CharField(
         _("status"),
         max_length=3,
         choices=StatusChoices.choices,
         default=StatusChoices.ACTIVE,
     )
-    remark = models.CharField(_("remark"), max_length=255, blank=True)
+    remark = models.TextField(_("remark"), max_length=255, blank=True)
 
     class Meta:
         db_table = "item"
@@ -116,6 +132,9 @@ class SpecificationType(models.Model):
         verbose_name = _("specification type")
         verbose_name_plural = _("specification types")
 
+    def __str__(self):
+        return f"{self.name} ({self.si_unit})"
+
 
 class Specification(models.Model):
     item = models.ForeignKey(
@@ -130,8 +149,8 @@ class Specification(models.Model):
         related_name="specifications",
         on_delete=models.CASCADE,
     )
-    value = models.FloatField(_("value"))
-    remark = models.CharField(_("remark"), max_length=255, blank=True)
+    value = models.CharField(_("value"), max_length=255)
+    remark = models.TextField(_("remark"), max_length=255, blank=True)
 
     class Meta:
         db_table = "specification"

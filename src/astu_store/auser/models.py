@@ -113,6 +113,14 @@ class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
             models.Index(fields=["username"], name="user_username_idx"),
         ]
 
+    @property
+    def is_school_representative(self):
+        return hasattr(self, "schoolrepresentative")
+
+    @property
+    def is_department_representative(self):
+        return hasattr(self, "departmentrepresentative")
+
 
 class SchoolOrDepartment(models.Model):
     """Abstruct model that used in school and departments."""
