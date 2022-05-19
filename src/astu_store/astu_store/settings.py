@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Local App
     "auser",
+    "store",
 ]
 
 MIDDLEWARE = [

@@ -1,8 +1,9 @@
-from auser import views
 from django.contrib.auth.views import (LoginView, PasswordChangeView,
                                        PasswordResetConfirmView,
                                        PasswordResetView)
 from django.urls import include, path, re_path, reverse_lazy
+
+from auser import views
 
 app_name = "auser"
 django_auth_urlpatterns = [
