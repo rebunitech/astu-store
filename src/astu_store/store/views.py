@@ -162,11 +162,13 @@ class AddItemView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     permission_required = ("store.add_item",)
     success_message = _('Item "%(name)s" added successfully.')
     template_name = "store/item/add.html"
+    # success_url = reverse_lazy("store:list_items")
     extra_context = {"title": _("Add item")}
 
     def get_success_url(self):
+        print(self.object)
         return reverse_lazy(
-            "store:add_specification", kwargs={"item_pk": self.get_object().pk}
+            "store:add_specification", kwargs={"item_pk": self.object.pk}
         )
 
 
@@ -182,8 +184,8 @@ class ListItemsView(PermissionRequiredMixin, ListView):
         user = self.request.user
         if user.is_superuser:
             return qs
-        elif user.is_school_representative():
-            return qs.filter(store__department__school=user.school)
+        elif user.is_college_representative():
+            return qs.filter(store__department__college=user.college)
         return qs.filter(store__department=user.department)
 
 
@@ -250,7 +252,7 @@ class ListSpecificationsView(PermissionRequiredMixin, ListView):
 
 
 class UpdateSpecificationView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = Item
+    model = Specification
     fields = ("specification_type", "value", "remark")
     permission_required = ("store.change_specification",)
     success_message = _("Specification updated successfully.")

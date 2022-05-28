@@ -4,41 +4,53 @@
       <a class="mx-auto mt-4 mb-5" href="{% url 'auser:dashboard' %}"><img src="{% static 'img/logo.svg' %}" alt="ASTU Store" class="img-fluid rounded-circle logo-img" /></a>
     </div>
     <div class="text-dark px-4 fs-4">Users</div>
+    <div class="text-dark px-4 fs-4"></div>
     <ul class="px-0">
+      {% if perms.auser.add_college %}
       <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
         <div class="col p-2 ps-3 text-center">
-          <i class="fa-solid fa-bahai"></i>
+          <i class="fa-solid fa-building-columns me-2"></i>
         </div>
         <div class="col-10">
-          <a class="nav-link px-0 text-reset text-decoration-none" href="/auth/student/">Students</a>
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'auser:list_colleges' %}">Colleges</a>
         </div>
-      </li>
-      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-        <div class="col p-2 ps-3 text-center ">
-          <i class="fa-solid fa-car-tunnel"></i>
-        </div>
-        <div class="col-10">
-          <a class="nav-link px-0 text-reset text-decoration-none" href="/auth/student/">Instructors</a>
-        </div>
-      </li>
-      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-        <div class="col p-2 ps-3 text-center">
-          <i class="fa-solid fa-chess-king"></i>
-        </div>
-        <div class="col-10">
-          <a class="nav-link px-0 text-reset text-decoration-none" href="/auth/student/">Content Creators</a>
-        </div>
-      </li>
-      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-        <div class="col p-2 ps-3 text-center">
-          <i class="fa-solid fa-child-rifle"></i>
-        </div>
-        <div class="col-10">
-          <a class="nav-link px-0 text-reset text-decoration-none" href="/auth/student/">Staff Members</a>
-        </div>
-      </li>
-      <li class="divider"></li>
+      </li>{% endif  %}
     </ul>
+    <div class="text-dark px-4 fs-4">Requests</div>
+    <div class="text-dark px-4 fs-4"></div>
+    <ul class="px-0">
+      {% if perms.store.view_store %}
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-circle-plus me-2"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:make-request' %}">Requeste Item</a>
+        </div>
+      </li>
+      {% endif  %}
+      {% if perms.store.view_store %}
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-store"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:list-request' %}">Requested Items <span class="badge bg-success rounded-pill px-3 ms-3">{{ pending_requests }}</span></a>
+        </div>
+      </li>
+      {% endif  %}
+      {% if perms.store.view_item %}
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-bars-staggered"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:request-history' %}">Your Request History</a>
+        </div>
+      </li>
+      {% endif  %}
+    </ul>
+    <div class="text-dark px-4 fs-4">Store</div>
     <div class="text-dark px-4 fs-4"></div>
     <ul class="px-0">
       {% if perms.store.view_store %}

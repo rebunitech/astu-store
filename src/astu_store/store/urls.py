@@ -7,7 +7,9 @@ app_name = "store"
 store_urls = [
     re_path(r"^$", views.ListStoresView.as_view(), name="list_stores"),
     re_path(r"^add/$", views.AddStoreView.as_view(), name="add_store"),
-    re_path(r"^(?P<pk>\d+)/$", views.UpdateStoreView.as_view(), name="update_store"),
+    re_path(
+        r"^(?P<pk>\d+)/update/$", views.UpdateStoreView.as_view(), name="update_store"
+    ),
     re_path(
         r"^(?P<pk>\d+)/delete/$", views.DeleteStoreView.as_view(), name="delete_store"
     ),
@@ -35,7 +37,9 @@ shellf_urls = [
 item_urls = [
     re_path(r"^$", views.ListItemsView.as_view(), name="list_items"),
     re_path(r"^add/$", views.AddItemView.as_view(), name="add_item"),
-    re_path(r"^(?P<pk>\d+)/$", views.UpdateItemView.as_view(), name="update_item"),
+    re_path(
+        r"^(?P<pk>\d+)/update/$", views.UpdateItemView.as_view(), name="update_item"
+    ),
     re_path(
         r"^(?P<pk>\d+)/delete/$", views.DeleteItemView.as_view(), name="delete_item"
     ),
@@ -53,7 +57,7 @@ specification_urls = [
         name="add_specification",
     ),
     re_path(
-        r"^(?P<pk>\d+)/$",
+        r"^(?P<pk>\d+)/update/$",
         views.UpdateSpecificationView.as_view(),
         name="update_specification",
     ),

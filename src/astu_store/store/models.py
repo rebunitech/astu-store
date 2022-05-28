@@ -1,5 +1,6 @@
 import uuid
 
+from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -7,12 +8,20 @@ from smart_selects.db_fields import ChainedForeignKey
 
 from auser.models import Department
 
+UserModel = get_user_model()
+
 
 class Store(models.Model):
     class StatusChoices(models.TextChoices):
-        ACTIVE = "ACT", "Active"
-        INACTIVE = "INA", "Inactive"
+        ACTIVE = "ACT", _("Active")
+        INACTIVE = "INA", _("Inactive")
 
+    store_keepers = models.ManyToManyField(
+        UserModel,
+        verbose_name=_("store keeper"),
+        related_name="stores",
+        limit_choices_to={"is_store_keeper": True},
+    )
     department = models.ForeignKey(
         Department,
         verbose_name="department",
@@ -119,6 +128,9 @@ class Item(models.Model):
         db_table = "item"
         verbose_name = _("item")
         verbose_name_plural = _("items")
+
+    def __str__(self):
+        return self.name
 
 
 class SpecificationType(models.Model):

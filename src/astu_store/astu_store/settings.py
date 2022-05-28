@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # Local Apps
     "auser",
     "store",
+    "request",
 ]
 
 MIDDLEWARE = [
@@ -84,7 +85,9 @@ WSGI_APPLICATION = "astu_store.wsgi.application"
 
 DATABASES = {
     "default": config(
-        "DATABASE_URL", default="sqlite:///" + str(BASE_DIR) + "db.sqlite3", cast=db_url
+        "DATABASE_URL",
+        default="sqlite:///" + str(BASE_DIR) + "/db.sqlite3",
+        cast=db_url,
     )
 }
 

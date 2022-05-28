@@ -3,6 +3,7 @@ from django.contrib.auth.models import (AbstractBaseUser, PermissionsMixin,
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from smart_selects.db_fields import ChainedForeignKey
 
 from auser.validators import PhoneNumberValidator
 
@@ -47,9 +48,6 @@ class AbstractUser(models.Model):
     last_name = models.CharField(_("last name"), max_length=150)
     sex = models.CharField(
         _("Gender"), max_length=2, choices=SexChoices.choices, blank=True, null=True
-    )
-    bio = models.TextField(
-        _("Bio"), help_text=_("Tell us about your self"), null=True, blank=True
     )
     profile_picture = models.ImageField(
         _("Profile picture"), upload_to="profile_pictures/", default="default.svg"
@@ -102,7 +100,10 @@ class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
 
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = ["email", "phone_number", "sex"]
+    REQUIRED_FIELDS = [
+        "email",
+        "phone_number",
+    ]
 
     class Meta:
         verbose_name = _("user")
@@ -112,22 +113,97 @@ class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
             models.Index(fields=["id"], name="user_id_idx"),
             models.Index(fields=["username"], name="user_username_idx"),
         ]
+        permissions = [
+            ("can_add_college_representative", "Can add college representative"),
+            ("can_view_college_representative", "Can change college representative"),
+            ("can_change_college_representative", "Can view college representative"),
+            ("can_delete_college_representative", "Can delete college representative"),
+            (
+                "can_activate_college_representative",
+                "Can activate college representative",
+            ),
+            (
+                "can_deactivate_college_representative",
+                "Can deactivate college representative",
+            ),
+            ("can_add_department_representative", "Can add department representative"),
+            (
+                "can_view_department_representative",
+                "Can change department representative",
+            ),
+            (
+                "can_change_department_representative",
+                "Can view department representative",
+            ),
+            (
+                "can_delete_department_representative",
+                "Can delete department representative",
+            ),
+            (
+                "can_activate_department_representative",
+                "Can activate department representative",
+            ),
+            (
+                "can_deactivate_department_representative",
+                "Can deactivate department representative",
+            ),
+            ("can_add_staff_member", "Can add staff member"),
+            ("can_view_staff_member", "Can change staff member"),
+            ("can_change_staff_member", "Can view staff member"),
+            ("can_delete_staff_member", "Can delete staff member"),
+            ("can_activate_staff_member", "Can activate staff member"),
+            ("can_deactivate_staff_member", "Can deactivate staff member"),
+            ("can_add_store_keeper", "Can add store keeper"),
+            ("can_view_store_keeper", "Can change store keeper"),
+            ("can_change_store_keeper", "Can view store keeper"),
+            ("can_delete_store_keeper", "Can delete store keeper"),
+            ("can_activate_store_keeper", "Can activate store keeper"),
+            ("can_deactivate_store_keeper", "Can deactivate store keeper"),
+        ]
 
     @property
-    def is_school_representative(self):
-        return hasattr(self, "schoolrepresentative")
+    def is_college_representative(self):
+        if self.is_superuser:
+            return True
+        return self.groups.filter(name="college_representative").exists()
 
     @property
     def is_department_representative(self):
-        return hasattr(self, "departmentrepresentative")
+        if self.is_superuser:
+            return True
+        return self.groups.filter(name="department_representative").exists()
+
+    @property
+    def is_store_keeper(self):
+        if self.is_superuser:
+            return True
+        return self.groups.filter(name="store_keeper").exists()
+
+    @property
+    def is_staff_member(self):
+        if self.is_superuser:
+            return True
+        return self.groups.filter(name="staff_member").exists()
 
 
-class SchoolOrDepartment(models.Model):
-    """Abstruct model that used in school and departments."""
+class CollegeOrDepartment(models.Model):
+    """Abstruct model that used in college and departments."""
+
+    class StatusChoices(models.TextChoices):
+        ACTIVE = "active", _("Active")
+        DEACTIVATED = "deactivated", _("Deactivated")
 
     name = models.CharField(_("name"), max_length=150)
-    short_name = models.CharField(_("short name"), max_length=10)
-    date_created = models.DateField(auto_now_add=True)
+    short_name = models.CharField(_("short name"), unique=True, max_length=10)
+    description = models.TextField(_("description"))
+    status = models.CharField(
+        _("status"),
+        max_length=15,
+        choices=StatusChoices.choices,
+        default=StatusChoices.ACTIVE,
+    )
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
@@ -135,20 +211,28 @@ class SchoolOrDepartment(models.Model):
     def __str__(self):
         return self.short_name
 
+    def normalize_short_name(self, short_name):
+        return short_name.upper().replace(" ", "")
 
-class School(SchoolOrDepartment):
+    def save(self, *args, **kwargs):
+        self.short_name = self.normalize_short_name(self.short_name)
+        return super().save(*args, **kwargs)
+
+
+class College(CollegeOrDepartment):
     class Meta:
-        verbose_name = _("school")
-        verbose_name_plural = _("schools")
-        db_table = "school"
+        verbose_name = _("college")
+        verbose_name_plural = _("colleges")
+        db_table = "college"
 
 
-class Department(SchoolOrDepartment):
-    school = models.ForeignKey(
-        School,
-        verbose_name=_("school"),
+class Department(CollegeOrDepartment):
+    college = models.ForeignKey(
+        College,
+        verbose_name=_("college"),
         related_name="departments",
         on_delete=models.CASCADE,
+        limit_choices_to={"status": "active"},
     )
 
     class Meta:
@@ -157,37 +241,25 @@ class Department(SchoolOrDepartment):
         db_table = "department"
 
 
-class SchoolRepresentative(User):
-    school = models.ForeignKey(
-        School,
-        verbose_name=_("school"),
-        related_name="school_representatives",
+class CollegeUser(User):
+    college = models.ForeignKey(
+        College,
+        verbose_name=_("college"),
+        related_name="users",
+        limit_choices_to={"status": "active"},
         on_delete=models.CASCADE,
     )
-
-
-class DepartmentRepresentative(User):
-    department = models.ForeignKey(
+    department = ChainedForeignKey(
         Department,
-        verbose_name=_("department"),
-        related_name="department_representatives",
-        on_delete=models.CASCADE,
-    )
-
-
-class StoreKeeper(User):
-    department = models.ForeignKey(
-        Department,
-        verbose_name=_("department"),
-        related_name="store_keepers",
-        on_delete=models.CASCADE,
-    )
-
-
-class Staff(User):
-    department = models.ForeignKey(
-        Department,
-        verbose_name=_("department"),
+        chained_field="college",
+        chained_model_field="college",
+        verbose_name="department",
         related_name="staffs",
+        limit_choices_to={"status": "active"},
         on_delete=models.CASCADE,
     )
+
+    class Meta:
+        db_table = _("college_user")
+        verbose_name = _("in college user")
+        verbose_name_plural = _("in college users")

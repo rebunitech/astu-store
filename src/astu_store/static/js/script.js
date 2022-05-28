@@ -8,7 +8,7 @@ $(document).ready(function() {
             targets: [0, -1]
         }, ]
     })
-    $('#store_list, #item_list').DataTable({
+    $('#store_list, #item_list, #colleges_list').DataTable({
         dom: 'Qfltipr',
         columnDefs: [{
             orderable: false,
