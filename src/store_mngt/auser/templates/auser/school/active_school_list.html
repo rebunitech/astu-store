@@ -1,0 +1,73 @@
+{% extends "layouts/main.html" %} {% load i18n static humanize auser %} {% block content %}
+<table class="table shadow-lg w-100" id="dt_table_content_creator">
+    <div class="float-end">
+        <a href="{% url 'auser:add_school' %}" class="mx-2 btn btn-sm btn-success
+         shadow-none"><i data-feather="plus"></i> {% translate "Add School" %}</a>
+        <a href="{% url 'auser:list_deactivated_school' %}" class="mx-2 btn btn-sm btn-warning shadow-none">
+            <i data-feather="list"></i> {% translate "Deactivated School " %}</a> {% include "layouts/import_data.html" with ctype=view|ctype %}
+    </div>
+    <hr>
+    <thead>
+        <tr>
+            <th></th>
+            <th>{% translate "Name" %}</th>
+            <th>{% translate "Abbreviation name" %}</th>
+            <th>{% translate "Email" %}</th>
+            <th>{% translate "Phone number" %}</th>
+            <th>{% translate "Location" %}</th>
+            <th>{% translate "Post box" %}</th>
+            <th></th>
+            <th>{% translate "Last login" %}</th>
+            <th>{% translate "Date joined" %}</th>
+            <th>{% translate "Manage" %}</th>
+        </tr>
+    </thead>
+    <tbody class="w-100">
+        {% for school in schools %}
+        <tr>
+            <td class="details-control px-3"></td>
+            <td>{{ school.name }}</td>
+            <td>{{ school.abbr_name }}</td>
+            <td>{{ school.email }}</td>
+            <td>{{ school.phone_number }}</td>
+            <td>{{ school.location }}</td>
+            <td>{{ school.po_box }}</td>
+            <th></th>
+
+            <td>{{ department.last_login|default:"Never" }}</td>
+            <td>{{ department.date_joined }}</td>
+            <td>
+                <div class="btn-group rounded" role="group" aria-label="Management buttons">
+                    <a href="{% url 'auser:school_detail' school.pk %} " class="btn btn-md btn-outline-dark 
+                    shadow-none ">{% translate "Details " %}</a> {% if perms.auser.change_school %}
+                    <a href="{% url 'auser:update_school' school.pk %} " class="btn btn-md 
+                    btn-outline-secondary shadow-none ">{% translate "Update " %}</a>{% endif %} {% if perms.auser.change_user_permissions %}
+                    <a href="{% url 'auser:change_permission' school.pk %} " class="btn btn-md btn-outline-success 
+                    shadow-none ">{% translate "Permissions" %}</a>{% endif %} {% if perms.auser.deactivate_user %}
+                    <button class="btn btn-md btn-outline-danger shadow-none
+                     " data-bs-toggle="modal" data-bs-target="#deactivate-{{ school.abbr_name }} ">{% translate "Deactivate" %}</button>{% endif %}
+                </div>
+            </td>
+            {% if perms.auser.deactivate_user %}
+            <div class="modal fade " id="deactivate-{{ school.abbr_name }} 
+            " tabindex="-1 " aria-labelledby="Deactivate Department  " aria-hidden="true ">
+                <div class="modal-dialog ">
+                    <div class="modal-content ">
+                        <div class="modal-body ">
+                            {% blocktranslate with name=department.name abbr_name=department.abbr_name %}Do you really wants to deactivate
+                            <strong>{{ name }} {{ abbr_name }}?</strong> User will not able to login.{% endblocktranslate %}
+                        </div>
+                        <div class="modal-footer ">
+                            <button type="button " class="btn btn-sm btn-success shadow-none
+                             " data-bs-dismiss="modal " aria-label="Close ">{% translate "Cancel " %}</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
