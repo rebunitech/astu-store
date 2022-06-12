@@ -19,9 +19,9 @@ class AddSchoolView(PermissionRequiredMixin, CreateView):
     fields = (
         "name",
         "abbr_name",
-        "location",
-        "phone_number",
         "email",
+        "phone_number",
+        "location",
         "po_box",
     )
 
@@ -94,7 +94,7 @@ class SchoolDetailView(PermissionRequiredMixin, DetailView):
     model = School
     template_name = "auser/school/school_detail.html"
     permission_required = "auser.view_school"
-    context_object_name = "schools"
+    context_object_name = "school"
     extra_context = {"title": _("School Details ")}
 
     def get_content_type(self):
