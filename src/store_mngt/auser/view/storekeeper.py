@@ -46,9 +46,10 @@ class UpdateStoreKeeper( PermissionRequiredMixin,
 
     model = Storekeeper
     fields = (
-        "email",
         "first_name",
         "last_name",
+        "username",
+        "email",
         "phone_number",
         "sex",
         "location",
@@ -169,7 +170,7 @@ class StoreKeeperDetailView(PermissionRequiredMixin, DetailView):
     template_name = "auser/storekeeper/store_keeper_detail.html"
     extra_context = {"title": _("Store Keeper Detail")}
     permission_required = ("auser.view_store_keeper",)
-    context_object_name = "store_keepers"
+    context_object_name = "storekeeper"
 
     def get_content_type(self):
         """Return content type for LogEntry"""
