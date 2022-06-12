@@ -135,3 +135,61 @@ class DeleteDepartment(PermissionRequiredMixin, DeleteView):
 
 
 
+class DeactivateDepartmentView(
+                                     PermissionRequiredMixin, 
+                                     SuccessMessageMixin, UpdateView
+                                    ):
+    """Generic view used to deactivate department. """
+
+    model = Department
+    fields = ("is_active",)
+    permission_required = ("auser.deactivate_department",)
+    success_url = reverse_lazy("auser:active_department_list")
+    success_message = _("%(name)s %(abbr_name)s deactivated successfully")
+    http_method_names = ["post"]
+
+    def form_valid(self, form):
+        form.cleaned_data.update(
+            {"name": self.object.name, "abbr_name": self.object.abbr_name}
+        )
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_data = form_kwargs.get("data", {}).copy()
+        form_data.update({"is_active": False})
+        form_kwargs.update({"data": form_data})
+        return form_kwargs
+
+    def get_queryset(self):
+        return self.model.objects.filter(is_active=True)
+
+
+class ActivateDepartmentView(
+                                  PermissionRequiredMixin, 
+                                  SuccessMessageMixin, UpdateView 
+                                  ):
+    """Generic view used to activate department """
+
+    model = Department
+    fields = ("is_active",)
+    permission_required = ("auser.activate_department",)
+    success_url = reverse_lazy("auser:active_department_list")
+    success_message = _("%(first_name)s %(last_name)s activated successfully")
+    http_method_names = ["post"]
+
+    def form_valid(self, form):
+        form.cleaned_data.update(
+            {"name": self.object.name, "abbr__name": self.object.abbr_name}
+        )
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_data = form_kwargs.get("data", {}).copy()
+        form_data.update({"is_active": True})
+        form_kwargs.update({"data": form_data})
+        return form_kwargs
+
+    def get_queryset(self):
+        return self.model.objects.filter(is_active=False)
