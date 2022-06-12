@@ -39,11 +39,11 @@
                     <a href="{% url 'auser:store_keeper_detail' storekeeper.pk %} " class="btn btn-md btn-outline-dark shadow-none ">{% translate "Details " %}</a> {% if perms.auser.change_storekeeper %}
                     <a href="{% url 'auser:store_keeper_update' storekeeper.pk %} " class="btn btn-md btn-outline-secondary shadow-none ">{% translate "Update " %}</a>{% endif %} {% if perms.auser.change_user_permissions %}
                     <a href="{% url 'auser:change_permission' storekeeper.pk %} " class="btn btn-md btn-outline-success shadow-none ">{% translate "Permissions" %}</a>{% endif %} {% if perms.auser.deactivate_user %}
-                    <button class="btn btn-md btn-outline-danger shadow-none " data-bs-toggle="modal " data-bs-target="#deactivate-{{ storekeeper.username }} ">{% translate "Deactivate" %}</button>{% endif %}
+                    <button class="btn btn-md btn-outline-danger shadow-none " data-bs-toggle="modal" data-bs-target="#deactivate-{{ storekeeper.username }} ">{% translate "Deactivate" %}</button>{% endif %}
                 </div>
             </td>
             {% if perms.auser.deactivate_user %}
-            <div class="modal fade " id="deactivate-{{ storekeeper.username }} " tabindex="-1 " aria-labelledby="Deactivate Store keeper" aria-hidden="true ">
+            <div class="modal fade " id="deactivate-{{ storekeeper.username }} " tabindex="-1" aria-labelledby="Deactivate Store keeper" aria-hidden="true">
                 <div class="modal-dialog ">
                     <div class="modal-content ">
                         <div class="modal-body ">
@@ -51,9 +51,9 @@
                             <strong>{{ first_name }} {{ last_name }}?</strong> User will not able to login.{% endblocktranslate %}
                         </div>
                         <div class="modal-footer ">
-                            <button type="button " class="btn btn-sm btn-success shadow-none " data-bs-dismiss="modal " aria-label="Close ">{% translate "Cancel " %}</button>
-                            <form action={% url 'auser:deactivate_store_keeper' staffmember.pk %} method="post ">{% csrf_token %}
-                                <input class="btn btn-danger btn-sm shadow-none " type="submit " value="{% translate 'I understand, deactivate!' %} " />
+                            <button type="button" class="btn btn-sm btn-success shadow-none " data-bs-dismiss="modal" aria-label="Close ">{% translate "Cancel " %}</button>
+                            <form action="{% url 'auser:deactivate_store_keeper' storekeeper.pk %}" method='post'>{% csrf_token %}
+                                <input class=" btn btn-danger btn-sm shadow-none " type="submit" value="{% translate 'I understand, deactivate!' %} " />
                             </form>
                         </div>
                     </div>
