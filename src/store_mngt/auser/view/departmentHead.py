@@ -16,23 +16,24 @@ class AddDepartmenHead(CreateView, SuccessMessageMixin, PermissionRequiredMixin)
 
     model = DepartmentHead
     fields = (
-        "email",
+        "username",
         "first_name",
         "last_name",
+        "email",
         "phone_number",
         "sex",
         "location",
         "po_box",
         "department",
     )
-    permission_required = ("auser.add_department_head",)  #TODO:
+    permission_required = ("auser.add_departmenthead",)  #TODO:
     template_name = "auser/departmentHead/add_department_head.html"
     success_message = _("%(first_name)s %(last_name)s added successfully")
     success_url = reverse_lazy("auser:active_department_head_list")
     extra_context = {"title": _("Add Department Head")}
     def form_valid(self, form):
             self.object = form.save(commit=False)
-            self.object.username = generate_username()
+            # self.object.username = generate_username()
             self.object.save()
             return super().form_valid(form)
 
@@ -43,9 +44,10 @@ class UpdateDepartmentHead( PermissionRequiredMixin,
 
     model = DepartmentHead
     fields = (
-        "email",
+        "username",
         "first_name",
         "last_name",
+        "email",
         "phone_number",
         "department",
         "sex",
@@ -131,7 +133,7 @@ class ActivateDepartmentHeadView(
     model = DepartmentHead
     fields = ("is_active",)
     permission_required = ("auser.activate_department_head",)
-    # success_url = reverse_lazy("auser:active_department_head_list")
+    success_url = reverse_lazy("auser:active_department_head_list")
     success_message = _("%(first_name)s %(last_name)s activated successfully")
     http_method_names = ["post"]
 
