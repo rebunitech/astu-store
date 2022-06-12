@@ -116,7 +116,7 @@ class Department(Address ,models.Model):
                                 on_delete=models.CASCADE,
                                 verbose_name=_("school"),
                                 related_name='departments',
-                                help_text=_("Please insert exist school"),
+                                help_text=_("Select school"),
                                )
     is_active = models.BooleanField(
         _("is active"),
@@ -144,7 +144,7 @@ class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
     },
     )
     is_staff = models.BooleanField(
-        _("schoolHead status"),
+        _("staff status"),
         default=False,
         help_text=_("Designates whether the user can log into this admin site."),
     )
@@ -183,6 +183,27 @@ class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
         ]
 
 
+class SchoolHead(User):
+    """ School head are users responsible for managing school and department activities. """
+
+    school = models.ForeignKey(
+        School,
+        on_delete=models.CASCADE,
+        related_name="school_heads",
+        verbose_name="school",
+    )
+
+    class Meta:
+        verbose_name = _("school head")
+        verbose_name_plural = _("school heads")
+        db_table = "school_head"
+        permissions = [
+            ("can_deactivate_school_head", "Can deactivate school head"),
+            ("can_activate_school_head", "Can activate school head"),
+        ]
+
+    def __str__(self):
+        return self.name
 class DepartmentHead(User):
     """ Department head are users mainly responsible for approve item requist, add item, add store and others"""
 
