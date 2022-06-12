@@ -22,10 +22,13 @@ from django.conf import settings
  
 urlpatterns = [ 
     path('admin/', admin.site.urls),
-    re_path(r"^auth/", include("auser.urls")),
+    re_path(r"", include("auser.urls")),
     *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT), 
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
-    re_path(r"core/", include("core.urls")),
+    re_path(r"", include("store.urls")),
+    re_path(
+        r"^request/", include("request.urls")
+    ),
 ]
 
 if settings.DEBUG:

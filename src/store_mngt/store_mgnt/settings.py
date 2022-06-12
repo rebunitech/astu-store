@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django.contrib.sites",
     "django.contrib.admindocs",
-    "django.contrib.flatpages",
+    # "django.contrib.flatpages",
 
     # Third Party
     'widget_tweaks',
@@ -55,8 +55,8 @@ INSTALLED_APPS = [
 
     # Local
     'auser',
-    # 'pages',  # dont forget after everything is okay
-    'item',
+    'store',
+    "request",
 ]  
 
 MIDDLEWARE = [
@@ -164,10 +164,10 @@ SITE_ID = 1
 LOGIN_URL = reverse_lazy("auser:login")
 
 # The URL or named URL pattern where requests are redirected after login
-# LOGIN_REDIRECT_URL = reverse_lazy("pages:dashboard")
+LOGIN_REDIRECT_URL = reverse_lazy("auser:dashboard")
 
 # The URL or named URL pattern where requests are redirected after logout
-# LOGOUT_REDIRECT_URL = LOGIN_URL
+LOGOUT_REDIRECT_URL = LOGIN_URL
 
 # A list of authentication backend classes to use when attempting to authenticate a user.
 # AUTHENTICATION_BACKENDS = [
