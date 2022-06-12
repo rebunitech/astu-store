@@ -1,3 +1,8 @@
+from auser.forms import StaffMemberRegistrationForm
+from auser.mixins import (CurrentUserMixin, LogEntryAdditionMixin,
+                          LogEntryChangeMixin, LogEntryDeletionMixin)
+from auser.models import Staffmember
+from auser.utils import generate_username
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.contenttypes.models import ContentType
@@ -6,16 +11,6 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
-
-from auser.models import Staffmember
-from auser.utils import generate_username
-from auser.forms import StaffMemberRegistrationForm
-from auser.mixins import ( CurrentUserMixin,
-                           LogEntryChangeMixin,
-                           LogEntryAdditionMixin,
-                           LogEntryDeletionMixin
-)
-
 
 # TODO: to check signup
 
@@ -59,12 +54,14 @@ class UpdateStaffMember( PermissionRequiredMixin,
 
     model = Staffmember
     fields = (
-        "email",
+        "username",
         "first_name",
         "last_name",
+        "email",
         "phone_number",
         "sex",
         "location",
+        "department",
         "po_box",
         "profile_picture",
         "bio",
