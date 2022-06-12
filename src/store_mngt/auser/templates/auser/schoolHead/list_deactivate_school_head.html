@@ -35,9 +35,12 @@
             <td>{{ school_head.date_joined }}</td>
             <td>
                 <div class="btn-group rounded " role="group " aria-label="Management buttons ">
-                    <a href="{% url 'auser:staff_detail' school_head.pk %} " class="btn btn-md btn-outline-dark shadow-none ">{% translate "Details " %}</a> {% if perms.auser.activate_user %}<button class="btn btn-md btn-outline-success shadow-none
-            " data-bs-toggle="modal " data-bs-target="#activate-{{ school_head.username }} "><i data-feather="activity "></i> {% translate "Activate " %}</button>{% endif %} {% if perms.auser.delete_user %}<button class="btn btn-md btn-outline-danger shadow-none
-            " data-bs-toggle="modal " data-bs-target="#delete-{{ school_head.username }} "><i data-feather="trash-2 "></i> {% translate "Delete " %}</button>{% endif %}
+                    <a href="{% url 'auser:school_head_detail' school_head.pk %} " class="btn btn-md 
+                         btn-outline-dark shadow-none ">{% translate "Details " %}</a> {% if perms.auser.activate_user %}<button class="btn btn-md btn-outline-success shadow-none
+                       " data-bs-toggle="modal" data-bs-target="#activate-{{ school_head.username }} "><i data-feather="activity "></i> {% translate "Activate " %}
+                     </button>{% endif %} {% if perms.auser.delete_user %}<button class="btn btn-md btn-outline-danger shadow-none" data-bs-toggle="modal" data-bs-target="#delete-{{ school_head.username }} "><i data-feather="trash-2 ">
+                         
+                     </i> {% translate "Delete " %}</button>{% endif %}
                 </div>
             </td>
             {% if perms.auser.activate_user %}
@@ -49,7 +52,7 @@
                         </div>
                         <div class="modal-footer ">
                             <button type="button " class="btn btn-sm btn-primary shadow-none " data-bs-dismiss="modal " aria-label="Close ">{% translate "Cancel " %}</button>
-                            <form action={% url 'auser:activate_school_head' school_head.pk %} method="post ">{% csrf_token %}
+                            <form action="{% url 'auser:activate_school_head' school_head.pk %}" method="post">{% csrf_token %}
                                 <input class="btn btn-success btn-sm shadow-none " type="submit " value="{% translate " Acticate! " %} " />
                             </form>
                         </div>
@@ -66,7 +69,7 @@
                         </div>
                         <div class="modal-footer ">
                             <button type="button " class="btn btn-sm btn-success shadow-none " data-bs-dismiss="modal " aria-label="Close ">{% translate "Cancel " %}</button>
-                            <form action={% url 'auser:delete_school_head' school_head.pk %} method="post ">{% csrf_token %}
+                            <form action="{% url 'auser:delete_school_head' school_head.pk %}" method="post">{% csrf_token %}
                                 <input class="btn btn-danger btn-sm shadow-none " type="submit " value="{% translate " I understand, delete this user! " %} " />
                             </form>
                         </div>
