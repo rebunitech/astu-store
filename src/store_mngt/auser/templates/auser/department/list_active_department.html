@@ -1,1 +1,77 @@
-list
+{% extends "layouts/main.html" %} {% load i18n static humanize auser %} {% block content %}
+<table class="table shadow-lg w-100" id="dt_table_content_creator">
+    <div class="float-end">
+        <a href="{% url 'auser:add_department' %}" class="mx-2 btn btn-sm btn-success
+         shadow-none"><i data-feather="plus"></i> {% translate "Add Department" %}</a>
+        <a href="{% url 'auser:list_deactivate_department' %}" class="mx-2 btn btn-sm btn-warning shadow-none">
+            <i data-feather="list"></i> {% translate "Deactivated Department " %}</a> {% include "layouts/import_data.html" with ctype=view|ctype %}
+    </div>
+    <hr>
+    <thead>
+        <tr>
+            <th></th>
+            <th>{% translate "Name" %}</th>
+            <th>{% translate "Abbreviation name" %}</th>
+            <th>{% translate "School" %}</th>
+            <th>{% translate "Email" %}</th>
+            <th>{% translate "Phone number" %}</th>
+            <th>{% translate "Location" %}</th>
+            <th>{% translate "Post box" %}</th>
+            <th></th>
+            <th>{% translate "Last login" %}</th>
+            <th>{% translate "Date joined" %}</th>
+            <th>{% translate "Manage" %}</th>
+        </tr>
+    </thead>
+    <tbody class="w-100">
+        {% for department in departments %}
+        <tr>
+            <td class="details-control px-3"></td>
+            <td>{{ department.name }}</td>
+            <td>{{ department.abbr_name }}</td>
+            <td>{{ department.school }}</td>
+            <td>{{ department.email }}</td>
+            <td>{{ department.phone_number }}</td>
+            <td>{{ department.location }}</td>
+            <td>{{ department.po_box }}</td>
+            <th></th>
+
+            <td>{{ department.last_login|default:"Never" }}</td>
+            <td>{{ department.date_joined }}</td>
+            <td>
+                <div class="btn-group rounded" role="group" aria-label="Management buttons">
+                    <a href="{% url 'auser:department_detail' department.pk %} " class="btn btn-md btn-outline-dark 
+                    shadow-none ">{% translate "Details " %}</a> {% if perms.auser.change_department %}
+                    <a href="{% url 'auser:update_department' department.pk %} " class="btn btn-md btn-outline-secondary 
+                    shadow-none ">{% translate "Update " %}</a>{% endif %} {% if perms.auser.change_user_permissions %}
+                    <a href="{% url 'auser:change_permission' department.pk %} " class="btn btn-md btn-outline-success 
+                    shadow-none ">{% translate "Permissions" %}</a>{% endif %} {% if perms.auser.deactivate_user %}
+                    <button class="btn btn-md btn-outline-danger
+                     shadow-none " data-bs-toggle="modal" data-bs-target="#deactivate-{{ department.abbr_name }} 
+                     ">{% translate "Deactivate" %}</button>{% endif %}
+                </div>
+            </td>
+            {% if perms.auser.deactivate_user %}
+            <div class="modal fade " id="deactivate-{{ department.abbr_name }} " tabindex="-1 " aria-labelledby="Deactivate Department  " aria-hidden="true ">
+                <div class="modal-dialog ">
+                    <div class="modal-content ">
+                        <div class="modal-body ">
+                            {% blocktranslate with name=department.name abbr_name=department.abbr_name %}Do you really wants to deactivate
+                            <strong>{{ name }} {{ abbr_name }}?</strong> User will not able to login.{% endblocktranslate %}
+                        </div>
+                        <div class="modal-footer ">
+                            <button type="button " class="btn btn-sm btn-success shadow-none " data-bs-dismiss="modal " aria-label="Close 
+                            ">{% translate "Cancel " %}</button>
+                            <form action="{% url 'auser:deactivate_department' department.pk %}" method="post">{% csrf_token %}
+                                <input class="btn btn-danger btn-sm shadow-none " type="submit " value="{% translate 'I understand, deactivate!' %} " />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

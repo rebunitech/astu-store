@@ -1,0 +1,29 @@
+{% extends 'layouts/main.html' %}{% load i18n auser %}{% block content %}
+<ul class="nav nav-tabs mt-5 mb-3" id="UserDetail" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" data-bs-toggle="tab
+        " data-bs-target="#profile" type="button" role="tab" aria-controls="home
+        " aria-selected="true">{% translate "Profile" %}</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab
+        " data-bs-target="#activity" type="button" role="tab" aria-controls="profile
+        " aria-selected="false">{% translate "Activity" %}</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#hisotry
+        " type="button" role="tab" aria-controls="contact" aria-selected="false
+        ">{% translate "Change History" %}</button>
+    </li>
+</ul>
+<div class="tab-content" id="UserDetailContent">
+    <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="home-tab">
+        {% include "auser/user/user_profile.html" with user=department update_link="auser:update_department"|reverse:department.pk %}
+    </div>
+    <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="profile-tab">
+        {% include "auser/user/user_actions_list.html" with user_actions=department.logentry_set.iterator %}
+    </div>
+    <div class="tab-pane fade" id="hisotry" role="tabpanel" aria-labelledby="contact-tab">
+        {% include "auser/user/object_history.html" with user_history=object_history %}
+    </div>
+</div>{% endblock content %}
