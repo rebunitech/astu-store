@@ -50,7 +50,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-primary shadow-none" data-bs-dismiss="modal" aria-label="Close">{% translate "Cancel" %}</button>
-                            <form action={% url 'auser:activate_department_head' department_head.pk %} method="post">{% csrf_token %}
+                            <form action="{% url 'auser:activate_department_head' department_head.pk %}" method="post">{% csrf_token %}
                                 <input class="btn btn-success btn-sm shadow-none" type="submit" value="{% translate " Acticate! " %}" />
                             </form>
                         </div>
@@ -68,7 +68,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-success shadow-none" data-bs-dismiss="modal" aria-label="Close">{% translate "Cancel" %}</button>
-                            <form action={% url 'auser:delete_department_head' department_head.pk %} method="post">{% csrf_token %}
+                            <form action="{% url 'auser:delete_department_head' department_head.pk %}" method="post">{% csrf_token %}
                                 <input class="btn btn-danger btn-sm shadow-none" type="submit" value="{% translate " I understand, delete this user! " %}" />
                             </form>
                         </div>
