@@ -13,7 +13,7 @@ A simple, fast, and secure online store admininstrator platform for the [ASTU](h
 ## Installation
 - Clone the repository
 ```
-git clone git@github.com:Wendirad/astu-store.git
+git clone git@github.com:RebuniTech/astu-store.git
 ```
 - Install the dependencies
 - Run the migrations
