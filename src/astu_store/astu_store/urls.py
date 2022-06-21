@@ -23,7 +23,6 @@ urlpatterns = [
     re_path(r"^admin/", admin.site.urls),
     re_path(r"", include("auser.urls")),
     re_path(r"", include("store.urls")),
-    re_path(r"", include("request.urls")),
     re_path(r"^chaining/", include("smart_selects.urls")),
     *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),

@@ -16,40 +16,6 @@
         </div>
       </li>{% endif  %}
     </ul>
-    <div class="text-dark px-4 fs-4">Requests</div>
-    <div class="text-dark px-4 fs-4"></div>
-    <ul class="px-0">
-      {% if perms.store.view_store %}
-      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-        <div class="col p-2 ps-3 text-center">
-          <i class="fa-solid fa-circle-plus me-2"></i>
-        </div>
-        <div class="col-10">
-          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:make-request' %}">Requeste Item</a>
-        </div>
-      </li>
-      {% endif  %}
-      {% if perms.store.view_store %}
-      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-        <div class="col p-2 ps-3 text-center">
-          <i class="fa-solid fa-store"></i>
-        </div>
-        <div class="col-10">
-          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:list-request' %}">Requested Items <span class="badge bg-success rounded-pill px-3 ms-3">{{ pending_requests }}</span></a>
-        </div>
-      </li>
-      {% endif  %}
-      {% if perms.store.view_item %}
-      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-        <div class="col p-2 ps-3 text-center">
-          <i class="fa-solid fa-bars-staggered"></i>
-        </div>
-        <div class="col-10">
-          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:request-history' %}">Your Request History</a>
-        </div>
-      </li>
-      {% endif  %}
-    </ul>
     <div class="text-dark px-4 fs-4">Store</div>
     <div class="text-dark px-4 fs-4"></div>
     <ul class="px-0">
