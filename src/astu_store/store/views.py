@@ -181,7 +181,7 @@ class ListItemsView(PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        user = self.request.user
+        # user = self.request.user
         if user.is_superuser:
             return qs
         elif user.is_college_representative():

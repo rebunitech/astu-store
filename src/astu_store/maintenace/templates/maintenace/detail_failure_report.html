@@ -1,0 +1,45 @@
+{% load i18n humanize %}
+<div class="row gutters-sm">
+    <div class="col-lg-5 col-sm-12 col-md-12  my-md-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+                    <img src="{{ user.profile_picture.url }}" alt="User profile" class="rounded-circle" width="150">
+                    <div class="mt-3">
+                        <h4>{{ item }}</h4>
+                        <p class="text-secondary mb-1">{{ user.username }} ({{ user.get_sex_display }})</p>
+                        {% if user.is_active != None and user.is_active %}<span class="text-success">Active</span>{% elif user.is_active != None and not user.is_active %}<span class="text-danger">Deactivated</span>{% endif %}</span>
+                        <p class="text-muted font-size-sm">{{ user.location|default:"Not available" }}</p>
+                    </div>
+                </div>
+                <ul class="list-unstyled p-3 row">
+                    <div class="col">
+                        <li class="mb-3"><a href="mailto:{{ user.email }}"><i data-feather="mail" class="text-secondary me-3"></i>{{ user.email }}</a></li>
+                        <li class="mb-3"><a href="#"><i data-feather="map-pin" class="text-secondary me-3"></i> {{ user.location|default:"Not available" }}</a></li>
+                        <li class="mb-3"><a href="#"><i data-feather="calendar" class="text-secondary me-3"></i> Joined {{ user.date_joined|naturaltime }}</a></li>
+                    </div>
+                    <div class="col-auto">
+                        <li class="mb-3"><a href="tel:{{ user.phone_number }}"><i data-feather="phone" class="text-secondary me-3"></i> {{ user.phone_number }}</a></li>
+                        <li class="mb-3"><a href="#"><i data-feather="at-sign" class="text-secondary me-3"></i> {{ user.po_box|default:"Not available" }}</a></li>
+                        <li class="mb-3"><a href="#"><i data-feather="calendar" class="text-secondary me-3"></i> Logged in {{ user.last_login|naturaltime|default:"Never" }}</a></li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="col">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row p-3 py-3 my-3">
+                    <h2 class="h1 px-0 text-primary">#About</h2>
+                    <div>{{ user.bio|default:"Not available"|safe }}</div>
+                    <div class="btn-group rounded my-5 float-start w-25" role="group" aria-label="Management buttons">
+                        {% if update_link and perms.admin.view_logentry %}<a href="{{ update_link }}" class="btn btn-md btn-outline-secondary shadow-none me-2">Update</a>{% endif %} {% if perms.auser.change_user_permissions %}<a href="{% url 'auser:change_permission' user.pk %}"
+                            class="btn btn-md btn-outline-success shadow-none me-2">Permissions</a>{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

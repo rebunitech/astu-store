@@ -41,12 +41,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+    'ckeditor',
+    
     # Third Party Apps
     "widget_tweaks",
     # Local Apps
     "auser",
     "store",
-    "request",
+    "maintenace",
 ]
 
 MIDDLEWARE = [
@@ -85,9 +87,7 @@ WSGI_APPLICATION = "astu_store.wsgi.application"
 
 DATABASES = {
     "default": config(
-        "DATABASE_URL",
-        default="sqlite:///" + str(BASE_DIR) + "/db.sqlite3",
-        cast=db_url,
+        "DATABASE_URL", default="sqlite:///db.sqlite3", cast=db_url
     )
 }
 
@@ -171,3 +171,4 @@ MESSAGE_TAGS = {
 
 # used in django smart select
 USE_DJANGO_JQUERY = True
+

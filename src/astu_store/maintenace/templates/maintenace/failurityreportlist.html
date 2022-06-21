@@ -1,0 +1,37 @@
+{% extends "layouts/main.html" %} {% block content %}
+<div class="row">
+    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
+        {% if perms.maintenace.add_failurityreport %}<a href="{% url 'maintenace:add_failurirtyreports' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add failurity report</a>{% endif %}
+    </div>
+    <hr/>
+    {{ failurityreport_list }}
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="store_list" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0" style="max-width: 25px;"></th>
+                    <th class="border-bottom border-0">Item</th>
+                    <th class="border-bottom border-0">Problems</th>
+                    <th class="border-bottom border-0">Quantity</th>
+                    <th class="border-bottom border-0">Dead_Stock_NumberProblems</th>
+                    <th class="border-bottom border-0">Store</th>
+                    <th class="border-bottom border-0"></th>
+                </tr>
+            </thead>
+            <tbody>{% if failurity_reports %}{% for failure in failurity_reports %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td class="details-control">{{ failure.item|capfirst }}</td>
+                    <td>{{ failure.problem }}</td>
+                    <td>{{ failure.quantity }}</td>
+                    <td>{{ failure.item.dead_stock_number }}</td>
+                    <td>{{ failure.item.store }}</td>                    
+                    <td >
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

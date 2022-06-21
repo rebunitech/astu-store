@@ -1,0 +1,52 @@
+{% extends "layouts/main.html" %} {% block content %}
+<div class="row">
+    
+    <hr />
+    {{ maintenancerequest_list }}
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="store_list" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0" style="max-width: 25px;"></th>
+                    <th class="border-bottom border-0">Item</th>
+                    <th class="border-bottom border-0">Problems</th>
+                    <th class="border-bottom border-0">Quantity</th>
+                    <th class="border-bottom border-0">Dead_Stock_Number</th> 
+                    <th class="border-bottom border-0"> Store</th>
+                    <th class="border-bottom border-0">Actions</th>
+                </tr>
+            </thead>asdfghj
+            <tbody>{% if maintenance_requests %}{% for m in maintenance_requests %}
+                <tr>
+                    
+                    
+                    <td class="text-center">{{ forloop.counter }}what </td>
+                    <td>{{ m.item|capfirst }}</td>
+                    <td>{{ m.problem }}</td>
+                    <td>{{ m.quantity }}</td>
+                    <td>{{ m.dead_stock_number }}</td>
+                    <td>{{ m.store }}</td>
+                    
+                   
+                    <td class="text-center">
+                        {% if perms.maintenace.view_undermaintenace %} <form method="post" action="{% url 'maintenace:approve_maintenance' m.pk %}">
+                            {% csrf_token %}<button type="submit" class="btn btn-sm btn-dark shadow-none px-2 mx-1"  >
+                                <i class="fa-solid fa-table-cells-large me-2"></i>Approve
+                            </button>
+                          {% endif %} 
+                        </form>
+                        {% if perms.maintenace.view_undermaintenace %}
+                        <button class="btn btn-sm btn-danger shadow-none px-2 mx-1" data-bs-toggle="modal" data-bs-target="#delete-item-11"><i class="fa-solid fa-circle-minus me-2" href = "btn btn-sm btn-dark shadow-none px-2 mx-1" href="{% url 'maintenace:list_undermaintenaces' %}"></i>Decline</button>{% endif %} 
+                       
+                    </td>
+                </tr>
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+
+
+
+
+
