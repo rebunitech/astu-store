@@ -1,0 +1,194 @@
+{% extends "layouts/main.html" %}
+{% block content %}
+        <ul class="nav nav-tabs mt-5 mb-3" id="ItemDetail" role="tablist">
+        	<li class="nav-item" role="presentation">
+        		<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#itemInfo" type="button" role="tab" aria-controls="itemInfo" aria-selected="true">
+        		Item Info</button></li>
+        	<li class="nav-item" role="presentation">
+        		<button class="nav-link" data-bs-toggle="tab" data-bs-target="#itemImg" type="button" role="tab" aria-controls="itemImg" aria-selected="true">
+        		Item Image</button></li>
+            <li class="nav-item" role="presentation">
+            	<button class="nav-link" data-bs-toggle="tab" data-bs-target="#specification" type="button" role="tab" aria-controls="specification" aria-selected="true">Specification</button></li>
+            <li class="nav-item" role="presentation">
+            	<button class="nav-link"  data-bs-toggle="tab" data-bs-target="#requestHisotry" type="button" role="tab" aria-controls="requestHisotry" aria-selected="false">
+            	Request History</button></li>
+        </ul>
+
+        <div class="tab-content" id="ItemDetailContent">
+            <div class="tab-pane fade show active" id="itemInfo" role="tabpanel" aria-labelledby="itemInfo-tab">
+                <div class="row my-md-2 mx-md-5 m-sm-3 m-1 d-flex justify-content-center">
+                    <div class="col-lg-5 col-sm-12 col-md-12 shadow-lg rounded-3 ">
+                        <div class="card border-0">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    <img src="{{ ItemImg.img.url }}"  class="rounded-square" width="150">
+                                </div>
+                                <div class="mt-3 mb-3 text-center ">
+                                    <h1 class="">{{ item.name|upper }}</h1>
+                                    <div class="fs-4 font-weight-bold">
+                                        {{ item.get_status_display }}
+          {% extends "layouts/main.html" %}
+{% block content %}
+        <ul class="nav nav-tabs mt-5 mb-3" id="ItemDetail" role="tablist">
+        	<li class="nav-item" role="presentation">
+        		<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#itemInfo" type="button" role="tab" aria-controls="itemInfo" aria-selected="true">
+        		Item Info</button></li>
+        	<li class="nav-item" role="presentation">
+        		<button class="nav-link" data-bs-toggle="tab" data-bs-target="#itemImg" type="button" role="tab" aria-controls="itemImg" aria-selected="true">
+        		Item Image</button></li>
+            <li class="nav-item" role="presentation">
+            	<button class="nav-link" data-bs-toggle="tab" data-bs-target="#specification" type="button" role="tab" aria-controls="specification" aria-selected="true">Specification</button></li>
+            <li class="nav-item" role="presentation">
+            	<button class="nav-link"  data-bs-toggle="tab" data-bs-target="#requestHisotry" type="button" role="tab" aria-controls="requestHisotry" aria-selected="false">
+            	Request History</button></li>
+        </ul>
+
+        <div class="tab-content" id="ItemDetailContent">
+            <div class="tab-pane fade show active" id="itemInfo" role="tabpanel" aria-labelledby="itemInfo-tab">
+                <div class="row my-md-2 mx-md-5 m-sm-3 m-1 d-flex justify-content-center">
+                    <div class="col-lg-5 col-sm-12 col-md-12 shadow-lg rounded-3 ">
+                        <div class="card border-0">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    <img src="{{ ItemImg.img.url }}"  class="rounded-square" width="150">
+                                </div>
+                                <div class="mt-3 mb-3 text-center ">
+                                    <h1 class="">{{ item.name|upper }}</h1>
+                                    <div class="fs-4 font-weight-bold">
+                                        {{ item.get_status_display }}
+                                        <span class="badge rounded-pill bg-warning text-dark ms-1">
+                                            {{ item.get_categories_display|upper }}
+                                        </span>
+                                    </div>
+                                </div>
+                                        <ul class="list-unstyled p-3 row d-flex justify-content-start">
+                                            <li class="mb-3 d-block">
+                                                <a class="text-decoration-none" href="#">
+                                                    <i class="fa-brands fa-buffer text-danger me-3">DSN: </i> {{ item.dead_stock_number }}
+                                                </a>
+                                            </li>
+                                            <li class="mb-3 d-block">
+                                                <a class="text-decoration-none" href="#">
+                                                    <i class="fa-solid fa-arrow-up-wide-short text-danger me-3">Quantity: </i>{{ item.quantity }}
+                                                </a>
+                                            </li>{% if item.suplier %}
+                                            <li class="mb-3 d-block">
+                                                <a class="text-decoration-none" href="#">
+                                                    <i class="fa-solid fa-stamp text-danger me-3">Suplier: </i>{{ item.dead_stock_number }}
+                                                </a>
+                                            </li>{% endif %}
+                                        
+                                            <li class="mb-3 d-block">
+                                                <a class="text-decoration-none" href="#">
+                                                    <i class="fa-solid fa-diploma text-danger me-3">For Whom: </i>{{ item.for_whom }}
+                                                </a>
+                                            </li>{% if item.exp_date%}
+                                            <li class="mb-3 d-block">
+                                                <a class="text-decoration-none" href="#">
+                                                    <i class="fa-solid fa-calendar-circle-exclamation text-danger me-3">Expiry Date: </i>{{ item.exp_date }}
+                                                </a>
+                                            </li>{% endif %}{% if item.year %}
+                                            <li class="mb-3 d-block">
+                                                <a class="text-decoration-none" href="#">
+                                                    <i class="fa-solid fa-calendar-circle-plus text-danger me-3">Year Of Purchase: </i>{{ item.year }}
+                                                </a>
+                                            </li>{% endif %}
+                                        </ul>
+ -->                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-sm-12 col-md-12 my-2 shadow-lg rounded px-0">
+                        <div class="card border-0 h-100">
+                            <div class="text-justify text-center fs-5">
+                                <i class="fa-solid fa-hashtag"><h1>Description</h1></i>
+                                    <p>{{ item.description }}</p>
+                            </div>
+                            <div class="row my-md-2 mx-md-5 m-sm-3 m-1">
+                                {% if item.store %}
+                                <div class="col-12 col-md-6">
+                                    <div class="card" style="height: 10rem;">
+                                        <div class="card-header bg-success fw-bolder fs-6 text-light">
+                                            <i class="fa-solid fa-circle me-3">Store</i> {{ item.store }}
+                                        </div>
+                                        <div class="card-body font-weight-bold fs-5">
+                                            {% if item.store.status  %}Store Status
+                                            <span class="badge rounded-pill bg-warning text-dark ms-1">
+                                                 {{ item.store.get_status_display|upper }}
+                                            </span>{% endif %}
+                                            <blockquote class="blockquote mt-5 mb-0">
+                                                <footer class="blockquote-footer fs-6">{% if item.shelf %}
+                                                    <i class="fa-light fa-shelves text-dark ms-4 me-2">
+                                                    {{ item.shelf }}</i>{% endif %}
+                                                    <i class="fa-light fa-location-dot text-dark ms-4 me-2">
+                                                    {{ item.store.block }}-{{ item.store.room }}</i>
+                                                </footer>
+                                            </blockquote>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if item.lab %}
+                                <div class="col-12 col-md-6">
+                                    <div class="card" style="height: 10rem;">
+                                        <div class="card-header bg-success fw-bolder fs-6 text-light">
+                                            <i class="fa-solid fa-circle me-3"></i>
+                                            {{ item.lab }}<small class=" ">&nbsp;({{ item.quantity }}</small>
+                                            {% if item.lab.status  %}
+                                            <small class="badge bg-main text-dark ms-1 float-end fw-light">Active
+                                            </small>{% endif %}
+                                        </div>
+                                        <div class="card-body">
+                                            <blockquote class="blockquote mb-0">
+                                                <footer class="blockquote-footer fs-6">{% if item.table %}
+                                                    <i class="fa-light fa-table-picnic text-danger ms-4 me-2"></i>{{ item.table }}{% endif %}
+                                                    <i class="fa-light fa-location-dot text-danger ms-4 me-2"></i>{{ item.lab.block }}-{{ item.lab.room }}
+                                                </footer>
+                                            </blockquote>
+                                        </div>
+                                    </div>
+                                </div>{% endif %}
+                            </div>
+                            <div class="my-md-5 mx-md-5 m-sm-3 m-1 align-items-center">
+                                {% if perms.store.view_specification %}
+                                <a class="btn btn-sm btn-dark shadow-none px-2 mx-1" href="{% url 'store:list_specifications' item.pk %}">
+                                    <i class="fa-solid fa-table-cells-large me-2"></i>Specifications</a>{% endif %}                         
+                                {% if perms.store.change_item %}
+                                <a class="btn btn-sm btn-primary shadow-none px-2 mx-1" href="{% url 'store:update_item' item.pk %}">
+                                    <i class="fa-solid fa-pen me-2"></i>Update</a>{% endif %} 
+                                {% if perms.store.delete_item %}
+                                <button class="btn btn-sm btn-danger shadow-none px-2 mx-1" data-bs-toggle="modal" data-bs-target="#delete-item-{{ item.pk }}">
+                                    <i class="fa-solid fa-circle-minus me-2"></i>Delete</button>
+                                <div class="modal fade" id="delete-item-{{ item.pk }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                Do you really wants to delete <strong>{{ item.name }}</strong>? This action is irreversable.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-primary shadow-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                                <form action="{% url 'store:delete_item' item.pk %}" method="post">{% csrf_token %}
+                                                    <input class="btn btn-danger btn-sm shadow-none" type="submit" value="I understand, delete!" />
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade show" id="itemImg" role="tabpanel" aria-labelledby="itemImg-tab">
+                {{ item.pk }}
+                {% include "store/img/list.html" with item_pk=item.pk %}
+                
+            </div>
+            <div class="tab-pane fade" id="specification" role="tabpanel" aria-labelledby="specification-tab">
+
+            </div>
+            <div class="tab-pane fade" id="requestHisotry" role="tabpanel" aria-labelledby="requestHisotry-tab">
+              
+            </div>
+        </div>
+{% endblock content %}

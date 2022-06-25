@@ -1,0 +1,73 @@
+{% extends "layouts/main.html" %} {% block content %}
+<div class="row">
+    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
+        {% if perms.store.add_table %}<a href="{% url 'store:add_table' view.kwargs.lab_id %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Table</a>{% endif %}
+    </div>
+    <hr />
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="table_list" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0" style="max-width: 25px;"></th>
+                    <th class="border-bottom border-0">ID</th>
+                    <th class="border-bottom border-0">Lab</th>
+                    <th class="border-bottom border-0">Is Working</th>
+                    <th class="border-bottom border-0"></th>
+                </tr>
+            </thead>
+            <tbody>{% if tables %}{% for table in tables %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td>{{ table.table_id }}</td>
+                    <td>{{ table.lab }}</td>
+                    <td>{{ table.is_working }}</td>
+                    <td class="text-center">{% if perms.store.change_table %}
+                        <a class="btn btn-sm btn-primary shadow-none px-2 mx-1" href="{% url 'store:update_table' table.pk %}"><i class="fa-solid fa-pen me-2"></i>Update</a>{% endif %} 
+                        {% if perms.store.delete_{% extends "layouts/main.html" %} {% block content %}
+<div class="row">
+    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
+        {% if perms.store.add_table %}<a href="{% url 'store:add_table' view.kwargs.lab_id %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Table</a>{% endif %}
+    </div>
+    <hr />
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="table_list" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0" style="max-width: 25px;"></th>
+                    <th class="border-bottom border-0">ID</th>
+                    <th class="border-bottom border-0">Lab</th>
+                    <th class="border-bottom border-0">Is Working</th>
+                    <th class="border-bottom border-0"></th>
+                </tr>
+            </thead>
+            <tbody>{% if tables %}{% for table in tables %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td>{{ table.table_id }}</td>
+                    <td>{{ table.lab }}</td>
+                    <td>{{ table.is_working }}</td>
+                    <td class="text-center">{% if perms.store.change_table %}
+                        <a class="btn btn-sm btn-primary shadow-none px-2 mx-1" href="{% url 'store:update_table' table.pk %}"><i class="fa-solid fa-pen me-2"></i>Update</a>{% endif %} 
+                        {% if perms.store.delete_table %}<button class="btn btn-sm btn-danger shadow-none px-2 mx-1" data-bs-toggle="modal" data-bs-target="#delete-table-{{ table.pk }}"><i class="fa-solid fa-circle-minus me-2"></i>Delete</button>
+                        <div class="modal fade" id="delete-table-{{ table.pk }}" tabindex="-1" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-body">
+                               Do you really wants to delete <strong>{{ table }}</strong>? This action is irreversable.
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-primary shadow-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                <form action="{% url 'store:delete_table' table.pk %}" method="post">{% csrf_token %}
+                                  <input class="btn btn-danger btn-sm shadow-none" type="submit" value="I understand, delete!" />
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
