@@ -1,4 +1,8 @@
 .env
 auser_old/
-**/__pycache__/
+__pycache__/
 assets/
+pages/
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
