@@ -1,0 +1,26 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Password reset on example.com
+From: webmaster@localhost
+To: yemesrach23@gmail.com
+Date: Sun, 19 Jun 2022 12:45:47 -0000
+Message-ID: 
+ <165564274723.12940.3895162303687763359@DESKTOP-K37K674.mshome.net>
+
+
+You're receiving this email because you requested a password reset for your user account at example.com.
+
+Please go to the following page and choose a new password:
+
+http://example.com/auth/reset/MQ/b7940b-debd13f6f376992ecf3aa22002a34b8f/
+
+Your username, in case you’ve forgotten: tata
+
+Thanks for using our site!
+
+The example.com team
+
+
+
+-------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-log
+
 from django.apps import apps
 from django.contrib.admin.models import ADDITION, DELETION, CHANGE, LogEntry
 from django.contrib.admin.options import get_content_type_for_model

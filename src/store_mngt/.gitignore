@@ -6,3 +6,4 @@ pages/
 **/migrations/**
 !**/migrations
 !**/migrations/__init__.py
+**/uploads/**

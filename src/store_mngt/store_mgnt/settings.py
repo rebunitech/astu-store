@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     # Local
     'auser',
     'store',
-    "request",
+    # "request",
+    "maintenance",
 ]  
 
 MIDDLEWARE = [
