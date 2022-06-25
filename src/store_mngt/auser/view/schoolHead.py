@@ -14,7 +14,7 @@ from auser.utils import generate_username
 from auser.models import School, SchoolHead
 UserModel = get_user_model()
 
-from auser.signals import school_head_created
+from auser.signals import staff_user_created
 
 
 
@@ -42,10 +42,10 @@ class AddSchoolHeadView(
     success_url = reverse_lazy("auser:active_school_head_list")
     success_message = _("%(first_name)s %(last_name)s added successfully")
     template_name = "auser/schoolHead/add_school_head.html"
-    extra_context = {"title": _("Add School Head")}
+    extra_context = {"title": _("Add School Dean")}
 
     def get_success_url(self):
-        x = school_head_created.send(
+        x = staff_user_created.send(
             sender=self.model, instance=self.object, created=True
         )
         return super().get_success_url()
@@ -83,7 +83,7 @@ class UpdateSchoolHeadView( SuperuserRequiredMixin,
     success_url = reverse_lazy("auser:active_school_head_list")
     success_message = _("%(first_name)s %(last_name)s updated successfully")
     template_name = "auser/schoolHead/update_school_head.html"
-    extra_context = {"title": _("Update School Head")}
+    extra_context = {"title": _("Update School Dean")}
 
     def get_queryset(self):
         """Return all school heads"""
@@ -98,7 +98,7 @@ class ListActiveSchoolHeadsView( SuperuserRequiredMixin, ListView):
     model = SchoolHead
     template_name = "auser/schoolHead/list_active_school_head.html"
     context_object_name = "school_heads"
-    extra_context = {"title": _("Active School Heads")}
+    extra_context = {"title": _("Active School Dean")}
 
     def get_queryset(self):
         """Return all school heads"""
@@ -112,7 +112,7 @@ class ListActiveSchoolHeadsView( SuperuserRequiredMixin, ListView):
 class SchoolHeadDetailView(SuperuserRequiredMixin, DetailView):
     model = SchoolHead
     template_name = "auser/schoolHead/school_head_detail.html"
-    extra_context = {"title": _("School Head Detail")}
+    extra_context = {"title": _("School Dean Detail")}
     context_object_name = "school_head"
 
     def get_queryset(self):
@@ -144,7 +144,7 @@ class ListDeactivatedSchoolHeadsView(ListView):
     model = SchoolHead
     template_name = "auser/schoolHead/list_deactivate_school_head.html"
     context_object_name = "deactivated_school_heads"
-    extra_context = {"title": _("Deactivated School Heads")}
+    extra_context = {"title": _("Deactivated School Dean")}
 
     def get_queryset(self):
         """Return all deactivate school heads"""
@@ -157,7 +157,7 @@ class ListDeactivatedSchoolHeadsView(ListView):
 
 class ActivateSchoolHeadView( SuccessMessageMixin,  UpdateView
 ):
-    """Generic view used to activate school head"""
+    """Generic view used to activate """
 
     model = SchoolHead
     fields = ("is_active",)

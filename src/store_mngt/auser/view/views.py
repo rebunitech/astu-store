@@ -20,7 +20,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     """Generic view for users dashboard."""
 
     template_name = "auser/dashboard.html"
-    extra_context = {"title": _("Dashboardf")}
+    extra_context = {"title": _("Dashboard")}
 
 
 class ImportView(View):
@@ -83,7 +83,7 @@ class ImportView(View):
                 self.file,
                 self.required_fields,
                 self.model,
-                user_id=request.user.id,
+                user_id=user.id,
                 object_types=self.object_types,
                 date_types=self.date_types,
             )

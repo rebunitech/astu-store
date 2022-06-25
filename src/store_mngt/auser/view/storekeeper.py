@@ -31,7 +31,7 @@ class AddStoreKeeper(CreateView, SuccessMessageMixin, PermissionRequiredMixin):
     template_name = "auser/storekeeper/add_store_keeper.html"
     success_message = _("%(first_name)s %(last_name)s added successfully")
     success_url = reverse_lazy("auser:active_store_keeper_list")
-    extra_context = {"title": _("Add Store Keeper")}
+    extra_context = {"title": _("Add Store Officer")}
     
     def form_valid(self, form):
             self.object = form.save(commit=False)
@@ -61,7 +61,7 @@ class UpdateStoreKeeper( PermissionRequiredMixin,
     success_url = reverse_lazy("auser:active_store_keeper_list")
     template_name = "auser/storekeeper/update_store_keeper.html"
     success_message = _("%(first_name)s %(last_name)s updated successfully")
-    extra_context = {"title": _("Update Store Keeper")}
+    extra_context = {"title": _("Update Store Officer")}
 
     def get_queryset(self):
         return self.model.objects.filter(is_active=True)
@@ -71,7 +71,7 @@ class ListActiveStoreKeepersView(PermissionRequiredMixin, ListView):
     model = Storekeeper
     template_name = "auser/storekeeper/list_store_keepers.html"
     permission_required = ("auser.view_store_keeper",)
-    extra_context = {"title": _("Active Store Keepers")}
+    extra_context = {"title": _("Active Store Officer")}
     context_object_name = "storekeepers"
 
     def get_queryset(self):
@@ -81,7 +81,7 @@ class ListDeactivatedStoreKeepersView(PermissionRequiredMixin, ListView):
     model = Storekeeper
     template_name = "auser/storekeeper/list_deactivated_store_keeper.html"
     permission_required = ("auser.view_storekeeper",)
-    extra_context = {"title": _("Deactivated Store Keeper")}
+    extra_context = {"title": _("Deactivated Store Officer")}
     context_object_name = "deactivated_store_keepers"
 
     def get_queryset(self):
@@ -168,7 +168,7 @@ class DeleteStoreKeeprView(
 class StoreKeeperDetailView(PermissionRequiredMixin, DetailView):
     model = Storekeeper
     template_name = "auser/storekeeper/store_keeper_detail.html"
-    extra_context = {"title": _("Store Keeper Detail")}
+    extra_context = {"title": _("Store Officer Detail")}
     permission_required = ("auser.view_store_keeper",)
     context_object_name = "storekeeper"
 
