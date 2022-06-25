@@ -36,7 +36,7 @@
             <td>{{ staffmember.date_joined }}</td>
             <td>
                 <div class="btn-group rounded" role="group" aria-label="Management buttons">
-                    <a href="{% url 'auser:staffmember_detail' staffmember.pk %} " class="btn btn-md btn-outline-dark 
+                    <a href="{% url 'auser:staffmember_detail' staffmember.pk %} " class="btn btn-md btn-outline-dark   
                     shadow-none ">{% translate "Details " %}</a> {% if perms.auser.change_staffmember %}
                     <a href="{% url 'auser:staffmember_update' staffmember.pk %} " class="btn btn-md 
                     btn-outline-secondary shadow-none ">{% translate "Update " %}</a>{% endif %} {% if perms.auser.change_user_permissions %}

@@ -1,8 +1,8 @@
 {% extends "layouts/main.html" %} {% load i18n static humanize %} {% block content %}
 <table class="table shadow-lg" id="dt_table_department_head">
     <div class="float-end">
-        <a href="{% url 'auser:store_keeper_add' %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> {% translate "Add Store keeper user" %}</a>
-        <a href="{% url 'auser:active_store_keeper_list' %}" class="mx-2 btn btn-sm btn-warning shadow-none"><i data-feather="list"></i> {% translate "Active Store keeper users" %}</a>
+        <a href="{% url 'auser:store_keeper_add' %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> {% translate "Add Store Officer user" %}</a>
+        <a href="{% url 'auser:active_store_keeper_list' %}" class="mx-2 btn btn-sm btn-warning shadow-none"><i data-feather="list"></i> {% translate "Active Store Officer users" %}</a>
     </div>
     <hr>
     <thead>
@@ -42,7 +42,7 @@
                 </div>
             </td>
             {% if perms.auser.activate_user %}
-            <div class="modal fade" id="activate-{{ storekeeper.username }}" tabindex="-1" aria-labelledby="Activate Store keeper User" aria-hidden="true">
+            <div class="modal fade" id="activate-{{ storekeeper.username }}" tabindex="-1" aria-labelledby="Activate Store Officer User" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-body">
@@ -59,7 +59,7 @@
                 </div>
             </div>
             {% endif %} {% if perms.auser.delete_user %}
-            <div class="modal fade" id="delete-{{ storekeeper.username tabindex=" -1 " aria-labelledby="Delete Store keeper User " aria-hidden="true ">
+            <div class="modal fade" id="delete-{{ storekeeper.username tabindex=" -1 " aria-labelledby="Delete Store Officer User " aria-hidden="true ">
                 <div class="modal-dialog ">
                     <div class="modal-content ">
                         <div class="modal-body ">

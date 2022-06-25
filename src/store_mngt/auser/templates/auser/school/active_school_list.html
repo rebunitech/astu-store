@@ -41,9 +41,7 @@
                     <a href="{% url 'auser:school_detail' school.pk %} " class="btn btn-md btn-outline-dark 
                     shadow-none ">{% translate "Details " %}</a> {% if perms.auser.change_school %}
                     <a href="{% url 'auser:update_school' school.pk %} " class="btn btn-md 
-                    btn-outline-secondary shadow-none ">{% translate "Update " %}</a>{% endif %} {% if perms.auser.change_user_permissions %}
-                    <a href="{% url 'auser:change_permission' school.pk %} " class="btn btn-md btn-outline-success 
-                    shadow-none ">{% translate "Permissions" %}</a>{% endif %} {% if perms.auser.deactivate_user %}
+                    btn-outline-secondary shadow-none ">{% translate "Update " %}</a>{% endif %} {% if perms.auser.deactivate_user %}
                     <button class="btn btn-md btn-outline-danger shadow-none
                      " data-bs-toggle="modal" data-bs-target="#deactivate-{{ school.abbr_name }} ">{% translate "Deactivate" %}</button>{% endif %}
                 </div>
