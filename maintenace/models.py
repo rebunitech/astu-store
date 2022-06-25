@@ -1,3 +1,4 @@
+from email.policy import default
 from itertools import permutations
 from unicodedata import name
 import uuid
@@ -10,16 +11,17 @@ from ckeditor.fields import RichTextField
 from store.models import Item, Store
 
       
-"""failurity report model"""     
+"""failurity report model"""        
        
 class FailurityReport(models.Model):
     item = models.ForeignKey(
                              Item,
                              on_delete=models.CASCADE,
                              verbose_name=_("items"),
-                             related_name="failurityreports"
+                             related_name="failurityreports",
+                             
                              )
-    quantity = models.IntegerField(validators=[MinValueValidator(0)]) # dont forget to add maximum
+    quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)]) # dont forget to add maximum
     
     problem = models.TextField(_("problem"))
         
@@ -29,9 +31,9 @@ class FailurityReport(models.Model):
         
        
         
+
     def __str__(self):
         return f"{self.item.name}"
-
 
 
 """ Models for maintenace request """    
@@ -46,11 +48,11 @@ class MaintenanceRequest(models.Model):
     
     problem = models.TextField(_("problem"),null=True,blank=True)
     is_approved = models.BooleanField(default=False)
-    quantity = models.IntegerField(validators=[MinValueValidator(0)])  #don't forget to do max validator
+    quantity = models.IntegerField(default=1)  #don't forget to do max validator
     is_declined = models.BooleanField(default=False)
     is_request = models.BooleanField(default=True)
     # is_repaired = models.BooleanField(default=False)
-    # is_damaged = models.BooleanField(default=False)
+    is_damaged = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = _("maintenance request")
@@ -61,22 +63,22 @@ class MaintenanceRequest(models.Model):
  
  
  
-# class DamageReport(models.Model):
-#     item = models.ForeignKey(
-# 		Item,
-# 		on_delete = models.CASCADE,
-#         verbose_name =_("item"),
-#         related_name = "damagereport"
-#         )
+class DamageReport(models.Model):
+    item = models.ForeignKey(
+		Item,
+		on_delete = models.CASCADE,
+        verbose_name =_("item"),
+        related_name = "damagereport"
+        )
     
-#     description = models.TextField(_("description"),null=True, blank=True) 
-
-#     problem = RichTextField()
+    # description = models.TextField(_("description"),null=True, blank=True) 
+    quantity = models.IntegerField(default=1, validators=[MinValueValidator(1),], )
+    problem = models.TextField(null=False, error_messages={"fill": "You should specify the problem."} )
     
-#     class Meta:
-#         verbose_name = _("damagereport")
-#         verbose_name_plural = _("damagereports")
+    class Meta:
+        verbose_name = _("damagereport")
+        verbose_name_plural = _("damagereports")
     
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
 
