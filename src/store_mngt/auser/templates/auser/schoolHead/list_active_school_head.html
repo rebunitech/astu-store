@@ -1,9 +1,9 @@
 {% extends "layouts/main.html" %} {% load i18n static humanize auser %} {% block content %}
 <table class="table shadow-lg w-100" id="dt_table_staff">
     <div class="d-flex justify-content-end">
-        <a href="{% url 'auser:add_school_head' %} " class="mx-2 btn btn-sm btn-success shadow-none "><i data-feather="plus "></i> {% translate "Add school head " %}</a>
+        <a href="{% url 'auser:add_school_head' %} " class="mx-2 btn btn-sm btn-success shadow-none "><i data-feather="plus "></i> {% translate "Add School Dean  " %}</a>
         <a href="{% url 'auser:deactivated_school_head_list' %} " class="mx-2 btn btn-sm btn-warning shadow-none ">
-            <i data-feather="list "></i> {% translate "Deactivated school heads " %}</a> {% include "layouts/import_data.html" with ctype=view|ctype %}
+            <i data-feather="list "></i> {% translate "Deactivated school Dean" %}</a> {% include "layouts/import_data.html" with ctype=view|ctype %}
     </div>
     <hr>
     <thead>
