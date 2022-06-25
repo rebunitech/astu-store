@@ -12,7 +12,7 @@ maintenace_urls = [
         name="add_failurirtyreports"
         ),
     re_path(
-        r"list_failurity/$",
+        r"list_failurity/$",   
         views.ListFailurityReportView.as_view(),
         name="list_failurity_report"
     ),
@@ -73,12 +73,58 @@ maintenace_urls = [
         views.CancelMaintenaceRequestView.as_view(),
         name="cancel_maintenance_request"
     ),
+    # url for canceled request lists
     re_path(
         r"canceled_request/$",
         views.CanceledListMaintenanceRequestView.as_view(),
         name="canceled_list",
     ),
+    
+     re_path(
+        r"Add_damage_reports/$",
+        views.AddDamageReportView.as_view(),
+        name= "add_damagereports",
+    ),
   
+       
+  # list of damage report url
+    re_path(
+        r"list_damage_reports/$",
+        views.ListDamageReportView.as_view(),
+        name="list_damagereports",
+    ),
+      #  damaged requests url
+
+     re_path(
+        r"damaged_requests/(?P<pk>\d+)/$",
+        views.AddDamagedMaintenaceRequestView.as_view(),  
+        name="damaged_requests",
+    ),
+       
+ #  damaged requests lists url
+
+     re_path(
+        r"damaged_requests/$",
+        views.ListDamagedMaintenaceRequestView.as_view(),
+        name="damaged_requests_lists",
+    ),
+     
+# reppaired maintenace request view 
+
+re_path (
+    r"repaired_request/(?P<pk>\d+)/$",
+    views.RepairedMaintenaceRequestView.as_view(),
+    name = "repaired_request_list"
+    
+),
+
+re_path (
+    r"repaired_request/(?P<pk>\d+)/$",
+    views.ListDamagedMaintenaceRequestView.as_view(),
+    name = "list_repaired_request_list"
+    
+),
+
 ]
 
 
