@@ -1,0 +1,5 @@
+<h1>request Delete</h1>
+<form method="post">{% csrf_token %}
+    Are you sure you want to deny  requested"{{ request }}" ?
+    <input type="submit" value="Submit" />
+</form>

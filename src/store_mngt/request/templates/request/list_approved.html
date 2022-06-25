@@ -1,0 +1,44 @@
+ {% extends "layouts/main.html" %} {% load i18n static humanize auser %} {% block content %}
+
+<table class="table shadow-lg w-100" id="dt_table_student">
+    <div class="d-flex justify-content-end">
+        {% if perms.store.add_store %}<a href="{% url 'request:declined_list' %}" 
+        class="btn btn-md btn-success rounded-3 shadow-none float-end">
+        <i class="fa-solid  me-2"></i>Declined Request List</a>{% endif %}
+    </div>
+    <hr>
+    <thead>
+        <tr>
+            <th>{% translate "No" %}</th>
+            <th>{% translate "item" %}</th>
+            <th>{% translate "quantity" %}</th>
+            <th>{% translate "start date" %}</th>
+            <th>{% translate "end date" %}</th>
+            <th>{% translate "category" %}</th>
+            <th>{% translate "Manage" %}</th>
+        </tr>
+    </thead>
+    <tbody class="w-100">{% if requests %}
+        {% for request in requests %}
+        <tr>
+
+            <td class="">{{ forloop.counter }}</td>
+            <td>{{ request.item }}</td>
+            <td>{{ request.quantity }}</td>
+            <td>{{ request.start_date }}</td>
+            <td>{{ request.end_date }}</td>
+            <td>{{ request.category }}</td>
+             <td> 
+                <div class="btn-group rounded " role="group " aria-label="Management buttons ">
+                    <a href="{% url 'request:request_detail' request.pk %} " class="btn btn-md 
+                            btn-outline-dark shadow-none ">{% translate "Details " %}</a> 
+                    <form class="col-3" action="{% url 'request:complete_request' request.id %}" method="post" novalidate="">
+                        {% csrf_token %}
+                       <input type="submit" class="btn btn-primary" value="Complete">
+                    </form>
+           </td>     
+
+
+        </tr>{% endfor %}{% endif %}
+    </tbody>
+</table>{% endblock content %}
