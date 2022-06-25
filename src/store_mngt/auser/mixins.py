@@ -1,11 +1,12 @@
-"""gradient_infosys auser custom mixins
+"""
+    ASTU Store mgnt auser custom mixins
 	
     Created by: Ashenafi Zenebe
 
 """
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from auser.signals import (log_entry_adition, log_entry_change,
+from auser.signals import (log_entry_addition, log_entry_change,
                            log_entry_deletion)
 
 
@@ -31,7 +32,7 @@ class LogEntryAdditionMixin:
 
     def get_success_url(self):
         """Save log entry when form is valid"""
-        log_entry_adition.send(
+        log_entry_addition.send(
             sender=self.model,
             instance=self.object,
             user_id=self.request.user.id,

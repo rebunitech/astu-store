@@ -175,12 +175,14 @@ class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
         permissions = [  
             ("can_deactivate_user", "Can deactivate user"),
             ("can_activate_user", "Can activate user"),
-            ("can_view_schoolHead", "Can view schoolHead"),
-            ("can_change_schoolHead", "Can change schoolHead"),
-            ("can_add_schoolHead", "Can add schoolHead"),
-            ("can_delete_schoolHead", "Can delete schoolHead"),
+            ("can_view_staff", "Can view staff"),
+            ("can_change_staff", "Can change staff"),
+            ("can_add_staff", "Can add staff"),
+            ("can_delete_staff", "Can delete staff"),
             ("can_change_user_permissions", "Can change user permissions"),
         ]
+
+    
 
 
 class SchoolHead(User):
@@ -254,6 +256,13 @@ class Storekeeper(User):
                             related_name="store_keepers",
                             verbose_name="department",
     )
+    # TODO: sinper dont forget to check this one
+    # store = models.ForeignKey(
+    #                           Store,
+    #                           on_delete=models.CASCADE,
+    #                            related_name="store_keepers",
+    #                            verbose_name="store",
+    # )
     class Meta:
         verbose_name = _("store keeper")
         verbose_name_plural = _("store keepers")

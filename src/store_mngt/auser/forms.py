@@ -19,7 +19,7 @@ UserModel = get_user_model()
 class StaffMemberRegistrationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Staffmember
-        fields = ("username", "email", "first_name", "last_name", "phone_number", "sex")
+        fields = ("username", "email", "first_name", "department", "last_name", "phone_number", "sex")
 
 
 class UserChangeForm(forms.ModelForm):

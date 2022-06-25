@@ -225,7 +225,7 @@ staffmember_urlpatterns = [
     re_path(
         r"^activate/(?P<pk>\d+)/$",
         view.ActivateStaffMemberView.as_view(),
-        name="activate_statffmember",
+        name="activate_staffmember",
     ),
     re_path(
         r"^deativate/(?P<pk>\d+)/$",
