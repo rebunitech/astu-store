@@ -1,7 +1,7 @@
 {% extends "layouts/main.html" %} {% block content %}
 <div class="row">
     <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
-        {% if perms.maintenace.add_failurityreport %}<a href="{% url 'maintenace:add_failurirtyreports' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add failurity report</a>{% endif %}
+        {% if perms.maintenance.add_failurityreport %}<a href="{% url 'maintenance:add_failurirtyreports' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add failurity report</a>{% endif %}
     </div>
     <hr/> {{ failurityreport_list }}
     <div class="container-fluid p-1 p-sm-3">
@@ -30,8 +30,8 @@
                     <td>
 
                         <div class="btn-group rounded" role="group" aria-label="Management buttons">
-                            {% if perms.maintenace.change_maintenancerequest %}
-                            <a href="{% url 'maintenace:failure_detail' failure.pk %} " class="btn btn-md btn-outline-secondary shadow-none ">Details</a>{% endif %}
+                            {% if perms.maintenance.change_maintenancerequest %}
+                            <a href="{% url 'maintenance:failure_detail' failure.pk %} " class="btn btn-md btn-outline-secondary shadow-none ">Details</a>{% endif %}
 
                         </div>
 

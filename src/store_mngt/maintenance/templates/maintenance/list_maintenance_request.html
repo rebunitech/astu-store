@@ -3,7 +3,7 @@
 <div class="row">
 
     <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
-        {% if perms.store.add_item %}<a href="{% url 'maintenace:add_maintenace_request' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Maintenance Request</a>{% endif %}
+        {% if perms.store.add_item %}<a href="{% url 'maintenance:add_maintenance_request' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Maintenance Request</a>{% endif %}
 
     </div>
     <hr />
@@ -34,15 +34,15 @@
 
                     <td>
                         <div class="btn-group rounded" role="group" aria-label="Management buttons">
-                            {% if perms.maintenace.change_maintenancerequest %}
-                            <a class="btn btn-sm btn-primary shadow-none px-2 mx-1" href="{% url 'maintenace:update_maintenance_request' m.pk %} " class="fa-solid fa-pen me-2">Update</a> {% endif %} {% if perms.maintenace.cancel_maintenancerequest %}
-                            <form action="{% url 'maintenace:cancel_maintenance_request' m.pk %}" method='post'>{% csrf_token %}
+                            {% if perms.maintenance.change_maintenancerequest %}
+                            <a class="btn btn-sm btn-primary shadow-none px-2 mx-1" href="{% url 'maintenance:update_maintenance_request' m.pk %} " class="fa-solid fa-pen me-2">Update</a> {% endif %} {% if perms.maintenance.cancel_maintenancerequest %}
+                            <form action="{% url 'maintenance:cancel_maintenance_request' m.pk %}" method='post'>{% csrf_token %}
                                 <input class=" btn btn-danger btn-sm shadow-none " type="submit" value="Cancel" />
-                            </form>{% endif %}{% if perms.maintenace.approve_maintenancerequest %}
-                            <form action="{% url 'maintenace:approve_maintenance_request' m.pk %}" method='post'>{% csrf_token %}
+                            </form>{% endif %}{% if perms.maintenance.approve_maintenancerequest %}
+                            <form action="{% url 'maintenance:approve_maintenance_request' m.pk %}" method='post'>{% csrf_token %}
                                 <input class=" btn btn-primary btn-sm shadow-none " type="submit" value="Approve" />
-                            </form>{% endif %}{% if perms.maintenace.decline_maintenancerequest %}
-                            <form action="{% url 'maintenace:decline_maintenance_request' m.pk %}" method='post'>{% csrf_token %}
+                            </form>{% endif %}{% if perms.maintenance.decline_maintenancerequest %}
+                            <form action="{% url 'maintenance:decline_maintenance_request' m.pk %}" method='post'>{% csrf_token %}
                                 <input class=" btn btn-danger btn-sm shadow-none " type="submit" value="Decline" />
                             </form>{% endif %}
                         </div>

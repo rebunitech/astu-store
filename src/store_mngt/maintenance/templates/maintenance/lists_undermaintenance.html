@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="float-end">
-        <a href="{% url 'maintenace:lists_declined_request' %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> List Declined Maintenance Request</a>
+        <a href="{% url 'maintenance:lists_declined_request' %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> List Declined Maintenance Request</a>
 
     </div>
     <hr />
@@ -29,9 +29,9 @@
                     <td>{{ m.item.item.store }}
                         <td>
                             <div class="btn-group rounded" role="group" aria-label="Management buttons">
-                                {% if perms.maintenace.view_maintenancerequest %}
-                                <a class="btn btn-sm btn-primary shadow-none px-2 mx-1" href=" " class="fa-solid fa-pen me-2">Repaired</a>{% endif %} {% if perms.maintenace.approve_maintenancerequest %}
-                                <form action="{% url 'maintenace:damaged_requests' m.pk %}" method='post'>{% csrf_token %}
+                                {% if perms.maintenance.view_maintenancerequest %}
+                                <a class="btn btn-sm btn-primary shadow-none px-2 mx-1" href=" " class="fa-solid fa-pen me-2">Repaired</a>{% endif %} {% if perms.maintenance.approve_maintenancerequest %}
+                                <form action="{% url 'maintenance:damaged_requests' m.pk %}" method='post'>{% csrf_token %}
                                     <input class=" btn btn-danger btn-sm shadow-none " type="submit" value="Damaged" />
                                 </form>{% endif %}
                         </td>

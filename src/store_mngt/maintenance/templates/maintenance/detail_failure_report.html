@@ -1,0 +1,16 @@
+{% extends 'layouts/main.html' %}{% load i18n %}{% block content %}
+
+<div class="row" id="UserDetailContent">
+    <div class="col-10">
+
+        {% include "maintenance/request_log.html" with maintenance=request update_link="maintenance:update_maintenance_request" %}
+
+
+
+
+
+    </div>
+
+
+
+</div>{% endblock content %}
