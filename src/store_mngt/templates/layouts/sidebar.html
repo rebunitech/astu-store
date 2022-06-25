@@ -11,17 +11,17 @@
                 <div class="col p-2 ps-3 text-center ">
                     <img class="img-sidebar " src="{% static 'img/student.svg' %} "></div>
                 <div class="col-10 ">
-                    <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_school_head_list' %} ">{% translate "School heads " %}</a></div>
+                    <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_school_head_list' %} ">{% translate "School Dean " %}</a></div>
             </li>{% endif %}{% if perms.auser.view_departmenthead %}
             <li class="nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
                 <div class="col py-2 px-3 text-center "><i data-feather="user"></i></div>
                 <div class="col-10 ">
                     <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_department_head_list' %} ">{% translate "Department Heads " %}</a></div>
-            </li>{% endif %} {% if perms.auser.view_storeeper %}
+            </li>{% endif %} {% if perms.auser.view_storekeeper %}
             <li class="nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
                 <div class="col py-2 px-3 text-center "><i data-feather="user"></i></div>
                 <div class="col-10 ">
-                    <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_store_keeper_list' %} ">{% translate "Store Keepers " %}</a></div>
+                    <a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_store_keeper_list' %} ">{% translate "Store Officer " %}</a></div>
             </li>{% endif %} {% if perms.auser.view_staffmember %}
             <li class="nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
                 <div class="col py-2 px-3 text-center "><i data-feather="user"></i></div>
@@ -30,11 +30,25 @@
             </li>{% endif %}
         </ul>
     </div>
-    <div class="row sidebar-nav mx-0 ">{% if perms.page.view_item %}
-        <li class="nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
-            <div class="col py-2 px-3 text-center "><i data-feather="item"></i></div>
-            <div class="col-10 "><a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'core:list_items' %}">{% translate "Item " %}</a></div>
-        </li>{% endif %}
+    <div class="row sidebar-nav mx-0 ">
+        <ul class="">{% if perms.auser.view_school %}
+            <li class=" nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
+                <div class="col py-2 px-3 text-center "><i data-feather="school"></i></div>
+                <div class="col-10 "><a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_school_list' %} ">{% translate "School" %}</a></div>
+            </li>{% endif %}{% if perms.auser.view_department %}
+            <li class=" nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
+                <div class="col py-2 px-3 text-center "><i data-feather="school"></i></div>
+                <div class="col-10 "><a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'auser:active_department_list' %} ">{% translate "Department" %}</a></div>
+            </li>{% endif %}{% if perms.auser.view_failurityreport %}
+            <li class=" nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
+                <div class="col py-2 px-3 text-center "><i data-feather="maintenance"></i></div>
+                <div class="col-10 "><a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'maintenance:list_failurity_report' %} ">{% translate "Failurity report" %}</a></div>
+            </li>{% endif %}{% if perms.auser.view_maintenancerequest %}
+            <li class=" nav-item my-1 mx-0 row flex-nowrap align-items-center text-light ">
+                <div class="col py-2 px-3 text-center "><i data-feather="maintenance"></i></div>
+                <div class="col-10 "><a class="nav-link px-0 text-reset text-decoration-none " href="{% url 'maintenance:list_maintenancerequests' %} ">{% translate "Maintenance Request" %}</a></div>
+            </li>{% endif %}
+
         </ul>
     </div>
 </nav>
