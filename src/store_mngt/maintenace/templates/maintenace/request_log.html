@@ -1,0 +1,15 @@
+{% load i18n humanize %}
+<div class="row gutters-sm">
+    <div class="col-lg-5 col-sm-12 col-md-12  my-md-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+                    <div class="mt-3">
+                        <h4>{{ failure_detail.item }}</h4>
+                        <p class="text-secondary mb-1">  <li>Item:{{ failurereport.item }} </li>
+                        <li>quantity:{{ failurereport.quantity }}</li>
+                        <li> problem:{{ failurereport.problem }} </li>
+                        <li> dead_stock_number:{{ failurereport.item.dead_stock_number }} </li>
+                        </p>
+                </div>
+                </div
