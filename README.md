@@ -1,5 +1,5 @@
 # ASTU Store
-A simple, fast, and secure online store admininstrator platform for the [ASTU](https://www.astu.edu.et)
+A simple, fast, and secure online store admininstrator platform for [ASTU](https://www.astu.edu.et)
 
 ## Features
 - Store management
