@@ -53,6 +53,7 @@ class MaintenanceRequest(models.Model):
     is_request = models.BooleanField(default=True)
     # is_repaired = models.BooleanField(default=False)
     is_damaged = models.BooleanField(default=False)
+    decline_reason = models.TextField(null=True)
 
     class Meta:
         verbose_name = _("maintenance request")
@@ -71,14 +72,15 @@ class DamageReport(models.Model):
         related_name = "damagereport"
         )
     
-    # description = models.TextField(_("description"),null=True, blank=True) 
     quantity = models.IntegerField(default=1, validators=[MinValueValidator(1),], )
     problem = models.TextField(null=False, error_messages={"fill": "You should specify the problem."} )
+    is_damaged = models.BooleanField(default=False)
+
     
     class Meta:
         verbose_name = _("damagereport")
         verbose_name_plural = _("damagereports")
     
     def __str__(self):
-        return self.name
+        return self.item.name
 
