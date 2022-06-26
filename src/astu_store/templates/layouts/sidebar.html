@@ -6,7 +6,7 @@
     <div class="text-dark px-4 fs-4">Users</div>
     <div class="text-dark px-4 fs-4"></div>
     <ul class="px-0">
-      {% if perms.auser.add_college %}
+      {% if perms.auser.add_college and perms.auser.view_college %}
       <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
         <div class="col p-2 ps-3 text-center">
           <i class="fa-solid fa-building-columns me-2"></i>

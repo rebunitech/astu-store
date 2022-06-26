@@ -3,7 +3,6 @@ from django.contrib.auth.models import (AbstractBaseUser, PermissionsMixin,
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from smart_selects.db_fields import ChainedForeignKey
 
 from auser.validators import PhoneNumberValidator
 
@@ -115,8 +114,9 @@ class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
         ]
         permissions = [
             ("can_add_college_representative", "Can add college representative"),
-            ("can_view_college_representative", "Can change college representative"),
-            ("can_change_college_representative", "Can view college representative"),
+            ("can_remove_college_representative", "Can remove college representative"),
+            ("can_view_college_representative", "Can view college representative"),
+            ("can_change_college_representative", "Can change college representative"),
             ("can_delete_college_representative", "Can delete college representative"),
             (
                 "can_activate_college_representative",
@@ -129,11 +129,11 @@ class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
             ("can_add_department_representative", "Can add department representative"),
             (
                 "can_view_department_representative",
-                "Can change department representative",
+                "Can view department representative",
             ),
             (
                 "can_change_department_representative",
-                "Can view department representative",
+                "Can change department representative",
             ),
             (
                 "can_delete_department_representative",
@@ -153,13 +153,17 @@ class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
             ("can_delete_staff_member", "Can delete staff member"),
             ("can_activate_staff_member", "Can activate staff member"),
             ("can_deactivate_staff_member", "Can deactivate staff member"),
-            ("can_add_store_keeper", "Can add store keeper"),
-            ("can_view_store_keeper", "Can change store keeper"),
-            ("can_change_store_keeper", "Can view store keeper"),
-            ("can_delete_store_keeper", "Can delete store keeper"),
-            ("can_activate_store_keeper", "Can activate store keeper"),
-            ("can_deactivate_store_keeper", "Can deactivate store keeper"),
+            ("can_add_store_officer", "Can add store officer"),
+            ("can_view_store_officer", "Can change store officer"),
+            ("can_change_store_officer", "Can view store officer"),
+            ("can_delete_store_officer", "Can delete store officer"),
+            ("can_activate_store_officer", "Can activate store officer"),
+            ("can_deactivate_store_officer", "Can deactivate store officer"),
         ]
+
+    @property
+    def is_college_user(self):
+        return False
 
     @property
     def is_college_representative(self):
@@ -174,16 +178,22 @@ class User(AbstractUser, AbstractBaseUser, PermissionsMixin, Address):
         return self.groups.filter(name="department_representative").exists()
 
     @property
-    def is_store_keeper(self):
+    def is_store_officer(self):
         if self.is_superuser:
             return True
-        return self.groups.filter(name="store_keeper").exists()
+        return self.groups.filter(name="store_officer").exists()
 
     @property
     def is_staff_member(self):
         if self.is_superuser:
             return True
         return self.groups.filter(name="staff_member").exists()
+
+    @property
+    def is_lab_assistant(self):
+        if self.is_superuser:
+            return True
+        return self.groups.filter(name="store_officer").exists()
 
 
 class CollegeOrDepartment(models.Model):
@@ -195,7 +205,7 @@ class CollegeOrDepartment(models.Model):
 
     name = models.CharField(_("name"), max_length=150)
     short_name = models.CharField(_("short name"), unique=True, max_length=10)
-    description = models.TextField(_("description"))
+    description = models.TextField(_("description"), max_length=1000)
     status = models.CharField(
         _("status"),
         max_length=15,
@@ -218,12 +228,35 @@ class CollegeOrDepartment(models.Model):
         self.short_name = self.normalize_short_name(self.short_name)
         return super().save(*args, **kwargs)
 
+    @property
+    def is_active(self):
+        return self.status == "active"
+
+    @property
+    def staff_members(self):
+        return self.users.filter(groups__name="staff_member")
+
+    @property
+    def store_officers(self):
+        return self.users.filter(groups__name="store_officer")
+
+    @property
+    def lab_assistants(self):
+        return self.users.filter(groups__name="lab_assistant")
+
 
 class College(CollegeOrDepartment):
     class Meta:
         verbose_name = _("college")
         verbose_name_plural = _("colleges")
         db_table = "college"
+        permissions = [
+            ("can_change_status", "Can activate status"),
+        ]
+
+    @property
+    def representatives(self):
+        return self.users.filter(groups__name="college_representative")
 
 
 class Department(CollegeOrDepartment):
@@ -231,7 +264,7 @@ class Department(CollegeOrDepartment):
         College,
         verbose_name=_("college"),
         related_name="departments",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         limit_choices_to={"status": "active"},
     )
 
@@ -240,6 +273,10 @@ class Department(CollegeOrDepartment):
         verbose_name_plural = _("departments")
         db_table = "department"
 
+    @property
+    def representatives(self):
+        return self.users.filter(groups__name="department_representative")
+
 
 class CollegeUser(User):
     college = models.ForeignKey(
@@ -247,19 +284,21 @@ class CollegeUser(User):
         verbose_name=_("college"),
         related_name="users",
         limit_choices_to={"status": "active"},
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
     )
-    department = ChainedForeignKey(
+    department = models.ForeignKey(
         Department,
-        chained_field="college",
-        chained_model_field="college",
-        verbose_name="department",
-        related_name="staffs",
+        verbose_name=_("department"),
+        related_name="users",
         limit_choices_to={"status": "active"},
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
     )
 
     class Meta:
         db_table = _("college_user")
         verbose_name = _("in college user")
         verbose_name_plural = _("in college users")
+
+    @property
+    def is_college_user(self):
+        return True

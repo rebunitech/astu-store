@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     # Third Party Apps
     "widget_tweaks",
+    "smart_selects",
     # Local Apps
     "auser",
     "store",
@@ -141,6 +142,7 @@ MEDIA_ROOT = BASE_DIR / "uploads"
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
+    "smart_selects/static",
 ]
 
 # Default primary key field type

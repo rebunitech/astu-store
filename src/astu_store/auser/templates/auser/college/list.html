@@ -1,52 +1,85 @@
 {% extends "layouts/main.html" %} {% block content %}
 <div class="row">
-    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
-        {% if perms.auser.add_college %}<a href="{% url 'auser:add_college' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add College</a>{% endif %}
+    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3 d-flex justify-content-end">
+        {% if perms.auser.add_college %}<a href="{% url 'auser:add_college' %}" class="btn btn-md btn-success rounded-3 shadow-none"><i class="fa-solid fa-circle-plus me-2"></i>Add College</a>{% endif %}
     </div>
     <hr />
-    <div class="container-fluid p-1 p-sm-3">
-        <table id="colleges_list" class="table w-100 rounded-3">
+    <div class="container-fluid p-sm-3">
+        <table id="colleges_list" class="table responsive nowrap">
             <thead>
-                <th class="border-bottom border-0" style="max-width: 25px;"></th>
                 <th class="border-bottom border-0">Name</th>
                 <th class="border-bottom border-0">Short name</th>
                 <th class="border-bottom border-0">Status</th>
-                <th class="border-bottom border-0">Departments</th>
-                <th class="border-bottom border-0">Staffs</th>
-                <th class="border-bottom border-0"></th>
+                <th class="border-bottom border-0 text-center">Departments</th>
+                <th class="border-bottom border-0 text-center">College Deans</th>
+                <th class="border-bottom border-0 text-center">Staffs Members</th>
+                <th class="border-bottom border-0 text-center">Store Officers</th>
+                <th class="border-bottom border-0 text-center">Lab Assistants</th>
+                <th class="border-bottom border-0">Actions</th>
             </thead>
-            <tbody>{% if colleges %}{% for college in colleges %}
+            <tbody>{% if colleges %}{% for college in colleges %}{% with college=college departments_count=college.departments.count  users_count=college.users.count representatives_count=college.representatives.count store_officers_count=college.store_officers.count lab_assistants_count=college.lab_assistants.count %}
                 <tr>
-                    <td class="text-center"><i class="fa-solid fa-circle-dot"></i></td>
-                    <td>{{ college.name }}</td>
-                    <td>{{ college.short_name }}</td>
-                    <td>{{ college.get_status_display }}</td>
-                    <td>{{ college.departments.count }}</td>
-                    <td>{{ college.users.count }}</td>
-                    <td class="text-center">
-                        {% if perms.auser.change_college %}
-                        <a class="btn btn-sm btn-primary shadow-none px-2 mx-1" href="{% url 'auser:update_college' college.short_name %}"><i class="fa-solid fa-pen me-2"></i>Update</a>{% endif %} 
-                        {% if perms.auser.delete_college %}<button class="btn btn-sm btn-danger shadow-none px-2 mx-1" data-bs-toggle="modal" data-bs-target="#delete-college-{{ college.short_name }}"><i class="fa-solid fa-trash-can me-2"></i>Delete</button>
-                        <div class="modal fade" id="delete-college-{{ college.short_name }}" tabindex="-1" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2 font-monospace"></i> This action is irreversable.</span>
-                              </div>
-                              <div class="modal-body">
-                               Do you really wants to delete <strong>{{ college.name }}</strong>?
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-outline-success shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
-                                <form action="{% url 'auser:delete_college' college.short_name %}" method="post">{% csrf_token %}
-                                   <button class="btn btn-outline-danger btn-sm shadow-none" type="submit"><i class="fa-solid fa-trash-can me-2"></i>I understand, delete!</button>
-                                </form>
-                              </div>
-                            </div>
-                          </div>
-                        </div>{% endif %}
+                    <td><a class="nav-link" href="{% url 'auser:college_detail' college.short_name %}">{{ college.name }}</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:college_detail' college.short_name %}">{{ college.short_name }}</a></td>
+                    <td><span class="badge bg-{% if college.is_active %}success{% else %}danger{% endif %} w-100">{{ college.get_status_display }}</span></td>
+                    <td><a class="nav-link" href="{% url 'auser:list_departments_for_college' college.short_name %}">{{ departments_count }}&nbsp;Department{{ departments_count|pluralize }}</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:college_representatives' college.short_name %}">{{ representatives_count }}&nbsp;College&nbsp;Dean{{ representatives_count|pluralize }}</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:list_departments_for_college' college.short_name %}">{{ users_count }}&nbsp;Staff&nbsp;Member{{ users_count|pluralize }}</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:list_departments_for_college' college.short_name %}">{{ store_officers_count }}&nbsp;Store&nbsp;Officer{{ store_officers_count|pluralize }}</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:list_departments_for_college' college.short_name %}">{{ lab_assistants_count }}&nbsp;Lab&nbsp;Assistant{{ lab_assistants_counts|pluralize }}</a></td>
+                    <td>
+                        <div class="dropdown">
+                          <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-gears fs-4"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                            {% if perms.auser.change_college %}
+                            <li><a class="dropdown-item py-2" href="{% url 'auser:update_college' college.short_name %}"><i class="fa-solid fa-pen me-3"></i>Update </a></li>{% endif %}{% if perms.auser.can_add_college_representative and college.is_active %}
+                            <li><a class="dropdown-item py-2" href="{% url 'auser:add_college_representative' college.short_name %}"><i class="fa-solid fa-user-plus me-3"></i>Add Dean</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-circle-plus me-3"></i>Select Dean</a></li>
+                            {% endif %}{% if perms.auser.can_change_college %}{% if college.is_active %}
+                            <li><button class="dropdown-item py-2 text-warning" data-bs-toggle="modal" data-bs-target="#change-status-{{ college.short_name }}"><i class="fa-solid fa-toggle-off me-3"></i>Deactivate</button></li>{% else %}
+                            <li><button class="dropdown-item py-2 text-success" data-bs-toggle="modal" data-bs-target="#change-status-{{ college.short_name }}"><i class="fa-solid fa-toggle-on me-3"></i>Activate</button></li>
+                            {% endif %}{% endif %}{% if perms.auser.delete_college %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-college-{{ college.short_name }}"><i class="fa-solid fa-trash-can me-3"></i>Delete</button></li>
+                            {% endif %}
+                          </ul>
+                        </div>
                     </td>
                 </tr>
+                {% if perms.auser.delete_college %}<div class="modal fade" id="delete-college-{{ college.short_name }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2"></i> This action is irreversable.</span>
+                      </div>
+                      <div class="modal-body">
+                       Do you really wants to delete <strong>{{ college.name }}</strong>?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                        <form action="{% url 'auser:delete_college' college.short_name %}" method="post">{% csrf_token %}
+                           <button class="btn btn-outline-danger btn-sm shadow-none" type="submit"><i class="fa-solid fa-trash-can me-2"></i>I understand, delete!</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>{% endif %}{% if perms.auser.can_change_college %}<div class="modal fade" id="change-status-{{ college.short_name }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                       Do you really wants to {% if college.is_active %}deactivate{% else %}activate{% endif %} <strong>{{ college.name }}</strong>?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                        <form action="{% if college.is_active %}{% url 'auser:deactivate_college' college.short_name %}{% else %}{% url 'auser:activate_college' college.short_name %}{% endif %}" method="post">{% csrf_token %}
+                           <button class="btn btn-outline-{% if college.is_active %}warning{% else %}success{% endif %} btn-sm shadow-none" type="submit"><i class="fa-solid fa-check-circle me-2"></i>Confirm</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>{% endif %}{% endwith %}
                 {% endfor %}{% endif %}</tbody>
         </table>
     </div>

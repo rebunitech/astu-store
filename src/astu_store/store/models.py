@@ -16,11 +16,11 @@ class Store(models.Model):
         ACTIVE = "ACT", _("Active")
         INACTIVE = "INA", _("Inactive")
 
-    store_keepers = models.ManyToManyField(
+    store_officers = models.ManyToManyField(
         UserModel,
-        verbose_name=_("store keeper"),
+        verbose_name=_("store officer"),
         related_name="stores",
-        limit_choices_to={"is_store_keeper": True},
+        limit_choices_to={"is_store_officer": True},
     )
     department = models.ForeignKey(
         Department,
