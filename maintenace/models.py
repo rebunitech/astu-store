@@ -11,7 +11,7 @@ from ckeditor.fields import RichTextField
 from store.models import Item, Store
 
       
-"""failurity report model"""        
+""" Creating failurity report model"""        
        
 class FailurityReport(models.Model):
     item = models.ForeignKey(
@@ -28,9 +28,7 @@ class FailurityReport(models.Model):
     class Meta:
         verbose_name = _("failurityreport")
         verbose_name_plural = _("failurityreports")
-        
-       
-        
+         
 
     def __str__(self):
         return f"{self.item.name}"
@@ -51,7 +49,7 @@ class MaintenanceRequest(models.Model):
     quantity = models.IntegerField(default=1)  #don't forget to do max validator
     is_declined = models.BooleanField(default=False)
     is_request = models.BooleanField(default=True)
-    # is_repaired = models.BooleanField(default=False)
+    is_repaired = models.BooleanField(default=False)
     is_damaged = models.BooleanField(default=False)
     decline_reason = models.TextField(null=True)
 
@@ -69,14 +67,21 @@ class DamageReport(models.Model):
 		Item,
 		on_delete = models.CASCADE,
         verbose_name =_("item"),
-        related_name = "damagereport"
+        related_name = "damagereport",
         )
+    # start 
+    # undermaintenance = models.ForeignKey(
+    #                                     MaintenanceRequest,
+    #                                     on_delete=models.CASCADE,
+    #                                     verbose_name="under maintenance",
+    #                                     null=True
+                                        
+    # )
     
     quantity = models.IntegerField(default=1, validators=[MinValueValidator(1),], )
     problem = models.TextField(null=False, error_messages={"fill": "You should specify the problem."} )
     is_damaged = models.BooleanField(default=False)
 
-    
     class Meta:
         verbose_name = _("damagereport")
         verbose_name_plural = _("damagereports")

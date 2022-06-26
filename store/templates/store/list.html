@@ -1,0 +1,55 @@
+{% extends "layouts/main.html" %} {% block content %}
+<div class="row">
+    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
+        {% if perms.store.add_store %}<a href="{% url 'store:add_store' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Store</a>{% endif %}
+    </div>
+    <hr />
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="store_list" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0" style="max-width: 25px;"></th>
+                    <th class="border-bottom border-0">Department</th>
+                    <th class="border-bottom border-0">Block</th>
+                    <th class="border-bottom border-0">Room</th>
+                    <th class="border-bottom border-0">Status</th>
+                    <th class="border-bottom border-0">Shelves</th>
+                    <th class="border-bottom border-0"></th>
+                </tr>
+            </thead>
+            <tbody>{% if stores %}{% for store in stores %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td>{{ store.department|capfirst }}</td>
+                    <td>{{ store.block }}</td>
+                    <td>{{ store.room }}</td>
+                    <td>{{ store.get_status_display }}</td>
+                    <td>{{ store.shelves.count }}</td>
+                    <td class="text-center">
+                        {% if perms.store.view_shelf %}
+                        <a class="btn btn-sm btn-dark shadow-none px-2 mx-1" href="{% url 'store:list_shelves' store.pk %}"><i class="fa-solid fa-table-cells-large me-2"></i>Shelves</a>{% endif %} 
+                        {% if perms.store.change_store %}
+                        <a class="btn btn-sm btn-primary shadow-none px-2 mx-1" href="{% url 'store:update_store' store.pk %}"><i class="fa-solid fa-pen me-2"></i>Update</a>{% endif %} 
+                        {% if perms.store.delete_store %}<button class="btn btn-sm btn-danger shadow-none px-2 mx-1" data-bs-toggle="modal" data-bs-target="#delete-str-{{ store.pk }}"><i class="fa-solid fa-circle-minus me-2"></i>Delete</button>
+                        <div class="modal fade" id="delete-str-{{ store.pk }}" tabindex="-1" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-body">
+                               Do you really wants to delete <strong>{{ store }}</strong>? This action is irreversable.
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-primary shadow-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                <form action="{% url 'store:delete_store' store.pk %}" method="post">{% csrf_token %}
+                                  <input class="btn btn-danger btn-sm shadow-none" type="submit" value="I understand, delete!" />
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

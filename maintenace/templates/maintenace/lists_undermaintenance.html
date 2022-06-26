@@ -29,10 +29,14 @@
                     <td>{{ m.item.item.store }}
                         <td>
                             <div class="btn-group rounded" role="group" aria-label="Management buttons">
-                                {% if perms.maintenace.view_maintenancerequest %}
-                                {{ m.is_damaged }}
-                                <a class="btn btn-sm btn-primary shadow-none px-2 mx-1" href=" " class="fa-solid fa-pen me-2">Repaired</a>{% endif %} {% if perms.maintenace.approve_maintenancerequest %}
-                                <form action="{% url 'maintenace:damaged_requests' m.pk m.item.pk  %}" method='post'>{% csrf_token %}
+                                {% if perms.maintenace.approve_maintenancerequest %}
+
+                                <form action="{% url 'maintenace:repaired_request_list' m.pk %}" method='post'>{% csrf_token %}
+                                    <input class="btn btn-sm btn-primary shadow-none px-2 mx-1" class="fa-solid fa-pen me-2" type="submit" value="Repaired" />
+                                </form>{% endif %}
+
+                                {% if perms.maintenace.approve_maintenancerequest %}
+                                <form action="{% url 'maintenace:damaged_requests'  m.pk m.item.pk %}" method='post'>{% csrf_token %}
                                     <input class=" btn btn-danger btn-sm shadow-none " type="submit" value="Damaged" />
                                 </form>{% endif %}
                         </td>

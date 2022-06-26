@@ -1,0 +1,53 @@
+departement_head = [
+
+maintenace.can_approve,
+maintenace.view_list_approved_maintenance_request,
+maintenace.can_decline,
+maintenace.cancel_maintenancerequest,
+maintenace.view_list_declined_maintenance_request,
+maintenace.add_damagereport,
+maintenace.view_damagereport,
+maintenace.can_damagemaintenacerequest,
+maintenace.view_listdamagedmaintenacerequest,
+
+]
+
+store_officer= [
+
+maintenace.add_maintenacerequest,
+maintenace.cancel_maintenancerequest,
+maintenace.view_maintenancerequest,
+maintenace.change_maintenancerequest,
+view_canceled_maintenancerequest,
+maintenace.view_list_declined_maintenance_request,
+maintenace.can_repaire,
+maintenace.view_list_repaired_maintenance_request,
+maintenace.add_failurityreport,
+maintenace.view_failurityreport,
+maintenace.add_damagereport,
+maintenace.view_damagereport,
+maintenace.can_damagemaintenacerequest,
+maintenace.view_listdamagedmaintenacerequest
+
+]
+
+Implemented liste 
+
+# Add failurity report
+# list failurity report 
+# Detail failurity report 
+# Add maintenace request
+# list maintenace request
+# update maintenace request 
+# cancel maintenance request 
+# Approve maintenace request
+# decline maintenace request 
+# Add damage report from items
+# list damage report from items 
+# add damaged report from under maintenace 
+# damaged report from under maintenace
+
+Not implemented 
+
+# Repaired item list from under maintenace 
+# maxvalue validation for item quantity 

@@ -1,0 +1,5 @@
+db.sqlite3
+requirements.txt
+static/
+.env
+__pycache__/

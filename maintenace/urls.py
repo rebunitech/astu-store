@@ -96,7 +96,7 @@ maintenace_urls = [
       #  damaged requests url
 
      re_path(
-        r"damaged_requests/(?P<pk>\d+)/(?P<item_pk>\d+)/$",
+        r"damaged_requests/(?P<item_pk>\d+)/(?P<pk>\d+)/$",
         views.AddDamagedMaintenaceRequestView.as_view(),  
         name="damaged_requests",
     ),
@@ -119,7 +119,7 @@ re_path (
 ),
 
 re_path (
-    r"repaired_request/(?P<pk>\d+)/$",
+    r"repaired_request/$",
     views.ListDamagedMaintenaceRequestView.as_view(),
     name = "list_repaired_request_list"
     
