@@ -4,7 +4,7 @@
         {% if perms.maintenace.add_damagereport %}
         <a href="{% url 'maintenace:add_damagereports' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Damage Item Directly</a>{% endif %}
     </div>
-    <hr/> {{ list_damaged_maintenace_request }}
+    <hr/>
     <div class="container-fluid p-1 p-sm-3">
         <table id="store_list" class="table w-100 rounded-3">
             <thead>
@@ -16,16 +16,16 @@
                     <th class="border-bottom border-0">Dead_Stock_NumberProblems</th>
                     <th class="border-bottom border-0">Store</th>
                     <th class="border-bottom border-0"></th>
-                </tr>
+            </tr>
             </thead>
             <tbody>{% if list_damaged_maintenace_request %}{% for damage in list_damaged_maintenace_request %}
                 <tr>
                     <td class="text-center">{{ forloop.counter }}</td>
-                    <td>{{ damage.item.item.name|capfirst }}</td>
+                    <td>{{ damage.item.name|capfirst }}</td>
                     <td>{{ damage.item.problem }}</td>
-                    <td>{{ damage.item.item.quantity }}</td>
-                    <td>{{ damage.item.item.dead_stock_number }}</td>
-                    <td>{{ damage.item.item.store }}</td>
+                    <td>{{ damage.item.quantity }}</td>
+                    <td>{{ damage.item.dead_stock_number }}</td>
+                    <td>{{ damage.item.store }}</td>
 
                     <td class="text-center">
                     </td>

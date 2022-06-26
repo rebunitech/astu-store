@@ -41,11 +41,30 @@
                             </form>{% endif %}{% if perms.maintenace.approve_maintenancerequest %}
                             <form action="{% url 'maintenace:approve_maintenance_request' m.pk %}" method='post'>{% csrf_token %}
                                 <input class=" btn btn-primary btn-sm shadow-none " type="submit" value="Approve" />
-                            </form>{% endif %}{% if perms.maintenace.decline_maintenancerequest %}
-                            <form action="{% url 'maintenace:decline_maintenance_request' m.pk %}" method='post'>{% csrf_token %}
-                                <input class=" btn btn-danger btn-sm shadow-none " type="submit" value="Decline" />
                             </form>{% endif %}
-                        </div>
+                            
+                            {% if perms.maintenace.decline_maintenancerequest %}
+                            <button class="btn btn-sm btn-danger shadow-none px-2 mx-1" data-bs-toggle="modal" data-bs-target="#decline_maintenance_req-{{ m.pk }}">
+                                <i class="fa-solid fa-circle-minus me-2"></i>Decline</button>
+                            <div class="modal fade" id="decline_maintenance_req-{{ m.pk }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-body">
+                                     Do you really wants to Decline <strong>{{ m.item }}</strong>? This action is irreversable.
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-sm btn-primary shadow-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                      <form action="{% url 'maintenace:decline_maintenance_request' m.pk %}" method="post">{% csrf_token %}
+                                          <textarea  type="text" name="reason" placeholder="Please specify your reason">
+
+                                          </textarea>
+                                        <input class="btn btn-danger btn-sm shadow-none" type="submit" value="I understand, Decline!" />
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                        </div>{% endif %}
                     </td>
                     <td>
 
@@ -55,4 +74,4 @@
         </table>
     </div>
 </div>
-{% endblock content %}
+{% endblock content %}    

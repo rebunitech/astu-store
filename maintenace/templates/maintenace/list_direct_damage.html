@@ -1,7 +1,9 @@
 {% extends "layouts/main.html" %} {% block content %}
 <div class="row">
     <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
-        <a href="{% url 'maintenace:damaged_requests_lists' %}" class="btn btn-md btn-success rounded-3 shadow-none float-start">List Damage from under maintenance request</a> {% if perms.maintenace.add_damagereport %}
+        
+        <a href="{% url 'maintenace:damaged_requests_lists' %}" class="btn btn-md btn-success rounded-3 shadow-none float-start">List Damage from under maintenance request</a> 
+        {% if perms.maintenace.add_damagereport %}
         <a href="{% url 'maintenace:add_damagereports' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Damage Item Directly</a>{% endif %}
     </div>
     <hr/> {{ damagereport_list }}
