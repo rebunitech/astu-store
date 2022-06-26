@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from gc import get_objects
+import urllib.request
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView,DetailView
@@ -58,31 +60,28 @@ class UpdateMaintenanceRequestView(UpdateView, PermissionRequiredMixin, SuccessM
     context_object_name = "update_maitenance"
     extra_context = {"title": _("Update Maintenance Request")}
     
-    """ cancel request view """
     
 class CancelMaintenaceRequestView(UpdateView, PermissionRequiredMixin, SuccessMessageMixin):
-    
-    model = MaintenanceRequest
-    
-    fields = ("is_request")
-    permission_required = "maintenace.cancel_maintenancerequest"
-    success_url = reverse_lazy("maintenace:canceled_list")
-    success_message = "Maintenace request cancelled successfully"
-    http_method_names = ["post"]
-    
-    def get_form_kwargs(self):
-        print("HEY")
-        form_kwargs = super().get_form_kwargs()
-        form_data = form_kwargs.get("data", {}).copy()
-        form_data.update({ "is_request" : False})
-        form_kwargs.update({"data": form_data})
-        return form_kwargs
+        """ cancel request view """
+        model = MaintenanceRequest
+        fields = ("is_request",)
+        permission_required = "maintenace.cancel_maintenancerequest"
+        success_url = reverse_lazy("maintenace:canceled_list")
+        success_message = "Maintenace request cancelled successfully"
+        http_method_names = ["post"]
+        
+        def get_form_kwargs(self):
+            form_kwargs = super().get_form_kwargs()
+            form_data = form_kwargs.get("data", {}).copy()
+            form_data.update({ "is_request" : False})
+            form_kwargs.update({"data": form_data})
+            return form_kwargs
 
-    def get_queryset(self):
-        print("AM FROM CANCAEL")
-        return self.model.objects.filter(is_request=True)
+        def get_queryset(self):
+            return self.model.objects.filter(is_request=True)
     
 class CanceledListMaintenanceRequestView(PermissionRequiredMixin, ListView, SuccessMessageMixin):
+    """ Generic view for canceled maintenance request """
     model = MaintenanceRequest
     permission_required = "view_canceled_maintenancerequest"
     template_name = "maintenace/canceled_list_request.html"
@@ -92,12 +91,9 @@ class CanceledListMaintenanceRequestView(PermissionRequiredMixin, ListView, Succ
     def get_queryset(self):
         return self.model.objects.filter(is_request=False)
     
-
-"""approved (undermaintenace ) request view """
-
 class ApproveMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     
-    """Generic view used to approve request"""
+    """Generic view used to approve request (undermaintenace)"""
     
     model =  MaintenanceRequest
     fields = ("is_approved",)
@@ -128,8 +124,6 @@ class ListApprovedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessage
         
         def get_queryset(self):
             return self.model.objects.filter(is_approved=True,is_damaged=False)
-        
-         
 class DeclinedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     """Generic view used to declined request"""
     model =  MaintenanceRequest
@@ -140,21 +134,22 @@ class DeclinedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixi
     http_method_names = ["post"]
    
     def get_form_kwargs(self):
+        # description = request.POST.get("reason") "decline_reason": description,
         form_kwargs = super().get_form_kwargs()
         form_data = form_kwargs.get("data", {}).copy()
-        form_data.update({"is_declined": True})
+        form_data.update({"is_declined": True,  })
         form_kwargs.update({"data": form_data})
         return form_kwargs
 
     def get_queryset(self):
         return self.model.objects.filter(is_declined=False)
     
-      
 """" list view for declined maintenace request view """
 
 class ListDeclinedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, ListView):
     
     """Generic view used to declined request list"""
+    
     model =  MaintenanceRequest
     template_name = "maintenace/declined_list.html"
     permission_required = "maintenace.view_list_declined_maintenance_request"
@@ -169,8 +164,7 @@ class ListDeclinedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessage
 class RepairedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     
          model =  MaintenanceRequest
-         itemName = "item.item.is_repair"
-         fields = ("",)
+         fields = ("is_repaired",)
          permission_required = "maintenace.can_repaire"
          success_url = reverse_lazy("Store:list_items")
          success_message = " Items request repaired successfully"
@@ -197,7 +191,6 @@ class ListRepairedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageM
     def get_queryset(self):
             return self.model.objects.filter(is_declined=True)
         
-    
     
 """ Add failurity report view  """
 
@@ -234,9 +227,7 @@ class DetailFailureReprtView(DetailView, PermissionRequiredMixin, SuccessMessage
     
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
-    
-
-
+        
 class AddDamageReportView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     """Add damage report from item directly. """
     
@@ -247,11 +238,11 @@ class AddDamageReportView(PermissionRequiredMixin, SuccessMessageMixin, CreateVi
     template_name = "maintenace/add_damage.html"
     success_url = reverse_lazy("maintenace:list_damagereports")
     context_object_name = "add_damage_report"
-
     extra_context = {"title": _("Add damage reports")}
     
 
 class ListDamageReportView(PermissionRequiredMixin, SuccessMessageMixin, ListView):
+    
     """ Damage Report  list view direct from item. """
     
     model = DamageReport
@@ -259,14 +250,13 @@ class ListDamageReportView(PermissionRequiredMixin, SuccessMessageMixin, ListVie
     template_name = "maintenace/list_direct_damage.html"
     context_object_name = "damagereports"
     extra_context = {"title": _("list damage reports")}
-    
-    
+
 
 class AddDamagedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    
     """ Damaged maintenace report item list from under maintenace (approved item) """
     
-    model = MaintenanceRequest
-    
+    model = DamageReport
     fields = ("is_damaged",)
     permission_required = "maintenace.can_damagemaintenacerequest"
     success_url = reverse_lazy("maintenace:damaged_requests_lists")
@@ -279,13 +269,17 @@ class AddDamagedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMix
         form_data.update({"is_damaged": True})
         form_kwargs.update({"data": form_data})
         return form_kwargs
-
-    def get_queryset(self):
-        return self.model.objects.filter(is_damaged=False)
+    
+    def get_item(self):
+        return get_object_or_404(Item, pk=self.kwargs['item_pk'])
+    
+    def form_valid(self, form):
+        form.instance.item = self.get_item()
+        return super().form_valid(form)
     
 class ListDamagedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMixin, ListView):
     
-    model = MaintenanceRequest
+    model = DamageReport
     template_name = "maintenace/list_damage_maintenance.html"
     permission_required = "maintenace.view_listdamagedmaintenacerequest"
     context_object_name = "list_damaged_maintenace_request"
@@ -294,4 +288,6 @@ class ListDamagedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMi
     def get_queryset(self):
             return self.model.objects.filter(is_damaged=True)
         
-        
+
+
+    
