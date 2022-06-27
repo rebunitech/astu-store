@@ -1,0 +1,89 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3 d-flex justify-content-end">
+        {% if perms.auser.can_add_college_lab_assitant %}<a href="#" class="btn btn-md btn-success rounded-3 shadow-none"><i class="fa-solid fa-circle-plus me-2"></i>Add Lab Assistants</a>{% endif %}
+    </div>
+    <hr />
+    <div class="container-fluid p-sm-3">
+        <table id="colleges_list" class="table responsive">
+            <thead>
+                <th class="border-bottom border-0">First name</th>
+                <th class="border-bottom border-0">Last name</th>
+                <th class="border-bottom border-0">Username</th>
+                <th class="border-bottom border-0">Email</th>
+                <th class="border-bottom border-0">Phone number</th>
+                <th class="border-bottom border-0">Sex</th>
+                <th class="border-bottom border-0">Status</th>
+                <th class="border-bottom border-0 text-center">Department</th>
+                <th class="border-bottom border-0 text-center">Stores</th>
+                <th class="border-bottom border-0">Actions</th>
+            </thead>
+            <tbody>{% if lab_assistants %}{% for lab_assistant in lab_assistants %}{% with lab_assistant=lab_assistant %}
+                <tr>
+                    <td>{{ lab_assistant.first_name|default:"-" }}</td>
+                    <td>{{ lab_assistant.last_name|default:"-" }}</td>
+                    <td>{{ lab_assistant.username }}</td>
+                    <td>{{ lab_assistant.email }}</td>
+                    <td>{{ lab_assistant.phone_number }}</td>
+                    <td>{{ lab_assistant.get_sex_display }}</td>
+                    <td><span class="badge bg-{% if lab_assistant.is_active %}success{% else %}danger{% endif %} w-100">{% if lab_assistant.is_active %}Active{% else %}Deactivated{% endif %}</span></td>
+                    <td class="text-center">{{ lab_assistant.department.short_name }}</td>
+                    <td class="text-center">{{ lab_assistant.stores.count }} Store{{ lab_assistant.stores.count|pluralize }}</td>
+                    <td>
+
+                        <div class="dropdown">
+                          <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-gears fs-4"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                            {% if perms.auser.can_change_college_lab_assistant %}
+                            <li><a class="dropdown-item py-2" href="#"><i class="fa-solid fa-pen me-3"></i>Update</a></li>{% if lab_assistant.is_active %}
+                            <li><button class="dropdown-item py-2 text-warning" data-bs-toggle="modal" data-bs-target="#change-status-{{ lab_assistant.username }}"><i class="fa-solid fa-toggle-off me-3"></i>Deactivate</button></li>{% else %}
+                            <li><button class="dropdown-item py-2 text-success" data-bs-toggle="modal" data-bs-target="#change-status-{{ lab_assistant.username }}"><i class="fa-solid fa-toggle-on me-3"></i>Activate</button></li>
+                            {% endif %}{% endif %}{% if perms.auser.delete_college_lab_assistant %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger py-2 fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-store-officer-{{ lab_assistant.username }}"><i class="fa-solid fa-trash-can me-3"></i>Delete</button></li>
+                            {% endif %}
+                          </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% if perms.auser.delete_college_lab_assistant %}<div class="modal fade" id="delete-store-officer-{{ lab_assistant.username }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2"></i> This action is irreversable.</span>
+                      </div>
+                      <div class="modal-body">
+                       Do you really wants to delete <strong>{{ lab_assistant.username }}</strong>?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                        <form action="#" method="post">{% csrf_token %}
+                           <button class="btn btn-outline-danger btn-sm shadow-none" type="submit"><i class="fa-solid fa-trash-can me-2"></i>I understand, delete!</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>{% endif %}{% if perms.auser.can_change_college_representative %}<div class="modal fade" id="change-status-{{ lab_assistant.username }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                       Do you really wants to {% if lab_assistant.is_active %}deactivate{% else %}activate{% endif %} <strong>{{ lab_assistant.username }}</strong>?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                        <form action="{% if lab_assistant.is_active %}#{% else %}#{% endif %}" method="post">{% csrf_token %}
+                           <button class="btn btn-outline-{% if lab_assistant.is_active %}warning{% else %}success{% endif %} btn-sm shadow-none" type="submit"><i class="fa-solid fa-check-circle me-2"></i>Confirm</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>{% endif %}{% endwith %}
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

@@ -62,10 +62,6 @@ class ActiveCollegeRequiredMixin:
             raise AttributeError(
                 f"{self.__class__.__name__} is missing attribute pk_url_kwarg"
             )
-        if not isinstance(self.hidden_fields, str):
-            raise TypeError(
-                f"{self.__class__.__name__} hidden_fields attribue expect str, given {type(self.hidden_fields).__name__}."
-            )
         super().__init__(*args, **kwargs)
 
     def dispatch(self, request, *args, **kwargs):

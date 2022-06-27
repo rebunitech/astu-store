@@ -20,13 +20,13 @@
             </thead>
             <tbody>{% if departments %}{% for department in departments %}{% with store_count=department.stores.count staff_count=department.users.count representatives_count=department.representatives.count officers_count=department.staff_members.count %}
                 <tr>
-                    <td>{{ department.name }}</td>
-                    <td>{{ department.short_name }}</td>
+                    <td><a href="{% url 'auser:department_detail' view.kwargs.short_name department.short_name %}" class="nav-link">{{ department.name }}</a></td>
+                    <td><a href="{% url 'auser:department_detail' view.kwargs.short_name department.short_name %}" class="nav-link">{{ department.short_name }}</a></td>
                     <td><span class="badge bg-{% if department.is_active %}success{% else %}danger{% endif %} w-100">{{ department.get_status_display }}</span></td>
-                    <td><a class="nav-link" href="#"><i class="fa fa-person me-2"></i>{{ representatives_count }} Department Head{{ representatives_count|pluralize }}</a></td>
-                    <td><a class="nav-link" href="{% url 'auser:list_departments_for_college' department.short_name %}"><i class="fa fa-user-group me-2"></i>{{ staff_count }} Staff Member{{ staff_count|pluralize }}</a></td>
-                    <td><a class="nav-link" href="#"><i class="fa fa-person-shelter me-2"></i>{{ officers_count }} Store Officer{{ officers_count|pluralize }}</a></td>
-                    <td><a class="nav-link" href="#"><i class="fa fa-person-shelter me-2"></i>TBD</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:department_representatives' view.kwargs.short_name department.short_name %}"><i class="fa fa-person me-2"></i>{{ representatives_count }} Department Head{{ representatives_count|pluralize }}</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:department_staffs_list' view.kwargs.short_name department.short_name %}"><i class="fa fa-user-group me-2"></i>{{ staff_count }} Staff Member{{ staff_count|pluralize }}</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:department_store_officers_list' view.kwargs.short_name department.short_name %}"><i class="fa fa-person-shelter me-2"></i>{{ officers_count }} Store Officer{{ officers_count|pluralize }}</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:department_lab_assistants_list' view.kwargs.short_name department.short_name %}"><i class="fa fa-person-shelter me-2"></i>TBD</a></td>
                     <td><a class="nav-link" href="{% url 'auser:list_departments_for_college' department.short_name %}"><i class="fa fa-store me-2"></i>{{ store_count }} Store{{ store_count|pluralize }}</a></td></a></td>
                     <td><a class="nav-link" href="#"><i class="fa fa-person-shelter me-2"></i>TBD</a></td>
                     <td>
@@ -37,9 +37,10 @@
                           <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
                             {% if perms.auser.change_department %}
                             <li><a class="dropdown-item py-2" href="{% url 'auser:update_department' department.college.short_name department.short_name %}"><i class="fa-solid fa-pen me-3"></i>Update </a></li>{% endif %}{% if perms.auser.can_add_department_representative and department.is_active %}
-                            <li><a class="dropdown-item py-2" href="#"><i class="fa-solid fa-user-plus me-3"></i>Add Dean</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-circle-plus me-3"></i>Select Dean</a></li>
-                            {% endif %}{% if perms.auser.can_change_department %}{% if department.is_active %}
+                            <li><a class="dropdown-item py-2" href="{% url 'auser:add_department_representative' view.kwargs.short_name department.short_name %}"><i class="fa-solid fa-user-plus me-3"></i>Add Head</a></li>
+                            <li><a class="dropdown-item py-2" href="#"><i class="fa-solid fa-circle-plus me-3"></i>Select Head</a></li>
+                            {% endif %}{% if perms.auser.can_add_department_staff_member %}
+                            <li><a class="dropdown-item py-2" href="{% url 'auser:add_department_staffs' view.kwargs.short_name department.short_name %}"><i class="fa-solid fa-square-plus me-3"></i>Add Staff Member</a></li>{% endif %}{% if perms.auser.can_change_department %}{% if department.is_active %}
                             <li><button class="dropdown-item py-2 text-warning" data-bs-toggle="modal" data-bs-target="#change-status-{{ department.short_name }}"><i class="fa-solid fa-toggle-off me-3"></i>Deactivate</button></li>{% else %}
                             <li><button class="dropdown-item py-2 text-success" data-bs-toggle="modal" data-bs-target="#change-status-{{ department.short_name }}"><i class="fa-solid fa-toggle-on me-3"></i>Activate</button></li>
                             {% endif %}{% endif %}{% if perms.auser.delete_department %}

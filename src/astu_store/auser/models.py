@@ -204,7 +204,7 @@ class CollegeOrDepartment(models.Model):
         DEACTIVATED = "deactivated", _("Deactivated")
 
     name = models.CharField(_("name"), max_length=150)
-    short_name = models.CharField(_("short name"), unique=True, max_length=10)
+    short_name = models.CharField(_("short name"), max_length=10)
     description = models.TextField(_("description"), max_length=1000)
     status = models.CharField(
         _("status"),
@@ -220,13 +220,6 @@ class CollegeOrDepartment(models.Model):
 
     def __str__(self):
         return self.short_name
-
-    def normalize_short_name(self, short_name):
-        return short_name.upper().replace(" ", "")
-
-    def save(self, *args, **kwargs):
-        self.short_name = self.normalize_short_name(self.short_name)
-        return super().save(*args, **kwargs)
 
     @property
     def is_active(self):
@@ -253,6 +246,7 @@ class College(CollegeOrDepartment):
         permissions = [
             ("can_change_status", "Can activate status"),
         ]
+        unique_together = [("short_name",)]
 
     @property
     def representatives(self):
@@ -272,10 +266,18 @@ class Department(CollegeOrDepartment):
         verbose_name = _("department")
         verbose_name_plural = _("departments")
         db_table = "department"
+        unique_together = [
+            (
+                "college",
+                "short_name",
+            )
+        ]
 
     @property
     def representatives(self):
-        return self.users.filter(groups__name="department_representative")
+        return self.users.filter(groups__name="department_representative").exclude(
+            groups__name="college_representative"
+        )
 
 
 class CollegeUser(User):

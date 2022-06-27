@@ -1,9 +1,7 @@
-from django.contrib.auth.mixins import (
-                                        PermissionRequiredMixin)
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
-from django.views.generic import ( DeleteView, 
-                                    UpdateView)
+from django.views.generic import DeleteView, UpdateView
 
 from auser.models import CollegeUser
 

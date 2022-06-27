@@ -24,9 +24,9 @@
                     <td><span class="badge bg-{% if college.is_active %}success{% else %}danger{% endif %} w-100">{{ college.get_status_display }}</span></td>
                     <td><a class="nav-link" href="{% url 'auser:list_departments_for_college' college.short_name %}">{{ departments_count }}&nbsp;Department{{ departments_count|pluralize }}</a></td>
                     <td><a class="nav-link" href="{% url 'auser:college_representatives' college.short_name %}">{{ representatives_count }}&nbsp;College&nbsp;Dean{{ representatives_count|pluralize }}</a></td>
-                    <td><a class="nav-link" href="{% url 'auser:list_departments_for_college' college.short_name %}">{{ users_count }}&nbsp;Staff&nbsp;Member{{ users_count|pluralize }}</a></td>
-                    <td><a class="nav-link" href="{% url 'auser:list_departments_for_college' college.short_name %}">{{ store_officers_count }}&nbsp;Store&nbsp;Officer{{ store_officers_count|pluralize }}</a></td>
-                    <td><a class="nav-link" href="{% url 'auser:list_departments_for_college' college.short_name %}">{{ lab_assistants_count }}&nbsp;Lab&nbsp;Assistant{{ lab_assistants_counts|pluralize }}</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:college_staffs_list' college.short_name %}">{{ users_count }}&nbsp;Staff&nbsp;Member{{ users_count|pluralize }}</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:college_store_officers_list' college.short_name %}">{{ store_officers_count }}&nbsp;Store&nbsp;Officer{{ store_officers_count|pluralize }}</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:college_lab_assistants_list' college.short_name %}">{{ lab_assistants_count }}&nbsp;Lab&nbsp;Assistant{{ lab_assistants_counts|pluralize }}</a></td>
                     <td>
                         <div class="dropdown">
                           <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
@@ -36,8 +36,8 @@
                             {% if perms.auser.change_college %}
                             <li><a class="dropdown-item py-2" href="{% url 'auser:update_college' college.short_name %}"><i class="fa-solid fa-pen me-3"></i>Update </a></li>{% endif %}{% if perms.auser.can_add_college_representative and college.is_active %}
                             <li><a class="dropdown-item py-2" href="{% url 'auser:add_college_representative' college.short_name %}"><i class="fa-solid fa-user-plus me-3"></i>Add Dean</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-circle-plus me-3"></i>Select Dean</a></li>
-                            {% endif %}{% if perms.auser.can_change_college %}{% if college.is_active %}
+                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-circle-plus me-3"></i>Select Dean</a></li>{% endif %}{% if perms.auser.add_department %}
+                            <li><a class="dropdown-item" href="{% url 'auser:add_department' college.short_name %}"><i class="fa-solid fa-square-plus me-3"></i>Add Department</a></li>{% endif %}{% if perms.auser.can_change_college %}{% if college.is_active %}
                             <li><button class="dropdown-item py-2 text-warning" data-bs-toggle="modal" data-bs-target="#change-status-{{ college.short_name }}"><i class="fa-solid fa-toggle-off me-3"></i>Deactivate</button></li>{% else %}
                             <li><button class="dropdown-item py-2 text-success" data-bs-toggle="modal" data-bs-target="#change-status-{{ college.short_name }}"><i class="fa-solid fa-toggle-on me-3"></i>Activate</button></li>
                             {% endif %}{% endif %}{% if perms.auser.delete_college %}

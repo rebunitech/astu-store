@@ -4,10 +4,10 @@
 
 <ul class="list-group list-group-horizontal d-flex justify-content-end mb-3">
 {% if perms.auser.change_college %}
-<li class="list-group-item list-group-item-primary"><a class="nav-link p-0" href="{% url 'auser:update_college' college.short_name %}"><i class="fa-solid fa-pen me-3"></i>Update </a></li>{% endif %}{% if perms.auser.can_add_college_representative and college.is_active %}
+<li class="list-group-item list-group-item-primary"><a class="nav-link p-0" href="{% url 'auser:update_department' view.kwargs.short_name view.kwargs.dept_short_name %}"><i class="fa-solid fa-pen me-3"></i>Update </a></li>{% endif %}{% if perms.auser.can_add_college_representative and college.is_active %}
 <li class="list-group-item list-group-item-primary"><a class="nav-link p-0" href="{% url 'auser:add_college_representative' college.short_name %}"><i class="fa-solid fa-user-plus me-3"></i>Add Dean</a></li>
 <li class="list-group-item list-group-item-primary"><a class="nav-link p-0" href="#"><i class="fa-solid fa-circle-plus me-3"></i>Select Dean</a></li>
-{% endif %}{% if perms.auser.add_department %}<li class="list-group-item list-group-item-primary"><a href="{% url 'auser:add_department' view.kwargs.short_name %}" class="nav-link p-0"><i class="fa-solid fa-circle-plus me-2"></i>Add Department</a></li>{% endif %}{% if perms.auser.can_change_status %}{% if college.is_active %}
+{% endif %}{% if perms.auser.can_change_status %}{% if college.is_active %}
 <li class="list-group-item list-group-item-primary"><a class="nav-link text-danger p-0"  href="#" data-bs-toggle="modal" data-bs-target="#change-status-{{ college.short_name }}"><i class="fa-solid fa-toggle-off me-3"></i>Deactivate</a></li>{% else %}
 <li class="list-group-item list-group-item-primary"><a class="nav-link text-success p-0"  href="#" data-bs-toggle="modal" data-bs-target="#change-status-{{ college.short_name }}"><i class="fa-solid fa-toggle-on me-3"></i>Activate</a></li>
 {% endif %}{% endif %}{% if perms.auser.delete_college %}
