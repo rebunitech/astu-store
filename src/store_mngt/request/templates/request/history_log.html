@@ -1,0 +1,58 @@
+{% load i18n humanize %}
+<div class="row gutters-sm">
+    <div class="col-lg-5 col-sm-12 col-md-12  my-md-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+                    <img src="{{ user.profile_picture.url }}" alt="User profile" class="rounded-circle" width="150">
+                    <div class="mt-3">
+                       
+                        <h4>{{ requests.item }}</h4>
+                        <p class="text-secondary mb-1">quantity:{{ request.quantity }} ({{ request.category }})</p>status:
+                        {% if requests.is_approved != None and requests.is_requesting  %}<span class="text-success">pending</span>{% elif requests.is_requesting != None and not requests.is_requesting  %}<span class="text-danger">Cancelled!</span> {% else %}
+                        <span class="text-muted"> Pending </span>  {% endif %}
+                        <p class="text-muted font-size-sm">{{ request.is_approved }}</p>
+                    </div>
+                </div>
+                <ul class="list-unstyled p-3 row">
+                    <div class="col">
+                        <li class="mb-3"><a href="mailto:{{ user.email }}"><i data-feather="mail" class="text-secondary me-3"></i>{{ user.email }}</a></li>
+                        <li class="mb-3"><a href="#"><i data-feather="map-pin" class="text-secondary me-3"></i>start: {{ requests.start_date }}</a></li>
+                        <li class="mb-3"><a href="#"><i data-feather="calendar" class="text-secondary me-3"></i>end: {{ requests.end_date }}</a></li>
+                    </div>
+                    <div class="col-auto">
+                        <li class="mb-3"><a href="tel:{{ user.phone_number }}"><i data-feather="phone" class="text-secondary me-3"></i>suppplier: {{ requests.supplier }}</a></li>
+                        <li class="mb-3"><a href="#"><i data-feather="at-sign" class="text-secondary me-3"></i> year:{{ request.year }}</a></li>
+                        <li class="mb-3"><a href="#"><i data-feather="calendar" class="text-secondary me-3"></i> status: {{ requests.is_requesting}}</a></li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="col">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row p-3 py-3 my-3">
+                    <h2 class="h1 px-0 text-primary">#Action</h2>
+                    <div>category:{{ requests.category }}</div>
+
+                      
+                   {% if requests.is_requesting != None and requests.is_requesting and not requests.is_approved %}
+
+                <form class="col-6" action="{% url 'request:cancel_request' requests.id %}" method="post" novalidate>
+                {% csrf_token %}
+                <button class="btn btn-primary" type="submit">cancel</button></form>
+                {% elif requests.is_requesting != None and not requests.is_requesting  %}
+                                     <div>category:{{ requests.category }}</div>
+
+                    
+        {% endif %}
+             
+           
+               
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

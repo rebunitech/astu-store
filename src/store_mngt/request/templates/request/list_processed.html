@@ -1,0 +1,36 @@
+
+{% extends "layouts/main.html" %}
+{% load i18n static humanize auser %}
+{% block content %}
+
+<table class="table shadow-lg w-100" id="dt_table_student">
+  <div class="d-flex justify-content-end">
+ 
+</div>
+<hr>
+    <thead>
+        <tr>
+            <th></th>
+            <th>{% translate "item" %}</th>
+            <th>{% translate "quantity" %}</th>
+            <th>{% translate "start date" %}</th>
+            <th>{% translate "end date" %}</th>
+            <th>Detail</th>
+            <th>delete</th>
+        </tr>
+    </thead>
+    <tbody class="w-100">
+        {% for request in request %}<tr>
+      
+                <td class="details-control px-3"></td>
+                <td>{{ request.item }}</td>
+                <td>{{ request.quantity }}</td>
+                <td>{{ request.start_date }}</td>
+                <td>{{ request.end_date }}</td>
+             <td> <div class="btn-group rounded " role="group " aria-label="Management buttons ">
+                    <a href="{% url 'request:request_detail_otherdept' request.pk %} " class="btn btn-md 
+                            btn-outline-dark shadow-none ">{% translate "Details " %}</a> </td>
+              <td><a href="{% url 'request:request_delete_dept' request.pk %}" class="btn btn-danger" >{% translate "Delete" %}</a></td>
+                </tr>{% endfor %}
+            </tbody>
+          </table>{% endblock content %}

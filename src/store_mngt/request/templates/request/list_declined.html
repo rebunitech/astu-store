@@ -1,0 +1,39 @@
+
+{% extends "layouts/main.html" %}
+{% load i18n static humanize auser %}
+{% block content %}
+<div class="row">
+    <div class="d-flex justify-content-end">
+        {% if perms.store.add_store %}<a href="{% url 'request:approved_list' %}" 
+        class="btn btn-md btn-success rounded-3 shadow-none float-end">
+        <i class="fa-solid  me-2"></i>Approved Request List</a>{% endif %}
+    </div>
+    <hr>
+    <div class="container-fluid p-1 p-sm-3">
+    <table class="table rounded-3 shadow-lg w-100" id="dt_table_student">
+
+    <thead>
+        <tr>
+            <th ></th>
+            <th class="border-bottom border-0" >{% translate "NO" %}</th>
+            <th class="border-bottom border-0" >{% translate "item" %}</th>
+            <th class="border-bottom border-0" >{% translate "quantity" %}</th>
+            <th class="border-bottom border-0" >{% translate "category" %}</th>
+            
+            <th></th>
+           
+        </tr>
+    </thead>
+    <tbody class="w-100">{% if requests %}{% for request in requests %}
+        <tr>
+            <td></td>
+            <td >{{ forloop.counter }}</td>
+            <td>{{ request.item|capfirst }}</td>
+            <td>{{ request.quantity }}</td>
+            <td>{{ request.category }}</td>  
+            
+        </tr>{% endfor %}{% endif %}
+    </tbody>
+</table>
+</div></div>
+{% endblock content %}

@@ -1,0 +1,67 @@
+{% load i18n humanize %}
+<div class="row gutters-sm">
+    <div class="col-lg-5 col-sm-12 col-md-12  my-md-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+                    <img src="{{ user.profile_picture.url }}" alt="User profile" class="rounded-circle" width="150">
+                    <div class="mt-3">
+                        <h4>{{ request.item }}</h4>
+                        <p class="text-secondary mb-1">quantity:{{ request.quantity }} ({{ request.category }})</p>status:
+                        {% if request.is_returned != None and request.is_returned %}<span class="text-success">Returned(ተመልሷል)</span>{% elif request.is_returned != None and not request.is_returned %}<span class="text-danger">on hand()አልተመለሰም</span>{% else %}<span class="text-muted">onhand(አልተመለሰም)</span>
+                         {% endif %}
+                        <p class="text-muted font-size-sm">{{ request.is_returned }}</p>
+                    </div>
+                </div>
+                <ul class="list-unstyled p-3 row">
+                    <div class="col">
+                        <li class="mb-3"><a href="mailto:{{ user.email }}"><i data-feather="mail" class="text-secondary me-3"></i>{{ user.email }}</a></li>
+                         <li class="mb-3"><a href="mailto:{{ user.email }}"><i data-feather="mail" class="text-secondary me-3"></i>{{ user.username }}</a></li>
+                        <li class="mb-3"><a href="#"><i data-feather="map-pin" class="text-secondary me-3"></i>start: {{ request.start_date }}</a></li>
+                        <li class="mb-3"><a href="#"><i data-feather="calendar" class="text-secondary me-3"></i>end: {{ request.end_date }}</a></li>
+                    </div>
+                    <div class="col-auto">
+                        <li class="mb-3"><a href="tel:{{ user.phone_number }}"><i data-feather="phone" class="text-secondary me-3"></i>department: {{ user.department }}</a></li>
+                        <li class="mb-3"><a href="#"><i data-feather="at-sign" class="text-secondary me-3"></i> year:{{ user.year }}</a></li>
+                        <li class="mb-3"><a href="#"><i data-feather="calendar" class="text-secondary me-3"></i> Logged in {{ request.is_given|naturaltime|default:"Never" }}</a></li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="col">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row p-3 py-3 my-3">
+                    <h2 class="h1 px-0 text-primary">#About</h2>
+                    <div>category:{{ request.category }}</div>
+
+                      
+                {%if request.is_returned != None and request.is_returned%}<span class="text-success">
+               <li class="mb-3"><a href="tel:{{ user.phone_number }}"><i data-feather="phone" class="text-secondary me-3"></i>department: {{ item.department }}</a></li>
+               <li class="mb-3"><a href="#"><i data-feather="at-sign" class="text-secondary me-3"></i>item: {{ request.item }}</a></li>
+                <li class="mb-3"><a href="#"><i data-feather="calendar" class="text-secondary me-3"></i> quantity returned: {{ request.quantity }}</a></li>
+                 <li class="mb-3"><a href="#"><i data-feather="calendar" class="text-secondary me-3"></i> remark: {{ request.year }}</a></li>
+                    
+                    
+        
+                {% elif request.is_returned != None and not request.is_returned %}<span class="text-danger">
+                <form class="col-6" action="{% url 'request:return_request' request.id %}" method="post" novalidate="">
+                {% csrf_token %}
+                <button class="btn btn-success" type="submit">Return!uu</button></form></span>
+
+                {% else %}
+                <form class="col-6" action="{% url 'request:return_request' request.id %}" method="post" novalidate="">
+                      {% csrf_token %}
+                    <button class="btn btn-success"> return!</button>
+                </form>
+
+               
+                {%endif%}
+ 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

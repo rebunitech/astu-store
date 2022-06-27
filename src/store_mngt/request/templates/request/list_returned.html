@@ -1,0 +1,32 @@
+ {% extends "layouts/main.html" %} {% load i18n static humanize auser %} {% block content %}
+
+<table class="table shadow-lg w-100" id="dt_table_student">
+    <div class="d-flex justify-content-end">
+
+    </div>
+    <hr>
+    <thead>
+        <tr>
+            <th>{% translate "hol" %}</th>
+            <th>{% translate "item" %}</th>
+            <th>{% translate "quantity" %}</th>
+            <th>{% translate "start date" %}</th>
+            <th>{% translate "end date" %}</th>
+            <th>{% translate "category" %}</th>
+           <th></th>
+        </tr>
+    </thead>
+    <tbody class="w-100">
+        {% for request in requests %}
+        <tr>
+
+            <td class="details-control px-3"></td>
+            <td>{{ request.item }}</td>
+            <td>{{ request.quantity }}</td>
+            <td>{{ request.start_date }}</td>
+            <td>{{ request.end_date }}</td>
+            <td>{{ request.category }}</td>
+
+        </tr>{% endfor %}
+    </tbody>
+</table>{% endblock content %}

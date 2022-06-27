@@ -1,0 +1,40 @@
+{% extends "layouts/main.html" %} {% load i18n static humanize auser %} {% block content %}
+<table class="table shadow-lg w-100" id="dt_table_content_creator">
+    <div class="float-end">
+        <a href="{% url 'request:add_item' %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> {% translate "Add Item" %}</a> {% include "layouts/import_data.html" with ctype=view|ctype %}
+    </div>
+    <hr>
+    <thead>
+        <tr>
+            <th></th>
+            <th>{% translate "Item name" %}</th>
+            <th>{% translate "quantity" %}</th>
+            <th>{% translate "DSN" %}</th>
+            <th>{% translate "Store" %}</th>
+            <th>{% translate "Year" %}</th>
+            <th>{% translate "Supplier" %}</th>
+            <th></th>
+            <th>{% translate "Manage" %}</th>
+        </tr>
+    </thead>
+    <tbody class="w-100">
+        {% for item in items %}
+        <tr>
+            <td class="details-control px-3"></td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.DSN }}</td>
+            <td>{{ item.store }}</td>
+            <td>{{ item.year }}</td>
+            <td>{{ item.supplier }}</td>
+
+            <td>
+                <div class="btn-group rounded" role="group" aria-label="Management buttons">
+                    <a href="{% url 'request:detail_item' item.pk %} " class="btn btn-md btn-outline-dark shadow-none ">{% translate "Details " %}</a>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
