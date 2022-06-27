@@ -1,6 +1,15 @@
+from tokenize import Single
 from django.apps import apps
 from django.db.models import Q
 
+from django.contrib.admin.models import ADDITION, DELETION, CHANGE, LogEntry
+from django.dispatch import Signal, receiver
+from django.contrib.admin.options import get_content_type_for_model
+from django.contrib.admin.utils import construct_change_message
+
+log_entry_addition = Signal()
+log_entry_change = Signal()
+log_entry_deletion = Signal()
 
 def create_permission_groups(sender, plan, *args, **kwargs):
     """
@@ -106,7 +115,7 @@ def create_permission_groups(sender, plan, *args, **kwargs):
             lab_assistant_group.permissions.set(lab_assistant_permissions)
 
         if not Group.objects.filter(name="staff_member").exists():
-            staff_member_group = Group.objects.create(name="lab_assistant")
+            staff_member_group = Group.objects.create(name="staff_member")
             staff_member_permissions = Permission.objects.filter(
                 Q(codename="view_store")
                 | Q(codename="add_shelf")
@@ -127,3 +136,41 @@ def create_permission_groups(sender, plan, *args, **kwargs):
                 | Q(codename="delete_specification")
             )
             staff_member_group.permissions.set(staff_member_permissions)
+
+
+@receiver(log_entry_addition)
+def save_addition_log_entry(sender, instance=None, user_id=None, created=None, **kwargs):
+    if created:
+        LogEntry.objects.log_action(
+            user_id=user_id,
+            content_type_id=get_content_type_for_model(instance).pk,
+            object_id=instance.pk,
+            object_repr=str(instance),
+            action_flag=ADDITION,
+            change_message=[{"added": {}}],
+        )
+
+
+@receiver(log_entry_change)
+def save_change_log_entry(sender, instance=None, form=None, user_id=None, **kwargs):
+    if form.has_changed():
+        message = construct_change_message(form, None, False)
+        LogEntry.objects.log_action(
+            user_id=user_id,
+            content_type_id=get_content_type_for_model(instance).pk,
+            object_id=instance.pk,
+            object_repr=str(instance),
+            action_flag=CHANGE,
+            change_message=message,
+        )
+
+
+@receiver(log_entry_deletion)
+def save_deletion_log_entry(sender, instance=None, user_id=None, **kwargs):
+    LogEntry.objects.log_action(
+        user_id=user_id,
+        content_type_id=get_content_type_for_model(instance).pk,
+        object_id=instance.pk,
+        object_repr=str(instance),
+        action_flag=DELETION,
+    )

@@ -38,7 +38,7 @@ from .officer import (CollegeLabAssistantsOfficersListView,
                       DepartmentStoreOfficersListView)
 from .user import (ActivateUserView, DeactivateUserView, DeleteUserView,
                    UpdateUserView)
-from .view import DashboardView
+from .view import DashboardView, ImportView
 
 __all__ = [
     "DepartmentLabAssistantsOfficersListView",
@@ -84,4 +84,5 @@ __all__ = [
     "DepartmentStaffMemberActivateView",
     "DepartmentStaffMemberDeactivateView",
     "DepartmentStaffMemberDeleteView",
+    "ImportView",   
 ]

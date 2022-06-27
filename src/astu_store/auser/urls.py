@@ -68,6 +68,8 @@ urlpatterns = [
     re_path(r"^", include(list_urlpatterns)),
     re_path(r"^dashboard/$", views.DashboardView.as_view(), name="dashboard"),
     re_path(r"^auth/", include(django_auth_urlpatterns)),
+    re_path(r"^import/(?P<pk>\d+)/$", views.ImportView.as_view(), name="import_data"),
+
     re_path(
         r"^college/",
         include(
