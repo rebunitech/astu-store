@@ -26,10 +26,10 @@
             <main class="col px-0">
                 {% include 'layouts/header.html' %}
                 <div class="ps-md-2 pt-2 m--5 mx-5">
-                    {% if not title_only %}<div class="pt-3">
+                    {% if not title_only %}
+                    <div class="pt-3">
                         <h1 class="fw-light fs-3">{{ title }}</h1>
-                    </div>{% endif %}
-                    {% include 'layouts/message.html' %}
+                    </div>{% endif %} {% include 'layouts/message.html' %}
                     <div class="main-content container-fluid">{% block content %}{% endblock content %}</div>
                 </div>
             </main>
@@ -45,6 +45,7 @@
     <script src="{% static 'js/choices.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
+    <!-- <script src="{% static 'js/main.js' %}"></script> -->
     {% block js %}{% endblock js %}
 </body>
 

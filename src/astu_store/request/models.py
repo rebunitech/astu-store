@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import generic
 from auser.models import Department
-from auser.models import Staffmember
+# from auser.models import Staffmember 
 from django.utils.translation import gettext as _
 from django.conf import settings
 

@@ -1,13 +1,12 @@
 {% extends "layouts/main.html" %} {% load i18n static humanize auser %} {% block content %}
-<table class="table shadow-lg w-100" id="dt_table_staff">
+<table class="table shadow-lg w-100" id="dt_table_request_list">
     <div class="d-flex justify-content-end">
         <a href="{% url 'request:add_request' %} " class="mx-2 btn btn-sm 
-            btn-danger shadow-none "><i data-feather="plus "></i> {% translate "Add request " %}</a>  {% include "layouts/import_data.html" with ctype=view|ctype %}
+            btn-danger shadow-none "><i data-feather="plus "></i> {% translate "Add request " %}</a> {% include "layouts/import_data.html" with ctype=view|ctype %}
     </div>
     <hr>
     <thead>
         <tr>
-            <th></th>
             <th>{% translate "No" %}</th>
             <th>{% translate "Name " %}</th>
             <th>{% translate "Quantity " %}</th>
@@ -16,12 +15,12 @@
             <th>{% translate "category" %}</th>
             <th>{% translate "Manage " %}</th>
         </tr>
-            
+
     </thead>
     <tbody class="w-100 ">
         {% for request in requests %}
         <tr>
-            <td ></td>
+            <!-- <td></td> -->
             <td>{{ forloop.counter }}</td>
             <td>{{ request.item}}</td>
             <td>{{ request.quantity }}</td>
@@ -38,7 +37,7 @@
                     <a href="{% url 'request:request_delete' request.pk %}" class="btn btn-danger ">{% translate "Delete" %}</a>{% endif %}
 
 
-  
+
         </tr>
         {% endfor %}
     </tbody>

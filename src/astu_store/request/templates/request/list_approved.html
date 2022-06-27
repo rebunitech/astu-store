@@ -1,19 +1,13 @@
  {% extends "layouts/main.html" %} {% load i18n static humanize auser %} {% block content %}
 
-<table class="table shadow-lg w-100" id="dt_table_student">
+<table class="table shadow-lg w-100" id="dt_table_approved_request">
     <div class="d-flex justify-content-end">
         {% if perms.store.add_store %}
         <a href="{% url 'request:declined_list' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end">
             <i class="fa-solid  me-2"></i>Declined Request List</a>{% endif %}
     </div>
     <hr>
-    <div class="dtsb-searchBuilder">
-        <div class="dtsb-titleRow">
-            <div class="dtsb-title">Custom Search Builder</div>
-        </div>
-        <div class="dtsb-group">
-            <button class="btn btn-light dtsb-add dtsb-button" type="button">Add Condition</button>
-        </div>
+
     </div>
     <thead>
         <tr>
