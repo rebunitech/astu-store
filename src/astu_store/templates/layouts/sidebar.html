@@ -63,11 +63,46 @@
         </li> {% endif %} {% if perms.request.can_view_request_approve %}
         <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
             <div class="col p-2 ps-3 text-center">
-                <i class="fa-solid fa-store"></i>
+                <i class="fa fa-thumbs-up"></i>
             </div>
             <div class="col-10">
                 <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:approved_list' %}">Approved Request</a>
             </div>
-        </li> {% endif %}
+        </li> {% endif %}{% if perms.request.can_view_request_decline %}
+        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+            <div class="col p-2 ps-3 text-center">
+                <i class="fa fa-ban" aria-hidden="true"></i>
+            </div>
+            <div class="col-10">
+                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:declined_list' %}">Decline Requests</a>
+            </div>
+        </li>{% endif %}{% if perms.request.can_view_complete_request %}
+        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+            <div class="col p-2 ps-3 text-center">
+                <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
+            </div>
+            <div class="col-10">
+                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:borrowed_list' %}">Borrowed Items</a>
+            </div>
+        </li>{% endif %}{% if perms.request.can_view_return_request %}
+        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+            <div class="col p-2 ps-3 text-center">
+                <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
+            </div>
+            <div class="col-10">
+                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:returned_list' %}">Returned Items</a>
+            </div>
+        </li>{% endif %}
+        <div class="text-dark px-4 fs-4">Maintenance Request</div>
+        <div class="text-dark px-4 fs-4"></div>
+        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+            <div class="col p-2 ps-3 text-center">
+                <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
+            </div>
+            <div class="col-10">
+                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:list_failurity_report' %}">Failurity Report</a>
+            </div>
+
+        </li>
     </div>
 </nav>
