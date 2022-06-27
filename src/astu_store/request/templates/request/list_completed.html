@@ -1,0 +1,40 @@
+
+{% extends "layouts/main.html" %}
+{% load i18n static humanize auser %}
+{% block content %}
+
+<table class="table shadow-lg w-100" id="dt_table_student">
+  <div class="d-flex justify-content-end">
+ 
+</div>
+<hr>
+    <thead>
+        <tr>
+            <th>{% translate "No" %}</th>
+            <th>{% translate "item" %}</th>
+            <th>{% translate "quantity" %}</th>
+            <th>{% translate "duration" %}</th>
+            <th>{% translate "category" %}</th>
+            <th>{% translate "borrowed" %}</th>
+            <th>status2</th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody class="w-100">
+        {% for request in requests %}<tr>
+      
+                <td >{{ forloop.counter }}</td>
+                <td>{{ request.item }}</td>
+                <td>{{ request.quantity }}</td>
+                <!-- TODO: duraction is not working check this -->
+                <td>{{ request.duration }}calculate duration and save it to model</td>
+                <td>{{ request.category }}</td>
+                <td>{{ request.is_given }}</td>
+                <td> <div class="btn-group rounded " role="group " aria-label="Management buttons ">
+                    <a href="{% url 'request:borrow_detail' request.pk %} " class="btn btn-md 
+                            btn-outline-dark shadow-none ">{% translate "Details " %}</a> </td>
+             
+                </tr>{% endfor %}
+            </tbody>
+          </table>{% endblock content %}

@@ -1,0 +1,56 @@
+{% extends "layouts/main.html" %} {% load i18n static humanize auser %} {% block content %}
+<table class="table shadow-lg w-100" id="dt_table_staff">
+    <div class="d-flex justify-content-end">
+        <a href="{% url 'request:add_request' %} " class="mx-2 btn btn-sm 
+            btn-success shadow-none "><i data-feather="plus "></i> {% translate "Add request " %}</a>  <a href="{% url 'request:add_request_otherdept' %} " class="mx-2 btn btn-sm 
+            btn-success shadow-none "><i data-feather="plus "></i> {% translate "Add request other department  " %}</a> {% include "layouts/import_data.html" with ctype=view|ctype %}
+    </div>
+    <hr>
+    <thead>
+        <tr>
+            <th></th>
+            <th>{% translate "Name " %}</th>
+            <th>{% translate "Quantity " %}</th>
+            <th>{% translate "start" %}</th>
+            <th>{% translate "end" %}</th>
+            <th>{% translate "Manage" %}</th>
+            <th>{% translate "Delete " %}</th>
+        </tr></th>
+            <th
+    </thead>
+    <tbody class="w-100 ">
+        {% for request in request %}
+        <tr>
+            <td class="details-control px-3 "></td>
+            <td>{{ request.item}}</td>
+            <td>{{ request.quantity }}</td>
+            <td>{{ request.start_date }}</td>
+            <td>{{ request.end_date }}</td>
+            <td>{{ request.category }}</td>
+            <td>
+                <div class="btn-group rounded " role="group " aria-label="Management buttons ">
+                   </a> {% if perms.core.change_item %} <a href="{% url 'request:request_detail_otherdept' request.pk %} " class="btn btn-md 
+                            btn-outline-dark shadow-none ">{% translate "Details " %}</a> 
+                    <a href="{% url 'request:request_delete_dept' request.pk %}" class="btn btn-danger" >{% translate "Delete" %}</a>{% endif %}
+                    <div class="modal fade " id="delete-{{ request.item }} " tabindex="-1 " aria-labelgledby="Delete Item" aria-hidden="true ">
+                        <div class="modal-dialog ">
+                            <div class="modal-content ">
+                                <div class="modal-body ">
+                                    {% blocktranslate with name=request.item %}Do you really wants to delete
+                                    <strong>{{ name }} ?</strong><span class="text-danger "> <h6>This action is irreversable.</span>{% endblocktranslate %}
+                                </div>
+                                <div class="modal-footer ">
+                                    <button type="button " class="btn btn-sm btn-success shadow-none " data-bs-dismiss="modal " aria-label="Close ">{% translate "Cancel " %}</button>
+                                    <form action="{% url 'request:request_delete' request.pk %}" method='post'>{% csrf_token %}
+                                        <input class="btn btn-danger btn-sm shadow-none " type="submit " value="{% translate " I understand, delete this item! " %} " />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
