@@ -18,14 +18,14 @@
                     <th class="border-bottom border-0"></th>
             </tr>
             </thead>
-            <tbody>{% if list_repaired %}{% for damage in list_repaired %}
+            <tbody>{% if list_repaired_item %}{% for damage in list_repaired_item %}
                 <tr>
                     <td class="text-center">{{ forloop.counter }}</td>
-                    <td>{{ damage.item.name|capfirst }}</td>
+                    <td>{{ damage.item.item.name|capfirst }}</td>
                     <td>{{ damage.item.problem }}</td>
-                    <td>{{ damage.item.quantity }}</td>
-                    <td>{{ damage.item.dead_stock_number }}</td>
-                    <td>{{ damage.item.store }}</td>
+                    <td>{{ damage.item.item.quantity }}</td>
+                    <td>{{ damage.item.item.dead_stock_number }}</td>
+                    <td>{{ damage.item.item.store }}</td>
 
                     <td class="text-center">
                     </td>

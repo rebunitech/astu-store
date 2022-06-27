@@ -40,8 +40,7 @@ class ListMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMixin,  L
     
     def get_queryset(self):
         return self.model.objects.filter(is_approved=False, is_declined = False, is_request=True)
-    
-    
+     
     
 """ update maintenace request view """
 
@@ -166,26 +165,40 @@ class RepairedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMixin
          model =  MaintenanceRequest
          fields = ("is_repaired",)
          permission_required = "maintenace.can_repaire"
-         success_url = reverse_lazy("maintenace:list_repaired")
+         template_name = "maintenace/lists_undermaintenance.html"
+         success_url = reverse_lazy("maintenace:list_repaired_request_list")
          success_message = " Items request repaired successfully"
          http_method_names = ["post"]
          
-         def get_form_kwargs(self):
-             form_kwargs = super().get_form_kwargs()
-             form_data = form_kwargs.get("data", {}).copy()
-             form_data.update({"is_repaired": True})
-             form_kwargs.update({"data": form_data})
-             return form_kwargs
          
-         def get_queryset(self):
-                return self.model.objects.filter(is_repaired=False)
-
-class ListRepairedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+        #  def get_context_data(self, **kwargs):
+        #      return super().get_context_data(**kwargs)
+        
+        #  def get_form_kwargs(self):
+        #     form_kwargs = super().get_form_kwargs()
+        #     form_data = form_kwargs.get("data", {}).copy()
+        #     form_data.update({"is_repaired": True})
+        #     form_kwargs.update({"data": form_data})
+        #     return form_kwargs
+        #  def get_item(self):
+        #     failurity_report = get_object_or_404(FailurityReport ,pk=self.kwargs['item_pk'] )
+        #     return failurity_report.item
+        
+         def form_valid(self, form):
+            form.instance.is_repaired = True
+            form.save()
+            return super().form_valid(form)
+            
+        
+        
+        
+        
+class ListRepairedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMixin, ListView):
     
     model =  MaintenanceRequest
     template_name = "maintenace/list_repaired_maintenace.html"
     permission_required = "maintenace.view_list_repaired_maintenance_request"
-    context_object_name = "list_repaired"
+    context_object_name = "list_repaired_item"
     extra_context = {"title": _("Repaired Maintenance Request")}
     
     def get_queryset(self):
@@ -232,7 +245,12 @@ class AddDamageReportView(PermissionRequiredMixin, SuccessMessageMixin, CreateVi
     """Add damage report from item directly. """
     
     model = DamageReport
-    fields = "__all__"
+    fields = (
+        
+        "item",
+        "quantity",
+        "problem",
+    )
     permission_required = ("maintenace.add_damagereport",)
     success_message = _('Damage reports added successfully.')
     template_name = "maintenace/add_damage.html"
@@ -271,7 +289,9 @@ class AddDamagedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMix
         return form_kwargs
     
     def get_item(self):
-        return get_object_or_404( Item,pk=self.kwargs['item_pk'] )
+        print(self.kwargs)
+        failurity_report = get_object_or_404(FailurityReport ,pk=self.kwargs['item_pk'] )
+        return failurity_report.item
     
     def form_valid(self, form):
         form.instance.item = self.get_item()
@@ -288,25 +308,3 @@ class ListDamagedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMi
     
     def get_queryset(self):
             return self.model.objects.filter(is_damaged=True)
-        
-        
-# # start
-# class AddDamage_UnderMaintenance(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
-#     '''  '''
-#     model = DamageReport
-    
-#     permission_required = "maintenace.can_damagemaintenacerequest"
-#     success_url = reverse_lazy("maintenace:damaged_requests_lists")
-#     success_message = "Damage report added successfully"
-#     http_method_names = ["post"]
-    
-#     def get_item(self, *args, **kwargs):
-#         x = kwargs["under_pk"]
-#         y = kwargs["item_pk"]
-#         if x:
-#             update value of undermaintenance which foriegn key
-#         else:
-#             update value of item which is foriegn key 
-        
-#         # i think this thing is the same is true for template i mean we should know damge come from where
-    

@@ -9,7 +9,7 @@ from auser.models import Department
 
 
 class Store(models.Model):
-    class StatusChoices(models.TextChoices):
+    class StatusChoices(models.TextChoices):      
         ACTIVE = "ACT", "Active"
         INACTIVE = "INA", "Inactive"
 
@@ -37,7 +37,7 @@ class Store(models.Model):
         unique_together = ("block", "room")
 
     def __str__(self):
-        return f"{self.department.short_name} -- B{self.block} R{self.room}"
+        return f"{self.department.short_name} B{self.block} R{self.room}"
 
 
 def uuid_hex():
@@ -85,12 +85,11 @@ class Item(models.Model):
 
     name = models.CharField(_("name"), max_length=255, db_index=True)
     description = models.TextField(_("description"), blank=True)
-    quantity = models.IntegerField(_("quantity"),default=1,  validators=[MinValueValidator(1)])
+    quantity = models.IntegerField(_("quantity"), validators=[MinValueValidator(1)])
     dead_stock_number = models.CharField(_("dead stock number"), max_length=50)
     store = models.ForeignKey(
         Store, verbose_name="store", related_name="items", on_delete=models.CASCADE
     )
-    # is_repaired = models.BooleanField(default=F)
     shelf = ChainedForeignKey(
         Shelf,
         chained_field="store",

@@ -56,27 +56,30 @@ class MaintenanceRequest(models.Model):
     class Meta:
         verbose_name = _("maintenance request")
         verbose_name_plural = _("maintenance requests")
-   
+        
+        
     def __str__(self):
         return self.item.item.name
  
  
  
 class DamageReport(models.Model):
+    
     item = models.ForeignKey(
 		Item,
 		on_delete = models.CASCADE,
         verbose_name =_("item"),
         related_name = "damagereport",
+        
         )
-    # start 
-    # undermaintenance = models.ForeignKey(
-    #                                     MaintenanceRequest,
-    #                                     on_delete=models.CASCADE,
-    #                                     verbose_name="under maintenance",
-    #                                     null=True
+    
+    undermaintenance = models.ForeignKey(
+                                        MaintenanceRequest,
+                                        on_delete=models.CASCADE,
+                                        verbose_name="under maintenance",
+                                        null=True
                                         
-    # )
+    )
     
     quantity = models.IntegerField(default=1, validators=[MinValueValidator(1),], )
     problem = models.TextField(null=False, error_messages={"fill": "You should specify the problem."} )
