@@ -1,0 +1,49 @@
+{% extends "layouts/main.html" %} {% block content %}
+
+<div class="row">
+    <div class="float-end">
+        <a href="{% url 'maintenance:lists_declined_request' %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> List Declined Maintenance Request</a>
+
+    </div>
+    <hr />
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="store_list" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0" style="max-width: 25px;"></th>
+                    <th class="border-bottom border-0">Item</th>
+                    <th class="border-bottom border-0">Problems</th>
+                    <th class="border-bottom border-0">Quantity</th>
+                    <th class="border-bottom border-0">Dead_Stock_Number</th>
+                    <th class="border-bottom border-0"> Store</th>
+                    <th class="border-bottom border-0"> Manage</th>
+                </tr>
+            </thead>
+            <tbody>{% if list_approved %}{% for m in list_approved %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td>{{ m.item|capfirst }}</td>
+                    <td>{{ m.problem|capfirst }}</td>
+                    <td>{{ m.quantity }}</td>
+                    <td>{{ m.item.item.dead_stock_number }}</td>
+                    <td>{{ m.item.item.store }}
+                        <td>
+                            <div class="btn-group rounded" role="group" aria-label="Management buttons">
+                                {% if perms.maintenance.view_maintenancerequest %}
+                                <a class="btn btn-sm btn-primary shadow-none px-2 mx-1" href=" " class="fa-solid fa-pen me-2">Repaired</a>{% endif %} {% if perms.maintenance.approve_maintenancerequest %}
+                                <form action="{% url 'maintenance:damaged_requests' m.pk %}" method='post'>{% csrf_token %}
+                                    <input class=" btn btn-danger btn-sm shadow-none " type="submit" value="Damaged" />
+                                </form>{% endif %}
+                        </td>
+
+                    </td>
+
+
+
+                    </td>
+                </tr>
+                {% endfor %}{% endif %}</tbody>
+        </table>
+        </div>
+    </div>
+    {% endblock content %}
