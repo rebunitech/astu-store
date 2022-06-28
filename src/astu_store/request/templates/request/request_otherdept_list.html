@@ -2,7 +2,7 @@
 <table class="table shadow-lg w-100" id="dt_table_staff">
     <div class="d-flex justify-content-end">
         <a href="{% url 'request:add_request' %} " class="mx-2 btn btn-sm 
-            btn-success shadow-none "><i data-feather="plus "></i> {% translate "Add request " %}</a>  <a href="{% url 'request:add_request_otherdept' %} " class="mx-2 btn btn-sm 
+            btn-success shadow-none "><i data-feather="plus "></i> {% translate "Add request " %}</a> <a href="{% url 'request:add_request_otherdept' %} " class="mx-2 btn btn-sm 
             btn-success shadow-none "><i data-feather="plus "></i> {% translate "Add request other department  " %}</a> {% include "layouts/import_data.html" with ctype=view|ctype %}
     </div>
     <hr>
@@ -15,8 +15,9 @@
             <th>{% translate "end" %}</th>
             <th>{% translate "Manage" %}</th>
             <th>{% translate "Delete " %}</th>
-        </tr></th>
-            <th
+        </tr>
+        </th>
+
     </thead>
     <tbody class="w-100 ">
         {% for request in request %}
@@ -29,9 +30,9 @@
             <td>{{ request.category }}</td>
             <td>
                 <div class="btn-group rounded " role="group " aria-label="Management buttons ">
-                   </a> {% if perms.core.change_item %} <a href="{% url 'request:request_detail_otherdept' request.pk %} " class="btn btn-md 
-                            btn-outline-dark shadow-none ">{% translate "Details " %}</a> 
-                    <a href="{% url 'request:request_delete_dept' request.pk %}" class="btn btn-danger" >{% translate "Delete" %}</a>{% endif %}
+                    </a> {% if perms.core.change_item %} <a href="{% url 'request:request_detail_otherdept' request.pk %} " class="btn btn-md 
+                            btn-outline-dark shadow-none ">{% translate "Details " %}</a>
+                    <a href="{% url 'request:request_delete_dept' request.pk %}" class="btn btn-danger">{% translate "Delete" %}</a>{% endif %}
                     <div class="modal fade " id="delete-{{ request.item }} " tabindex="-1 " aria-labelgledby="Delete Item" aria-hidden="true ">
                         <div class="modal-dialog ">
                             <div class="modal-content ">
@@ -48,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
         </tr>
         {% endfor %}
     </tbody>

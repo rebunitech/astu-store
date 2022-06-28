@@ -17,8 +17,7 @@
         </tr>
 
     </thead>
-    <tbody class="w-100 ">
-        {% for request in requests %}
+    <tbody class="w-100 ">{% if requests %} {% for request in requests %}
         <tr>
             <!-- <td></td> -->
             <td>{{ forloop.counter }}</td>
@@ -39,7 +38,7 @@
 
 
         </tr>
-        {% endfor %}
+        {% endfor %}{% endif %}
     </tbody>
 </table>
 
