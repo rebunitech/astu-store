@@ -6,7 +6,7 @@ from maintenance.forms import AddMaintenanceRequest
 from maintenance.models import *
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 class AddMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
@@ -72,7 +72,7 @@ class CancelMaintenanceRequestView(UpdateView, PermissionRequiredMixin, SuccessM
     http_method_names = ["post"]
     
     def get_form_kwargs(self):
-        print("HEY")
+        print("@sinper123")
         form_kwargs = super().get_form_kwargs()
         form_data = form_kwargs.get("data", {}).copy()
         form_data.update({ "is_request" : False})
@@ -80,19 +80,19 @@ class CancelMaintenanceRequestView(UpdateView, PermissionRequiredMixin, SuccessM
         return form_kwargs
 
     def get_queryset(self):
-        print("AM FROM CANCAEL")
+        print("Sinper")
         return self.model.objects.filter(is_request=True)
     
 class CanceledListMaintenanceRequestView(PermissionRequiredMixin, ListView, SuccessMessageMixin):
     model = MaintenanceRequest
-    permission_required = "view_canceled_maintenancerequest"
+    permission_required = "maintenance.view_canceled_maintenancerequest"
     template_name = "maintenance/canceled_list_request.html"
     context_object_name = "canceled_request"
     extra_context = {"title": "Canceled Maintenance Request" }
     
     def get_queryset(self):
         return self.model.objects.filter(is_request=False)
-    
+
 
 
     
@@ -128,7 +128,7 @@ class ListApprovedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessage
         context_object_name = "list_approved"
         
         def get_queryset(self):
-            return self.model.objects.filter(is_approved=True,is_damaged=False)
+            return self.model.objects.filter(is_approved=True,is_damaged=False, is_repaired=False)
         
          
 class DeclinedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -165,27 +165,25 @@ class ListDeclinedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessage
     def get_queryset(self):
             return self.model.objects.filter(is_declined=True)
         
-    """generic view for repaired item list """
     
 class RepairedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+    """generic view for repaired item list """
     
-         model =  MaintenanceRequest
-         itemName = "item.item.is_repair"
-         fields = ("",)
-         permission_required = "maintenance.can_repaire"
-         success_url = reverse_lazy("Store:list_items")
-         success_message = " Items request repaired successfully"
-         http_method_names = ["post"]
-         
-         def get_form_kwargs(self):
-             form_kwargs = super().get_form_kwargs()
-             form_data = form_kwargs.get("data", {}).copy()
-             form_data.update({"is_repaired": True})
-             form_kwargs.update({"data": form_data})
-             return form_kwargs
-         
-         def get_queryset(self):
-                return self.model.objects.filter(is_repaired=False)
+    model =  MaintenanceRequest
+    fields = ("is_repaired",)
+    permission_required = "maintenace.can_repaire"
+    template_name = "maintenace/lists_undermaintenance.html"
+    success_url = reverse_lazy("maintenace:list_repaired_request_list")
+    success_message = " Items request repaired successfully"
+    http_method_names = ["post"]
+    
+    def form_valid(self, form):
+        form.instance.is_repaired = True
+        form.save()
+        return super().form_valid(form)
+    
+    def get_queryset(self):
+        return self.model.objects.filter(is_repaired=False)
 
 class ListRepairedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     
@@ -196,7 +194,7 @@ class ListRepairedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessage
     extra_context = {"title": _("Declined Maintenance Request")}
     
     def get_queryset(self):
-            return self.model.objects.filter(is_declined=True)
+            return self.model.objects.filter(is_repaired=True)
         
     
     
@@ -223,9 +221,9 @@ class ListFailurityReportView(ListView, PermissionRequiredMixin, SuccessMessageM
     context_object_name = "failurity_reports"
     extra_context = {"title": _("list failurity reports")}
 
-"""" detail failurity report view  """
 
 class DetailFailureReprtView(DetailView, PermissionRequiredMixin, SuccessMessageMixin):
+    """" detail failurity report view  """
     
     model = FailurityReport
     permission_required = ("maintenance.view_failurity_report",)
@@ -265,13 +263,10 @@ class ListDamageReportView(PermissionRequiredMixin, SuccessMessageMixin, ListVie
 
 class AddDamagedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     """ Damaged maintenance report item list from under maintenance (approved item) """
-    
-    model = MaintenanceRequest
-    x = [ i for i in MaintenanceRequest._meta.get_fields()]
-    print(type(x[1]))
+    model = DamageReport
     fields = ("is_damaged",)
-    permission_required = "maintenance.can_damagemaintenancerequest"
-    success_url = reverse_lazy("maintenance:damaged_requests_lists")
+    permission_required = "maintenace.can_damagemaintenacerequest"
+    success_url = reverse_lazy("maintenace:damaged_requests_lists")
     success_message = "Damage report added successfully"
     http_method_names = ["post"]
    
@@ -281,15 +276,21 @@ class AddDamagedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMi
         form_data.update({"is_damaged": True})
         form_kwargs.update({"data": form_data})
         return form_kwargs
-
-    def get_queryset(self):
-        return self.model.objects.filter(is_damaged=False)
+    
+    def get_item(self):
+        # print(self.kwargs)
+        failurity_report = get_object_or_404(FailurityReport ,pk=self.kwargs['item_pk'] )
+        return failurity_report.item
+    
+    def form_valid(self, form):
+        form.instance.item = self.get_item()
+        return super().form_valid(form)
     
 class ListDamagedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, ListView):
     
     model = MaintenanceRequest
     template_name = "maintenance/list_damage_maintenance.html"
-    permission_required = "maintenance.view_listdamagedmaintenacerequest"
+    permission_required = "maintenance.view_damagedmaintenacerequest"
     context_object_name = "list_damaged_maintenance_request"
     extra_context = {"title": _("Damaged Item")}
     
