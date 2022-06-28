@@ -2,7 +2,7 @@ $(document).ready(function() {
     $('#sidebar').on('show.bs.collapse hidden.bs.collapse', function() {
         $('.course-title').toggle();
     })
-    $('#specification_type_list, #shelf_list,#dt_table_request_list, #dt_table_damaged_list, #dt_table_undermaintenance_items, #dt_table_declined_maintenanceRequest, #specification_list, #dt_table_approved_request, #dt_table_failurityReport_list, #dt_table_declined_request, #dt_table_borrowed_item_list, #dt_table_returned_item, #dt_table_maintenanceRequest_list').DataTable({
+    $('#specification_type_list, #shelf_list,#dt_table_request_list, #dt_table_damaged_list, #dt_table_canceled_maintenanceRequest, #dt_table_undermaintenance_items, #dt_table_declined_maintenanceRequest, #specification_list, #dt_table_approved_request, #dt_table_failurityReport_list, #dt_table_declined_request, #dt_table_borrowed_item_list, #dt_table_returned_item, #dt_table_maintenanceRequest_list').DataTable({
         dom: 'QBfltipr',
         columnDefs: [{
             orderable: false,
