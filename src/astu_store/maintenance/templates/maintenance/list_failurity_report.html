@@ -1,12 +1,16 @@
-{% extends "layouts/main.html" %} {% block content %}
+{% extends "layouts/main.html" %} {% load i18n static auser %}{% block content %}
 <div class="row">
-    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
-        {% if perms.maintenance.add_failurityreport %}<a href="{% url 'maintenance:add_failurirtyreports' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add failurity report</a>{% endif %}
+    <div class="d-flex justify-content-end">
+        {% if perms.maintenance.add_failurityreport %}
+        <a href="{% url 'maintenance:add_failurirtyreports' %}" class="btn btn-md 
+        btn-success rounded-3 shadow-none float-end">
+            <i class="fa-solid fa-circle-plus me-2">
+            </i>Add failurity report</a>{% endif %}{% include "layouts/import_data.html" with ctype=view|ctype %}
     </div>
-    <hr/> {{ failurityreport_list }}
+    <hr/>
     <div class="container-fluid p-1 p-sm-3">
 
-        <table id="store_list" class="table w-100 rounded-3">
+        <table id="dt_table_failurityReport_list" class="table w-100 rounded-3">
 
             <thead>
                 <tr>

@@ -2,12 +2,15 @@
 
 <div class="row">
     <div class="float-end">
-        <a href="{% url 'maintenance:lists_declined_request' %}" class="mx-2 btn btn-sm btn-success shadow-none"><i data-feather="plus"></i> List Declined Maintenance Request</a>
-
+        {% if perms.maintenance.view_list_declined_maintenance_request %}
+        <a href="{% url 'maintenance:lists_declined_request' %}" class="btn btn-md 
+        btn-success rounded-3 shadow-none float-end">
+            <i class="fa-solid fa-chevron-right"></i>
+            </i>Lists Of Declined Maintenance </a>{% endif %}
     </div>
     <hr />
     <div class="container-fluid p-1 p-sm-3">
-        <table id="store_list" class="table w-100 rounded-3">
+        <table id="dt_table_undermaintenance_items" class="table w-100 rounded-3">
             <thead>
                 <tr>
                     <th class="border-bottom border-0" style="max-width: 25px;"></th>
