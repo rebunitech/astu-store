@@ -7,7 +7,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from smart_selects.db_fields import ChainedForeignKey
 
-from auser.models import Department
+from auser.models import College, Department
 
 UserModel = get_user_model()
 
@@ -197,6 +197,18 @@ class SubCategory(models.Model):
         super().save(*args, **kwargs)
 
 
+class Measurment(models.Model):
+    name = models.CharField(_("name"), max_length=255)
+
+    class Meta:
+        db_table = "measurement"
+        verbose_name = _("measurement")
+        verbose_name_plural = _("measurements")
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     class KindChoices(models.TextChoices):
         CONSUMABLE = "CONSUMABLE", _("Consumable")
@@ -218,8 +230,25 @@ class Product(models.Model):
         sort=True,
         on_delete=models.PROTECT,
     )
+    college = models.ForeignKey(
+        College, verbose_name=_("college"), on_delete=models.PROTECT
+    )
+    department = ChainedForeignKey(
+        Department,
+        chained_field="college",
+        chained_model_field="college",
+        verbose_name="department",
+        related_name="products",
+        show_all=False,
+        auto_choose=True,
+        sort=True,
+        on_delete=models.PROTECT,
+    )
     kind = models.CharField(
         max_length=25, verbose_name=_("kind"), choices=KindChoices.choices
+    )
+    measurment = models.ForeignKey(
+        Measurment, verbose_name=_("measurement"), on_delete=models.PROTECT
     )
     critical_no = models.IntegerField(
         help_text=_("min number of Item that must be in store")
@@ -239,18 +268,6 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
 
-class Measurment(models.Model):
-    name = models.CharField(_("name"), max_length=255)
-
-    class Meta:
-        db_table = "measurement"
-        verbose_name = _("measurement")
-        verbose_name_plural = _("measurements")
-
-    def __str__(self):
-        return self.name
-
-
 class Item(models.Model):
     class StatusChoices(models.TextChoices):
         ACTIVE = "ACTIVE", "Active"
@@ -267,9 +284,6 @@ class Item(models.Model):
     name = models.CharField(_("name"), max_length=255, db_index=True)
     description = models.TextField(_("description"), blank=True)
     quantity = models.IntegerField(_("quantity"), validators=[MinValueValidator(1)])
-    measurment = models.ForeignKey(
-        Measurment, verbose_name=_("measurement"), on_delete=models.PROTECT
-    )
     dead_stock_number = models.CharField(_("dead stock number"), max_length=50)
     purpose = models.CharField(
         _("purpose"),
@@ -309,7 +323,7 @@ class Item(models.Model):
         Table,
         chained_field="lab",
         chained_model_field="lab",
-        verbose_name="shelf",
+        verbose_name="table",
         related_name="items",
         show_all=False,
         auto_choose=True,
@@ -324,6 +338,11 @@ class Item(models.Model):
         validators=[MinValueValidator(1900)],
         blank=True,
         null=True,
+    )
+    product = models.ForeignKey(
+        Product,
+        verbose_name=_('Product'),
+        on_delete=models.PROTECT
     )
     supplier = models.CharField(_("supplier"), max_length=255, blank=True, null=True)
     status = models.CharField(

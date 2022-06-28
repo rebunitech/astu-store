@@ -2,7 +2,7 @@ $(document).ready(function() {
     $('#sidebar').on('show.bs.collapse hidden.bs.collapse', function() {
         $('.course-title').toggle();
     })
-    $('#specification_type_list, #shelf_list, #store_list, #item_list, #categories_list, #specification_list').DataTable({
+    $('#specification_type_list, #shelf_list, #store_list, #item_list, #categories_list, #products_list, #labs_list, #table_list,  #specification_list').DataTable({
         columnDefs: [{
             orderable: false,
             targets: [0, -1]

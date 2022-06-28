@@ -19,7 +19,7 @@
     <div class="text-dark px-4 fs-4">Store</div>
     <div class="text-dark px-4 fs-4"></div>
     <ul class="px-0">
-      {% if perms.store.view_store %}
+      {% if perms.inventory.view_store %}
       <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
         <div class="col p-2 ps-3 text-center">
           <i class="fa-solid fa-store"></i>
@@ -29,17 +29,37 @@
         </div>
       </li>
       {% endif  %}
-      {% if perms.store.view_item %}
+      {% if perms.inventory.view_lab %}
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-store"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'inventory:labs_list' %}">Labs</a>
+        </div>
+      </li>
+      {% endif  %}
+      {% if perms.inventory.view_product %}
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-brands fa-product-hunt"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'inventory:products_list' %}">Products</a>
+        </div>
+      </li>
+      {% endif  %}
+      {% if perms.inventory.view_item %}
       <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
         <div class="col p-2 ps-3 text-center">
           <i class="fa-solid fa-bars-staggered"></i>
         </div>
         <div class="col-10">
-          <a class="nav-link px-0 text-reset text-decoration-none" href="">Items</a>
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'inventory:items_list' %}">Items</a>
         </div>
       </li>
       {% endif  %}
-      {% if perms.store.view_specificationtype %}
+      {% if perms.inventory.view_specificationtype %}
       <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
         <div class="col p-2 ps-3 text-center">
           <i class="fa-solid fa-ruler-horizontal"></i>
@@ -49,7 +69,7 @@
         </div>
       </li>
       {% endif  %}
-      {% if perms.store.view_category %}
+      {% if perms.inventory.view_category %}
       <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
         <div class="col p-2 ps-3 text-center">
           <i class="fa-solid fa-braille"></i>
@@ -59,7 +79,7 @@
         </div>
       </li>
       {% endif  %}
-      {% if perms.store.view_subcategory %}
+      {% if perms.inventory.view_subcategory %}
       <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
         <div class="col p-2 ps-3 text-center">
           <i class="fa-solid fa-braille"></i>
@@ -69,7 +89,7 @@
         </div>
       </li>
       {% endif  %}
-      {% if perms.store.view_measurement %}
+      {% if perms.inventory.view_measurement %}
       <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
         <div class="col p-2 ps-3 text-center">
           <i class="fa-solid fa-ruler-horizontal"></i>
