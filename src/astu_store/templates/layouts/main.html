@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Primary Meta Tags -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/choices.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+
+    <title>{{ title }} — ASTU Store</title>
+</head>
+
+<body>
+    <div class="container-fluid px-0">
+        <div class="row flex-nowrap mx-0">
+            {% include 'layouts/sidebar.html' %}
+            <main class="col px-0">
+                {% include 'layouts/header.html' %}
+                <div class="ps-md-2 pt-2 m--5 mx-5">
+                    {% if not title_only %}<div class="pt-3">
+                        <h1 class="fw-light fs-3">{{ title }}</h1>
+                    </div>{% endif %}
+                    {% include 'layouts/message.html' %}
+                    <div class="main-content container-fluid">{% block content %}{% endblock content %}</div>
+                </div>
+            </main>
+        </div>
+    </div>
+    {% block firstJs %}{% endblock firstJs %}
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/pdfmake.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/vfs_fonts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'js/choices.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    {% block js %}{% endblock js %}
+</body>
+
+</html>

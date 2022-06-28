@@ -61,8 +61,7 @@ class MaintenanceRequest(models.Model):
     def __str__(self):
         return self.item.item.name
  
- 
- 
+
 class DamageReport(models.Model):
     
     item = models.ForeignKey(
@@ -88,7 +87,8 @@ class DamageReport(models.Model):
     class Meta:
         verbose_name = _("damagereport")
         verbose_name_plural = _("damagereports")
-    
+        
+
     def __str__(self):
         return self.item.name
 

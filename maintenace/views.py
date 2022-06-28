@@ -111,6 +111,10 @@ class ApproveMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin
     def get_queryset(self):
         return self.model.objects.filter(is_approved=False)
     
+    # def form_valid(self,form):
+    #     self.object.item.quantity -= self.object.quantity  #when request approved it subtracts requested item from available
+    #     self.object.item.save()
+    
 """list of approved (undermaintenace ) request view """
 
 class ListApprovedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, ListView):
@@ -289,7 +293,7 @@ class AddDamagedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMix
         return form_kwargs
     
     def get_item(self):
-        print(self.kwargs)
+        # print(self.kwargs)
         failurity_report = get_object_or_404(FailurityReport ,pk=self.kwargs['item_pk'] )
         return failurity_report.item
     
@@ -308,3 +312,5 @@ class ListDamagedMaintenaceRequestView(PermissionRequiredMixin, SuccessMessageMi
     
     def get_queryset(self):
             return self.model.objects.filter(is_damaged=True)
+
+

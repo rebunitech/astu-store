@@ -16,7 +16,7 @@
                     <th class="border-bottom border-0">Quantity</th>
                     <th class="border-bottom border-0">Dead_Stock_Number</th>
                     <th class="border-bottom border-0"> Store</th>
-                    <th class="border-bottom border-0"> Manage</th>
+                    <th class="border-bottom border-0"> Actions</th>
                 </tr>
             </thead>
             <tbody>{% if list_approved %}{% for m in list_approved %}
@@ -27,6 +27,34 @@
                     <td>{{ m.quantity }}</td>
                     <td>{{ m.item.item.dead_stock_number }}</td>
                     <td>{{ m.item.item.store }}
+
+
+                        {% comment %} <td>
+                            <div class="dropdown">
+                              <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-gears fs-4"></i>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                                {% if perms.maintenace.approve_maintenancerequest %}
+                                <li><a class="dropdown-item py-2" href="{% url 'auser:update_college' college.short_name %}"><i class="fa-solid fa-pen me-3"></i>Update </a></li>{% endif %}{% if perms.auser.can_add_college_representative and college.is_active %}
+                                <li><a class="dropdown-item py-2" ><i class="fa-solid fa-user-plus me-3"></i>Add Dean</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-circle-plus me-3"></i>Select Dean</a></li>{% endif %}{% if perms.auser.add_department %}
+                                <li><a class="dropdown-item" href="{% url 'auser:add_department' college.short_name %}"><i class="fa-solid fa-square-plus me-3"></i>Add Department</a></li>{% endif %}{% if perms.auser.can_change_college %}{% if college.is_active %}
+                                <li><button class="dropdown-item py-2 text-warning" data-bs-toggle="modal" data-bs-target="#change-status-{{ college.short_name }}"><i class="fa-solid fa-toggle-off me-3"></i>Deactivate</button></li>{% else %}
+                                <li><button class="dropdown-item py-2 text-success" data-bs-toggle="modal" data-bs-target="#change-status-{{ college.short_name }}"><i class="fa-solid fa-toggle-on me-3"></i>Activate</button></li>
+                                {% endif %}{% endif %}{% if perms.auser.delete_college %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><button class="dropdown-item text-danger fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-college-{{ college.short_name }}"><i class="fa-solid fa-trash-can me-3"></i>Delete</button></li>
+                                {% endif %}
+                              </ul>
+                            </div>
+                        </td> {% endcomment %}
+
+
+
+
+
+
                         <td>
                             <div class="btn-group rounded" role="group" aria-label="Management buttons">
                                 {% if perms.maintenace.approve_maintenancerequest %}
@@ -38,7 +66,7 @@
                                 <form action="{% url 'maintenace:damaged_requests'  m.pk m.item.pk %}" method='post'>{% csrf_token %}
                                     <input class=" btn btn-danger btn-sm shadow-none " type="submit" value="Damaged" />
                                 </form>{% endif %}
-                        </td>
+                        </td> 
 
                     </td>
 

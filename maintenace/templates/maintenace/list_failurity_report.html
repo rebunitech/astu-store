@@ -1,8 +1,10 @@
+
 {% extends "layouts/main.html" %} {% block content %}
 <div class="row">
     <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
-        {% if perms.maintenace.add_failurityreport %}<a href="{% url 'maintenace:add_failurirtyreports' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Failurity Report</a>{% endif %}
-    </div>
+    
+        {% if perms.maintenace.add_failurityreport %}<a href="{% url 'maintenace:add_failurirtyreports' %}" class="btn btn-md btn-success rounded-2 shadow-none float-end"><i class="fa-solid fa-circle-plus me-1"></i>Add Failurity Report</a>{% endif %}
+    </div></div>
     <hr/> {{ failurityreport_list }}
     <div class="container-fluid p-1 p-sm-3">
 
