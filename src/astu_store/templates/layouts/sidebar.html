@@ -52,97 +52,99 @@
 
         <div class="text-dark px-4 fs-4">Request</div>
         <div class="text-dark px-4 fs-4"></div>
-        {% if perms.request.view_store %}
-        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-            <div class="col p-2 ps-3 text-center">
-                <i class="fa-solid fa-store"></i>
-            </div>
-            <div class="col-10">
-                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:request_list' %}">Request</a>
-            </div>
-        </li> {% endif %} {% if perms.request.can_view_request_approve %}
-        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-            <div class="col p-2 ps-3 text-center">
-                <i class="fa fa-thumbs-up"></i>
-            </div>
-            <div class="col-10">
-                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:approved_list' %}">Approved Request</a>
-            </div>
-        </li> {% endif %}{% if perms.request.can_view_request_decline %}
-        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-            <div class="col p-2 ps-3 text-center">
-                <i class="fa fa-ban" aria-hidden="true"></i>
-            </div>
-            <div class="col-10">
-                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:declined_list' %}">Decline Requests</a>
-            </div>
-        </li>{% endif %}{% if perms.request.can_view_complete_request %}
-        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-            <div class="col p-2 ps-3 text-center">
-                <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
-            </div>
-            <div class="col-10">
-                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:borrowed_list' %}">Borrowed Items</a>
-            </div>
-        </li>{% endif %}{% if perms.request.can_view_return_request %}
-        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-            <div class="col p-2 ps-3 text-center">
-                <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
-            </div>
-            <div class="col-10">
-                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:returned_list' %}">Returned Items</a>
-            </div>
-        </li>{% endif %}
+        <ul class="px-0"> {% if perms.request.view_store %}
+            <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+                <div class="col p-2 ps-3 text-center">
+                    <i class="fa-solid fa-store"></i>
+                </div>
+                <div class="col-10">
+                    <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:request_list' %}">Request</a>
+                </div>
+            </li> {% endif %} {% if perms.request.can_view_request_approve %}
+            <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+                <div class="col p-2 ps-3 text-center">
+                    <i class="fa fa-thumbs-up"></i>
+                </div>
+                <div class="col-10">
+                    <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:approved_list' %}">Approved Request</a>
+                </div>
+            </li> {% endif %}{% if perms.request.can_view_request_decline %}
+            <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+                <div class="col p-2 ps-3 text-center">
+                    <i class="fa fa-ban" aria-hidden="true"></i>
+                </div>
+                <div class="col-10">
+                    <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:declined_list' %}">Decline Requests</a>
+                </div>
+            </li>{% endif %}{% if perms.request.can_view_complete_request %}
+            <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+                <div class="col p-2 ps-3 text-center">
+                    <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
+                </div>
+                <div class="col-10">
+                    <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:borrowed_list' %}">Borrowed Items</a>
+                </div>
+            </li>{% endif %}{% if perms.request.can_view_return_request %}
+            <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+                <div class="col p-2 ps-3 text-center">
+                    <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
+                </div>
+                <div class="col-10">
+                    <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'request:returned_list' %}">Returned Items</a>
+                </div>
+            </li>{% endif %}
+        </ul>
         <div class="text-dark px-4 fs-4">Maintenance Request</div>
         <div class="text-dark px-4 fs-4"></div>
-        {% if perms.maintenance.view_failurityreport %}
-        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-            <div class="col p-2 ps-3 text-center">
-                <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
-            </div>
-            <div class="col-10">
-                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:list_failurity_report' %}">Failurity Report Items</a>
-            </div>
-        </li>{% endif %}{% if perms.maintenance.view_maintenancerequest %}
-        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-            <div class="col p-2 ps-3 text-center">
-                <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
-            </div>
-            <div class="col-10">
-                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:list_maintenancerequests' %}">Maintenance Requests</a>
-            </div>
-        </li>{% endif %}{% if perms.maintenance.view_maintenancerequest %}
-        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-            <div class="col p-2 ps-3 text-center">
-                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-            </div>
-            <div class="col-10">
-                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:lists_approved_request' %}">Approved Maintenance Request</a>
-            </div>
-        </li>{% endif %}{% if perms.maintenance.view_maintenancerequest %}
-        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-            <div class="col p-2 ps-3 text-center">
-                <i class="fa fa-ban" aria-hidden="true"></i>
-            </div>
-            <div class="col-10">
-                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:lists_declined_request' %}">Decline Maintenance Request</a>
-            </div>
-        </li>{% endif %}{% if perms.maintenance.view_maintenancerequest %}
-        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-            <div class="col p-2 ps-3 text-center">
-                <i class="fa-solid fa-circle-exclamation"></i>
-            </div>
-            <div class="col-10">
-                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:damaged_requests_lists' %}">Damaged Items</a>
-            </div>
-        </li>{% endif %}{% if perms.maintenance.view_canceled_maintenancerequest %}
-        <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
-            <div class="col p-2 ps-3 text-center">
-                <i class="fa-solid fa-plane-slash"></i>
-            </div>
-            <div class="col-10">
-                <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:canceled_list' %}">Canceled Maintenance Request</a>
-            </div>
-        </li>{% endif %}
+        <ul class="px-0">{% if perms.maintenance.view_failurityreport %}
+            <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+                <div class="col p-2 ps-3 text-center">
+                    <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
+                </div>
+                <div class="col-10">
+                    <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:list_failurity_report' %}">Failurity Report Items</a>
+                </div>
+            </li>{% endif %}{% if perms.maintenance.view_maintenancerequest %}
+            <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+                <div class="col p-2 ps-3 text-center">
+                    <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
+                </div>
+                <div class="col-10">
+                    <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:list_maintenancerequests' %}">Maintenance Requests</a>
+                </div>
+            </li>{% endif %}{% if perms.maintenance.view_maintenancerequest %}
+            <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+                <div class="col p-2 ps-3 text-center">
+                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                </div>
+                <div class="col-10">
+                    <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:lists_approved_request' %}">Approved Maintenance Request</a>
+                </div>
+            </li>{% endif %}{% if perms.maintenance.view_maintenancerequest %}
+            <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+                <div class="col p-2 ps-3 text-center">
+                    <i class="fa fa-ban" aria-hidden="true"></i>
+                </div>
+                <div class="col-10">
+                    <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:lists_declined_request' %}">Decline Maintenance Request</a>
+                </div>
+            </li>{% endif %}{% if perms.maintenance.view_maintenancerequest %}
+            <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+                <div class="col p-2 ps-3 text-center">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <div class="col-10">
+                    <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:damaged_requests_lists' %}">Damaged Items</a>
+                </div>
+            </li>{% endif %}{% if perms.maintenance.view_canceled_maintenancerequest %}
+            <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+                <div class="col p-2 ps-3 text-center">
+                    <i class="fa-solid fa-plane-slash"></i>
+                </div>
+                <div class="col-10">
+                    <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'maintenance:canceled_list' %}">Canceled Maintenance Request</a>
+                </div>
+            </li>{% endif %}
+        </ul>
     </div>
 </nav>
