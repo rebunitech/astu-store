@@ -106,7 +106,7 @@ def create_permission_groups(sender, plan, *args, **kwargs):
             lab_assistant_group.permissions.set(lab_assistant_permissions)
 
         if not Group.objects.filter(name="staff_member").exists():
-            staff_member_group = Group.objects.create(name="lab_assistant")
+            staff_member_group = Group.objects.create(name="staff_member")
             staff_member_permissions = Permission.objects.filter(
                 Q(codename="view_store")
                 | Q(codename="add_shelf")
