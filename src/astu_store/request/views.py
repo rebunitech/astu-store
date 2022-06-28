@@ -236,7 +236,7 @@ class ListCompletedUserRequest(PermissionRequiredMixin, ListView):
     model = Request
     template_name = "request/list_completed.html"
     permission_required = ("request.can_view_complete_request",)
-    extra_context = {"title": ("borrowed items list:")}
+    extra_context = {"title": ("Borrowed items list")}
     context_object_name = "requests"
 
     def get_queryset(self):

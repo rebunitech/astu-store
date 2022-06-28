@@ -28,7 +28,7 @@
                 <div class="ps-md-2 pt-2 m--5 mx-5">
                     {% if not title_only %}
                     <div class="pt-3">
-                        <h1 class="fw-light fs-3">{{ title }}</h1>
+                        <h1 class="fw-light fs-3">{{ title|capfirst }}</h1>
                     </div>{% endif %} {% include 'layouts/message.html' %}
                     <div class="main-content container-fluid">{% block content %}{% endblock content %}</div>
                 </div>

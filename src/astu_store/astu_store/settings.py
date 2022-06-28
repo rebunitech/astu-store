@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "auser",
     "store",
     "request",
+    "maintenance",
     
 ]
 

@@ -27,5 +27,6 @@ urlpatterns = [
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
     re_path(r"^$", RedirectView.as_view(url=reverse_lazy("auser:dashboard"))),
     re_path(r"^request/", include("request.urls")),
+    re_path(r"^maintenance/", include("maintenance.urls")),
     re_path(r"chaining/", include("smart_selects.urls")),
 ]
