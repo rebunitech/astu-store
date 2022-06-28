@@ -27,7 +27,7 @@ maintenance_urls = [
         views.AddMaintenanceRequestView.as_view(),
         name="add_maintenace_request"),
     re_path(
-        r"^list_maintenace_request/$", 
+        r"^list_maintenance_request/$",
         views.ListMaintenanceRequestView.as_view(), 
         name="list_maintenancerequests"
         ),
@@ -55,7 +55,7 @@ maintenance_urls = [
         views.ApproveMaintenanceRequestView.as_view(),
         name="approve_maintenance_request",
     ),
-    re_path(
+    re_path( 
         r"list_approve/$",
         views.ListApprovedMaintenanceRequestView.as_view(),
         name="lists_approved_request"

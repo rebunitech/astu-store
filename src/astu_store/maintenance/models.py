@@ -60,7 +60,7 @@ class MaintenanceRequest(models.Model):
     quantity = models.IntegerField(default=1,null=False)  #don't forget to do max validator
     is_declined = models.BooleanField(default=False)
     is_request = models.BooleanField(default=True)
-    # is_repaired = models.BooleanField(default=False)
+    is_repaired = models.BooleanField(default=False)
     is_damaged = models.BooleanField(default=False)
 
     class Meta:
