@@ -1,9 +1,4 @@
-from concurrent.futures import process
 from datetime import datetime
-from pickle import TRUE
-from pyclbr import Class
-from shelve import Shelf
-from tracemalloc import start
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -22,7 +17,7 @@ timezone.localtime(timezone.now())
 from django.contrib.auth.models import User
 from django.utils.duration import _get_duration_components
 
-from store.models import Item, Store 
+from inventory.models import Store, Item
 
 User = settings.AUTH_USER_MODEL
 
@@ -32,10 +27,6 @@ STATUS = ((0, "Draft"), (1, "Publish"))
 
 class Request(models.Model):
 
-    STATUS = (
-        ("consumable", "consumable"),
-        ("non-consumable", "non-consumable"),
-    )
     
     item = models.ForeignKey(
                             Item,
@@ -46,7 +37,6 @@ class Request(models.Model):
     
     start_date = models.DateTimeField(default=datetime.now)
     end_date = models.DateTimeField(default=datetime.now)
-    category = models.CharField(max_length=100, choices=STATUS)
     status = models.CharField(max_length=30)
     is_approved = models.BooleanField(null=True, blank=True)  # decline--false, approve--true, pending--null
     is_given = models.BooleanField(null=True, blank=True)     # for store officer item delivered--True or borowed

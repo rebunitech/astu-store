@@ -11,7 +11,6 @@ class AddRequestView(ModelForm):
             "quantity",
             "start_date",
             "end_date",
-            "category",
         )
 # for start borrow date and end date
 # class DateRangeForm(forms.Form):

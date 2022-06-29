@@ -31,7 +31,6 @@ class AddRequestView(CreateView):
         "quantity",
         "start_date",
         "end_date",
-        "category",
         
     )
 
