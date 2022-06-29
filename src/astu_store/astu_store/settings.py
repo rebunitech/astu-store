@@ -46,10 +46,9 @@ INSTALLED_APPS = [
     "smart_selects",
     # Local Apps
     "auser",
-    "request",
-    "maintenance",
-    
     "inventory",
+    "request",
+    "maintenance",    
 ]
 
 MIDDLEWARE = [
