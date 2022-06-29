@@ -86,9 +86,15 @@ maintenance_urls = [
     ),
     #  damaged requests url
      re_path(
-        r"damaged_requests/(?P<pk>\d+)/$",
+        r"damaged_requests/(?P<pk>\d+)/(?P<item_pk>\d+)/$",
         views.AddDamagedMaintenanceRequestView.as_view(),  
         name="damaged_requests",
+    ),
+
+    re_path(
+        r"damage/(?P<pk>\d+)/$",
+        views.DamagedMaintenanceRequestView.as_view(),
+        name="damage_test",
     ),
        
     #  damaged requests lists url

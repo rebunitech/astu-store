@@ -8,7 +8,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from ckeditor.fields import RichTextField
 
-from store.models import Item, Store
+from inventory.models import Item, Store
 
       
 """failurity report model"""        
@@ -83,7 +83,7 @@ class DamageReport(models.Model):
     # description = models.TextField(_("description"),null=True, blank=True) 
     quantity = models.IntegerField(validators=[MinValueValidator(1),], )
     problem = models.TextField(null=False, error_messages={"fill": "You should specify the problem."} )
-    
+    is_damaged = models.BooleanField(default=False)
     class Meta:
         verbose_name = _("damagereport")
         verbose_name_plural = _("damagereports")

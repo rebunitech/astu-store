@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView,DetailView
+from pandas import DataFrame
 from maintenance.forms import AddMaintenanceRequest
 from maintenance.models import *
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -22,7 +23,7 @@ class AddMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, Cr
     extra_context = {"title": _("Add maintenance requests")}
     
     def get_success_url(self):
-        print(self.object)
+        # print(self.object)
         return reverse_lazy(
             "maintenance:list_maintenancerequests",
         )
@@ -53,9 +54,9 @@ class UpdateMaintenanceRequestView(UpdateView, PermissionRequiredMixin, SuccessM
         "problem",
     )
     permission_required = "maintenance.change_maintenancerequest"
-    template_name = "maintenance/update_maintenace_request.html"
+    template_name = "maintenance/update_maintenance_request.html"
     success_message = 'Maintenance request of %(item)s updated successfully.'
-    success_url = reverse_lazy("maintenance:list_maintenacerequests")
+    success_url = reverse_lazy("maintenance:list_maintenancerequests")
     context_object_name = "update_maitenance"
     extra_context = {"title": _("Update Maintenance Request")}
     
@@ -65,7 +66,7 @@ class CancelMaintenanceRequestView(UpdateView, PermissionRequiredMixin, SuccessM
     
     model = MaintenanceRequest
     
-    fields = ("is_request")
+    fields = ("is_request",)
     permission_required = "maintenance.cancel_maintenancerequest"
     success_url = reverse_lazy("maintenance:canceled_list")
     success_message = "Maintenance request cancelled successfully"
@@ -260,6 +261,17 @@ class ListDamageReportView(PermissionRequiredMixin, SuccessMessageMixin, ListVie
     extra_context = {"title": _("list damage reports")}
     
     
+
+class DamagedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    '''  '''
+    model = DamageReport
+    fields = "__all__"
+    permission_required = "maintenance.add_damagereport"
+    template_name = "maintenance/add_detail_damage.html"
+    success_message = "%(item)s is added to damage item successfully."
+    success_url = "maintenance:damaged_requests_lists"
+    extra_context = {"title": "Add Damage item"}
+
 
 class AddDamagedMaintenanceRequestView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     """ Damaged maintenance report item list from under maintenance (approved item) """
