@@ -219,7 +219,6 @@ class DeleteItemView(PermissionRequiredMixin, DeleteView):
 class AddSpecificationView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     model = Specification
     fields = ("specification_type", "value", "remark")
-    # form_class = SpecificationFormSet
     permission_required = ("store.add_specification",)
     success_message = _("Specification added successfully.")
     template_name = "store/specification/add.html"

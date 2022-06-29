@@ -5,10 +5,11 @@
     </div>
     <hr />
     <div class="container-fluid p-1 p-sm-3">
-        <table id="products_list" class="table w-100 rounded-3">
+        <table id="items_list" class="table w-100 rounded-3">
             <thead>
                 <tr>
                     <th class="border-bottom border-0 text-center">Name</th>
+                    <th class="border-bottom border-0 text-center">Product</th>
                     <th class="border-bottom border-0 text-center">DSN</th>
                     <th class="border-bottom border-0 text-center">Quantity</th>
                     <th class="border-bottom border-0 text-center">Purpose</th>
@@ -24,7 +25,8 @@
             <tbody>{% if items %}{% for item in items %}
                 <tr>
                     <td>{{ item.name|capfirst }}</td>
-                    <td>{{ item.dead_stoke_number }}</td>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.dead_stock_number }}</td>
                     <td>{{ item.quantity }} {{ item.product.measurment }}</td>
                     <td>{{ item.get_purpose_display }}</td>
                     <td>{% if item.store %}{{ item.store }}{% else %}{{ item.lab }}{% endif %}</td>
@@ -39,7 +41,9 @@
                             <i class="fa fa-gears fs-4"></i>
                           </button>
                           <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
-                            {% if perms.inventory.change_item %}
+                            {% if perms.inventory.view_specification %}
+                            <li><a class="dropdown-item py-2" href="{% url 'inventory:item_specifications_list' item.pk %}"><i class="fa-solid fa-list me-2"></i>Specifications</a></li>
+                            {% endif %}{% if perms.inventory.change_item %}
                             <li><a class="dropdown-item py-2" href="{% url 'inventory:update_item' item.pk %}"><i class="fa-solid fa-pen me-2"></i>Update</a></li>{% endif %} {% if perms.inventory.delete_item %}
                             <li><hr class="dropdown-divider"></li>
                             <li><button class="dropdown-item text-danger fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-item-{{ item.pk }}"><i class="fa-solid fa-circle-minus me-2"></i>Delete</button></li>{% endif %}

@@ -52,12 +52,16 @@ class UpdateItemView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
 
     def get_queryset(self):
         user = self.request.user
-        qs = super().get_queryset().filter(store__pk=self.kwargs.get("pk"))
+        qs = super().get_queryset()
         if not user.is_college_user:
             return qs
         if user.is_college_representative:
-            return qs.filter(Q(college=user.collegeuser.college))
-        return qs.filter(Q(department=user.collegeuser.department))
+            return qs.filter(Q(store__department__college=user.collegeuser.college))
+        if user.is_department_representative:
+            return qs.filter(Q(store__department=user.collegeuser.department))
+        if user.is_store_officer:
+            return qs.filter(Q(store__store_officers__pk=user.pk))
+        return qs.filter(Q(id=None))
 
 class DeleteItemView(PermissionRequiredMixin, DeleteView):
     model = Item
@@ -67,9 +71,13 @@ class DeleteItemView(PermissionRequiredMixin, DeleteView):
 
     def get_queryset(self):
         user = self.request.user
-        qs = super().get_queryset().filter(store__pk=self.kwargs.get("pk"))
+        qs = super().get_queryset()
         if not user.is_college_user:
             return qs
         if user.is_college_representative:
-            return qs.filter(Q(college=user.collegeuser.college))
-        return qs.filter(Q(department=user.collegeuser.department))
+            return qs.filter(Q(store__department__college=user.collegeuser.college))
+        if user.is_department_representative:
+            return qs.filter(Q(store__department=user.collegeuser.department))
+        if user.is_store_officer:
+            return qs.filter(Q(store__store_officers__pk=user.pk))
+        return qs.filter(Q(id=None))

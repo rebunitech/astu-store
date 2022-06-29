@@ -383,6 +383,16 @@ class Specification(models.Model):
         verbose_name="item",
         related_name="specifications",
         on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+    product = models.ForeignKey(
+        Product,
+        verbose_name="product",
+        related_name="specifications",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
     )
     specification_type = models.ForeignKey(
         SpecificationType,
@@ -397,4 +407,5 @@ class Specification(models.Model):
         db_table = "specification"
         verbose_name = _("specification")
         verbose_name_plural = _("specifications")
-        unique_together = ("item", "specification_type")
+        unique_together = (("item", "specification_type"), ("product", "specification_type"))
+

@@ -37,6 +37,9 @@
                             <i class="fa fa-gears fs-4"></i>
                           </button>
                           <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                            {% if perms.inventory.view_specification %}
+                            <li><a class="dropdown-item py-2" href="{% url 'inventory:product_specifications_list' product.slug %}"><i class="fa-solid fa-list me-2"></i>Specifications</a></li>
+                            {% endif %}
                             {% if perms.inventory.change_product %}
                             <li><a class="dropdown-item py-2" href="{% url 'inventory:update_product' product.slug %}"><i class="fa-solid fa-pen me-2"></i>Update</a></li>{% endif %} {% if perms.inventory.delete_product %}
                             <li><hr class="dropdown-divider"></li>

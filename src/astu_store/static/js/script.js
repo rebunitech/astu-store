@@ -2,14 +2,14 @@ $(document).ready(function() {
     $('#sidebar').on('show.bs.collapse hidden.bs.collapse', function() {
         $('.course-title').toggle();
     })
-    $('#specification_type_list, #shelf_list, #store_list, #item_list, #categories_list, #products_list, #labs_list, #table_list,  #specification_list').DataTable({
+    $('#specification_type_list, #shelf_list, #store_list, #categories_list, #products_list, #labs_list, #table_list,  #specification_list').DataTable({
         columnDefs: [{
             orderable: false,
             targets: [0, -1]
         }, ]
     })
     $('#department_list').DataTable({
-        dom: 'Qfltipr',
+        dom: 'QBfltipr',
         columnDefs: [{
             orderable: false,
             targets: -1
@@ -20,8 +20,8 @@ $(document).ready(function() {
         { responsivePriority: 3, targets: 2},
         ]
     })
-    $('#colleges_list').DataTable({
-        dom: 'Qfltipr',
+    $('#colleges_list, #items_list').DataTable({
+        dom: 'QBfltipr',
         responsive: true,
         columnDefs: [{
             orderable: false,

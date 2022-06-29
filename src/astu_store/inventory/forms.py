@@ -30,13 +30,6 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = ("name",)
 
-    def clean_name(self):
-        name = self.cleaned_data["name"]
-        if Category.objects.filter(slug=slugify(name)).exists():
-            raise ValidationError("Category with this name aleady exists.")
-        return name
-
-
 class SubCategoryForm(forms.ModelForm):
     class Meta:
         model = SubCategory
@@ -44,13 +37,6 @@ class SubCategoryForm(forms.ModelForm):
             "category",
             "name",
         )
-
-    def clean_name(self):
-        name = self.cleaned_data["name"]
-        if SubCategory.objects.filter(slug=slugify(name)).exists():
-            raise ValidationError("Sub category with this name aleady exists.")
-        return name
-
 
 class ProductForm(forms.ModelForm):
     class Meta:

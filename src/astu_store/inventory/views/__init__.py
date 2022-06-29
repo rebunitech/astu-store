@@ -9,7 +9,9 @@ from .shelf import (AddShelfView, DeleteShelfView, ListShelvesView,
 from .specification import (AddMeasurmentView, AddSpecificationTypeView,
                             DeleteMeasurmentView, DeleteSpecificationTypeView,
                             ListMeasurmentsView, ListSpecificationTypesView,
-                            UpdateMeasurmentView, UpdateSpecificationTypeView)
+                            UpdateMeasurmentView, UpdateSpecificationTypeView, AddItemSpecificationView, ListItemSpecificationsView, UpdateItemSpecificationView, DeleteItemSpecificationView,
+                            AddProductSpecificationView, ListProductSpecificationsView, UpdateProductSpecificationView, DeleteProductSpecificationView
+                            )
 from .store import (AddStoreView, DeleteStoreView, ListStoresView,
                     UpdateStoreView)
 from .lab import (AddLabView, DeleteLabView, ListLabsView,
@@ -70,4 +72,15 @@ __all__ = [
     "ListItemsView",
     "UpdateItemView",
     "DeleteItemView"
+    # Item Specification
+    "AddItemSpecificationView",
+    "ListItemSpecificationsView",
+    "UpdateItemSpecificationView",
+    "DeleteItemSpecificationView",
+    # Product Specification
+    "AddProductSpecificationView",
+    "ListProductSpecificationsView",
+    "UpdateProductSpecificationView",
+    "DeleteProductSpecificationView",
+
 ]
