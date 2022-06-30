@@ -22,6 +22,7 @@ from django.views.generic import RedirectView
 urlpatterns = [
     re_path(r"^admin/", admin.site.urls),
     re_path(r"", include("auser.urls")),
+    re_path(r"", include("core.urls")),
     re_path(r"^chaining/", include("smart_selects.urls")),
     re_path(r"^inventory/", include("inventory.urls")),
     *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),

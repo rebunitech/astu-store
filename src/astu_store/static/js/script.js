@@ -8,6 +8,19 @@ $(document).ready(function() {
             targets: [0, -1]
         }, ]
     })
+    $('#available_products_list').DataTable({
+        dom: 'Qfltipr',
+        responsive: true,
+        columnDefs: [{
+            orderable: false,
+            targets: -1
+        },
+        { responsivePriority: 0, targets: 0},
+        { responsivePriority: 1, targets: -1},
+        { responsivePriority: 2, targets: [1, 2]},
+        { responsivePriority: 3, targets: [3, 4]},
+        ]
+    })
     $('#department_list').DataTable({
         dom: 'QBfltipr',
         columnDefs: [{

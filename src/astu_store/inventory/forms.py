@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 
-from inventory.models import Category, Product, Shelf, SubCategory, Table, Item
+from inventory.models import Category, Item, Product, Shelf, SubCategory, Table
 
 
 class ShelfForm(forms.ModelForm):
@@ -30,6 +30,7 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = ("name",)
 
+
 class SubCategoryForm(forms.ModelForm):
     class Meta:
         model = SubCategory
@@ -37,6 +38,7 @@ class SubCategoryForm(forms.ModelForm):
             "category",
             "name",
         )
+
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -81,11 +83,13 @@ class ItemForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        store = cleaned_data.get('store')
-        lab = cleaned_data.get('lab')
-        shelf = cleaned_data.get('shelf')
-        table = cleaned_data.get('table')
+        store = cleaned_data.get("store")
+        lab = cleaned_data.get("lab")
+        shelf = cleaned_data.get("shelf")
+        table = cleaned_data.get("table")
 
         if (store or shelf) and (lab or table):
-            raise ValidationError("You cann't choose store and lab together. Please choose only one of them.")
+            raise ValidationError(
+                "You cann't choose store and lab together. Please choose only one of them."
+            )
         return cleaned_data

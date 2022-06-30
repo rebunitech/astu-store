@@ -8,7 +8,7 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from auser.models import Department
 from inventory.forms import TableForm
-from inventory.models import Table, Lab
+from inventory.models import Lab, Table
 
 
 class AddTableView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):

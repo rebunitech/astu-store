@@ -4,8 +4,9 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from inventory.models import Item
 from inventory.forms import ItemForm
+from inventory.models import Item
+
 
 class AddItemView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     model = Item
@@ -15,8 +16,6 @@ class AddItemView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     permission_required = ("inventory.add_item",)
     success_message = _("Item '%(name)s' is successfully added!")
     extra_context = {"title": _("Add Item")}
-
-
 
 
 class ListItemsView(PermissionRequiredMixin, ListView):
@@ -40,7 +39,6 @@ class ListItemsView(PermissionRequiredMixin, ListView):
         return qs.filter(Q(id=None))
 
 
-
 class UpdateItemView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Item
     form_class = ItemForm
@@ -62,6 +60,7 @@ class UpdateItemView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
         if user.is_store_officer:
             return qs.filter(Q(store__store_officers__pk=user.pk))
         return qs.filter(Q(id=None))
+
 
 class DeleteItemView(PermissionRequiredMixin, DeleteView):
     model = Item

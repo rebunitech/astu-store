@@ -15,8 +15,8 @@
                     <th class="border-bottom border-0 text-center">Purpose</th>
                     <th class="border-bottom border-0 text-center">Store/Lab</th>
                     <th class="border-bottom border-0 text-center">Shelf/Table</th>
-                    <th class="border-bottom border-0 text-center">Expiration Date</th>
-                    <th class="border-bottom border-0 text-center">YoP</th>
+                    <th class="border-bottom border-0 text-center">Expiration&nbsp;Date</th>
+                    <th class="border-bottom border-0 text-center">Year&nbsp;of&nbsp;Purchase</th>
                     <th class="border-bottom border-0 text-center">Status</th>
                     <th class="border-bottom border-0 text-center">Supplier</th>
                     <th class="border-bottom border-0"></th>
@@ -34,7 +34,7 @@
                     <td>{{ item.expiration_date|default:"-" }}</td>
                     <td>{{ item.year_of_purchase|default:"-" }}</td>
                     <td>{{ item.get_status_display }}</td>
-                    <td>{{ item.supplier }}</td>
+                    <td>{{ item.supplier|default:"-" }}</td>
                     <td class="text-center">
                         <div class="dropdown">
                           <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">

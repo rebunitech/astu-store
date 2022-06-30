@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # Local Apps
     "auser",
     "inventory",
+    "core",
 ]
 
 MIDDLEWARE = [

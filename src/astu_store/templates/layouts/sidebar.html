@@ -3,9 +3,18 @@
     <div class="d-flex justify-content-center">
       <a class="mx-auto mt-4 mb-5" href="{% url 'auser:dashboard' %}"><img src="{% static 'img/logo.svg' %}" alt="ASTU Store" class="img-fluid rounded-circle logo-img" /></a>
     </div>
-    <div class="text-dark px-4 fs-4">Users</div>
+    
     <div class="text-dark px-4 fs-4"></div>
     <ul class="px-0">
+      {% if perms.auser.view_borrow_request %}
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-building-columns me-2"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'core:available_products_list' %}">Borrow Item</a>
+        </div>
+      </li>{% endif  %}
       {% if perms.auser.add_college and perms.auser.view_college %}
       <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
         <div class="col p-2 ps-3 text-center">

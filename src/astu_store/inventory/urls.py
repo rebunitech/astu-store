@@ -229,35 +229,39 @@ urlpatterns = [
                                 name="delete_product",
                             ),
                             re_path(
-                                r'^specification/',
-                                include([
-                                    re_path(
-                                        r'^$',
-                                        views.ListProductSpecificationsView.as_view(),
-                                        name='product_specifications_list'
-                                    ),
-                                    re_path(
-                                        r'^add/$',
-                                        views.AddProductSpecificationView.as_view(),
-                                        name='add_product_specification',
-                                    ),
-                                    re_path(
-                                        r'^(?P<s_pk>\d+)/',
-                                        include([
-                                            re_path(
-                                                r'^update/$',
-                                                views.UpdateProductSpecificationView.as_view(),
-                                                name='update_product_specification'
+                                r"^specification/",
+                                include(
+                                    [
+                                        re_path(
+                                            r"^$",
+                                            views.ListProductSpecificationsView.as_view(),
+                                            name="product_specifications_list",
+                                        ),
+                                        re_path(
+                                            r"^add/$",
+                                            views.AddProductSpecificationView.as_view(),
+                                            name="add_product_specification",
+                                        ),
+                                        re_path(
+                                            r"^(?P<s_pk>\d+)/",
+                                            include(
+                                                [
+                                                    re_path(
+                                                        r"^update/$",
+                                                        views.UpdateProductSpecificationView.as_view(),
+                                                        name="update_product_specification",
+                                                    ),
+                                                    re_path(
+                                                        r"^delete/$",
+                                                        views.DeleteProductSpecificationView.as_view(),
+                                                        name="delete_product_specification",
+                                                    ),
+                                                ]
                                             ),
-                                            re_path(
-                                                r'^delete/$',
-                                                views.DeleteProductSpecificationView.as_view(),
-                                                name='delete_product_specification'
-                                            )
-                                        ])
-                                    )
-                                ])
-                            )
+                                        ),
+                                    ]
+                                ),
+                            ),
                         ]
                     ),
                 ),
@@ -265,64 +269,68 @@ urlpatterns = [
         ),
     ),
     re_path(
-        r'^item/',
-        include([
-            re_path(
-                r'^$',
-                views.ListItemsView.as_view(),
-                name='items_list'
-            ),
-            re_path(
-                r'^add/$',
-                views.AddItemView.as_view(),
-                name='add_item',
-            ),
-            re_path(
-                r'^(?P<pk>\d+)/',
-                include([
-                    re_path(
-                        r'^update/$',
-                        views.UpdateItemView.as_view(),
-                        name='update_item'
-                    ),
-                    re_path(
-                        r'^delete/$',
-                        views.DeleteItemView.as_view(),
-                        name='delete_item'
-                    ),
-                    re_path(
-                        r'^specification/',
-                        include([
+        r"^item/",
+        include(
+            [
+                re_path(r"^$", views.ListItemsView.as_view(), name="items_list"),
+                re_path(
+                    r"^add/$",
+                    views.AddItemView.as_view(),
+                    name="add_item",
+                ),
+                re_path(
+                    r"^(?P<pk>\d+)/",
+                    include(
+                        [
                             re_path(
-                                r'^$',
-                                views.ListItemSpecificationsView.as_view(),
-                                name='item_specifications_list'
+                                r"^update/$",
+                                views.UpdateItemView.as_view(),
+                                name="update_item",
                             ),
                             re_path(
-                                r'^add/$',
-                                views.AddItemSpecificationView.as_view(),
-                                name='add_item_specification',
+                                r"^delete/$",
+                                views.DeleteItemView.as_view(),
+                                name="delete_item",
                             ),
                             re_path(
-                                r'^(?P<s_pk>\d+)/',
-                                include([
-                                    re_path(
-                                        r'^update/$',
-                                        views.UpdateItemSpecificationView.as_view(),
-                                        name='update_item_specification'
-                                    ),
-                                    re_path(
-                                        r'^delete/$',
-                                        views.DeleteItemSpecificationView.as_view(),
-                                        name='delete_item_specification'
-                                    )
-                                ])
-                            )
-                        ])
-                    )
-                ])
-            )
-        ])
+                                r"^specification/",
+                                include(
+                                    [
+                                        re_path(
+                                            r"^$",
+                                            views.ListItemSpecificationsView.as_view(),
+                                            name="item_specifications_list",
+                                        ),
+                                        re_path(
+                                            r"^add/$",
+                                            views.AddItemSpecificationView.as_view(),
+                                            name="add_item_specification",
+                                        ),
+                                        re_path(
+                                            r"^(?P<s_pk>\d+)/",
+                                            include(
+                                                [
+                                                    re_path(
+                                                        r"^update/$",
+                                                        views.UpdateItemSpecificationView.as_view(),
+                                                        name="update_item_specification",
+                                                    ),
+                                                    re_path(
+                                                        r"^delete/$",
+                                                        views.DeleteItemSpecificationView.as_view(),
+                                                        name="delete_item_specification",
+                                                    ),
+                                                ]
+                                            ),
+                                        ),
+                                    ]
+                                ),
+                            ),
+                        ]
+                    ),
+                ),
+            ]
+        ),
     ),
     re_path(
         r"^lab/",

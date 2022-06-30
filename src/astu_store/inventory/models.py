@@ -3,6 +3,8 @@ import os
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import Q, Sum
+from django.db.models.functions import Coalesce
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from smart_selects.db_fields import ChainedForeignKey
@@ -267,6 +269,15 @@ class Product(models.Model):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
+    @property
+    def availables(self):
+        total_item = self.items.aggregate(total_item=Coalesce(Sum("quantity"), 0))[
+            "total_item"
+        ]
+        total_borrow_request = self.borrow_requests.aggregate(
+            total_borrow_request=Coalesce(Sum("quantity", filter=Q(status=1)), 0)
+        )["total_borrow_request"]
+        return total_item - total_borrow_request
 
 class Item(models.Model):
     class StatusChoices(models.TextChoices):
@@ -296,6 +307,7 @@ class Item(models.Model):
         verbose_name="store",
         related_name="items",
         on_delete=models.PROTECT,
+        blank=True,
         null=True,
     )
     shelf = ChainedForeignKey(
@@ -341,8 +353,9 @@ class Item(models.Model):
     )
     product = models.ForeignKey(
         Product,
-        verbose_name=_('Product'),
-        on_delete=models.PROTECT
+        verbose_name=_("Product"),
+        related_name="items",
+        on_delete=models.PROTECT,
     )
     supplier = models.CharField(_("supplier"), max_length=255, blank=True, null=True)
     status = models.CharField(
@@ -384,7 +397,7 @@ class Specification(models.Model):
         related_name="specifications",
         on_delete=models.CASCADE,
         blank=True,
-        null=True
+        null=True,
     )
     product = models.ForeignKey(
         Product,
@@ -392,7 +405,7 @@ class Specification(models.Model):
         related_name="specifications",
         on_delete=models.CASCADE,
         blank=True,
-        null=True
+        null=True,
     )
     specification_type = models.ForeignKey(
         SpecificationType,
@@ -407,5 +420,7 @@ class Specification(models.Model):
         db_table = "specification"
         verbose_name = _("specification")
         verbose_name_plural = _("specifications")
-        unique_together = (("item", "specification_type"), ("product", "specification_type"))
-
+        unique_together = (
+            ("item", "specification_type"),
+            ("product", "specification_type"),
+        )

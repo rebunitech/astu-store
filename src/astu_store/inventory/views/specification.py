@@ -1,11 +1,12 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.shortcuts import get_object_or_404
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from inventory.models import Measurment, SpecificationType, Specification, Item, Product
+from inventory.models import (Item, Measurment, Product, Specification,
+                              SpecificationType)
 
 
 class AddSpecificationTypeView(
@@ -85,8 +86,9 @@ class DeleteMeasurmentView(PermissionRequiredMixin, DeleteView):
     http_method_names = ["post"]
 
 
-
-class AddItemSpecificationView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+class AddItemSpecificationView(
+    PermissionRequiredMixin, SuccessMessageMixin, CreateView
+):
     model = Specification
     fields = ("specification_type", "value", "remark")
     permission_required = ("inventory.add_specification",)
@@ -119,14 +121,16 @@ class ListItemSpecificationsView(PermissionRequiredMixin, ListView):
         return super().get_queryset().filter(item__pk=self.kwargs.get("pk"))
 
 
-class UpdateItemSpecificationView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+class UpdateItemSpecificationView(
+    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
+):
     model = Specification
     fields = ("specification_type", "value", "remark")
     permission_required = ("inventory.change_specification",)
     success_message = _("Specification updated successfully.")
     template_name = "inventory/item/specification/update.html"
     extra_context = {"title": _("Update item specification")}
-    pk_url_kwarg = 's_pk'
+    pk_url_kwarg = "s_pk"
 
     def get_success_url(self):
         return reverse_lazy(
@@ -139,7 +143,7 @@ class DeleteItemSpecificationView(PermissionRequiredMixin, DeleteView):
     model = Specification
     permission_required = ("inventory.delete_specification",)
     http_method_names = ["post"]
-    pk_url_kwarg = 's_pk'
+    pk_url_kwarg = "s_pk"
 
     def get_success_url(self):
         return reverse_lazy(
@@ -148,7 +152,9 @@ class DeleteItemSpecificationView(PermissionRequiredMixin, DeleteView):
         )
 
 
-class AddProductSpecificationView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+class AddProductSpecificationView(
+    PermissionRequiredMixin, SuccessMessageMixin, CreateView
+):
     model = Specification
     fields = ("specification_type", "value", "remark")
     permission_required = ("inventory.add_specification",)
@@ -181,19 +187,21 @@ class ListProductSpecificationsView(PermissionRequiredMixin, ListView):
         return super().get_queryset().filter(product__slug=self.kwargs.get("slug"))
 
 
-class UpdateProductSpecificationView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+class UpdateProductSpecificationView(
+    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
+):
     model = Specification
     fields = ("specification_type", "value", "remark")
     permission_required = ("inventory.change_specification",)
     success_message = _("Specification updated successfully.")
     template_name = "inventory/product/specification/update.html"
     extra_context = {"title": _("Update product specification")}
-    pk_url_kwarg = 's_pk'
+    pk_url_kwarg = "s_pk"
 
     def get_success_url(self):
         return reverse_lazy(
             "inventory:product_specifications_list",
-            kwargs={"slug": self.kwargs['slug']},
+            kwargs={"slug": self.kwargs["slug"]},
         )
 
 
@@ -201,10 +209,10 @@ class DeleteProductSpecificationView(PermissionRequiredMixin, DeleteView):
     model = Specification
     permission_required = ("inventory.delete_specification",)
     http_method_names = ["post"]
-    pk_url_kwarg = 's_pk'
+    pk_url_kwarg = "s_pk"
 
     def get_success_url(self):
         return reverse_lazy(
             "inventory:product_specifications_list",
-            kwargs={"slug": self.kwargs['slug']},
+            kwargs={"slug": self.kwargs["slug"]},
         )

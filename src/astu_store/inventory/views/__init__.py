@@ -2,25 +2,28 @@ from .category import (AddCategoryView, AddSubCategoryView, DeleteCategoryView,
                        DeleteSubCategoryView, ListCategoriesView,
                        ListSubCategoriesView, UpdateCategoryView,
                        UpdateSubCategoryView)
+from .item import AddItemView, DeleteItemView, ListItemsView, UpdateItemView
+from .lab import AddLabView, DeleteLabView, ListLabsView, UpdateLabView
 from .product import (AddProductView, DeleteProductView, ListProductsView,
                       UpdateProductView)
 from .shelf import (AddShelfView, DeleteShelfView, ListShelvesView,
                     UpdateShelfView)
-from .specification import (AddMeasurmentView, AddSpecificationTypeView,
-                            DeleteMeasurmentView, DeleteSpecificationTypeView,
-                            ListMeasurmentsView, ListSpecificationTypesView,
-                            UpdateMeasurmentView, UpdateSpecificationTypeView, AddItemSpecificationView, ListItemSpecificationsView, UpdateItemSpecificationView, DeleteItemSpecificationView,
-                            AddProductSpecificationView, ListProductSpecificationsView, UpdateProductSpecificationView, DeleteProductSpecificationView
-                            )
+from .specification import (AddItemSpecificationView, AddMeasurmentView,
+                            AddProductSpecificationView,
+                            AddSpecificationTypeView,
+                            DeleteItemSpecificationView, DeleteMeasurmentView,
+                            DeleteProductSpecificationView,
+                            DeleteSpecificationTypeView,
+                            ListItemSpecificationsView, ListMeasurmentsView,
+                            ListProductSpecificationsView,
+                            ListSpecificationTypesView,
+                            UpdateItemSpecificationView, UpdateMeasurmentView,
+                            UpdateProductSpecificationView,
+                            UpdateSpecificationTypeView)
 from .store import (AddStoreView, DeleteStoreView, ListStoresView,
                     UpdateStoreView)
-from .lab import (AddLabView, DeleteLabView, ListLabsView,
-                    UpdateLabView)
-
 from .table import (AddTableView, DeleteTableView, ListTablesView,
                     UpdateTableView)
-from .item import AddItemView, UpdateItemView, ListItemsView, DeleteItemView
-
 
 __all__ = [
     # Store
@@ -34,12 +37,12 @@ __all__ = [
     "UpdateShelfView",
     "DeleteShelfView",
     # Lab
-    'AddLabView',
+    "AddLabView",
     "ListLabsView",
     "UpdateLabView",
     "DeleteLabView",
     # Table,
-    'AddTableView',
+    "AddTableView",
     "ListTablesView",
     "UpdateTableView",
     "DeleteTableView",
@@ -82,5 +85,4 @@ __all__ = [
     "ListProductSpecificationsView",
     "UpdateProductSpecificationView",
     "DeleteProductSpecificationView",
-
 ]
