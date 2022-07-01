@@ -1,12 +1,18 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Q, Sum
+from django.db.models.functions import Coalesce
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
+from core.forms import ReasonForm
 from core.models import BorrowRequest
 from inventory.models import Product
 
+from core.signals import *
 
 class InitiateBorrowRequestView(
     PermissionRequiredMixin, SuccessMessageMixin, CreateView
@@ -19,13 +25,15 @@ class InitiateBorrowRequestView(
     success_url = reverse_lazy("core:available_products_list")
 
     def get_success_message(self, *args, **kwargs):
-        return f"You have successfuly request {self.object.quantity} {self.object.product} {self.object.product.measurment}."
+        return f"You have successfuly request {self.object.quantity}"\
+               f" {self.object.product.measurment} of {self.object.product}."
 
     def form_valid(self, form):
         if self.is_quantify_valid(form) and self.is_dates_valid(form):
             form.instance.product = self.product
             form.instance.user = self.request.user
             return super().form_valid(form)
+        borrow_request_initialized.send(sender=self.model, instance=self.object)
         return super().form_invalid(form)
 
     def is_dates_valid(self, form):
@@ -51,20 +59,364 @@ class InitiateBorrowRequestView(
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
-        form["quantity"].field.widget.attrs["max"] = self.availables
+        form["quantity"].field.widget.attrs.update({"max": self.availables, "min": 0})
         return form
 
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
         self.product = get_object_or_404(Product, slug=self.kwargs["slug"])
-        self.availables = self.product.availables
+        self.availables = self.product.items.aggregate(
+            total=Coalesce(Sum("quantity"), 0)
+        )["total"]
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data.update({
-            'previous_borrow_requests': BorrowRequest.objects.filter(
-                product=self.product,
-                status=0
-            ).order_by('date_requested').values('start_date', 'end_date', 'quantity')
-        })
+        context_data.update(
+            {
+                "previous_borrow_requests": BorrowRequest.objects.filter(
+                    product=self.product, status=0
+                )
+                .order_by("date_requested")
+                .values("start_date", "end_date", "quantity")
+            }
+        )
         return context_data
+
+
+class ListActiveBorrowRequestView(PermissionRequiredMixin, ListView):
+    model = BorrowRequest
+    permission_required = ("core.view_borrow_request",)
+    context_object_name = "borrow_requests"
+    extra_context = {"title": "Active Borrow Requests List"}
+    template_name = "core/borrow_request/active/list.html"
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(Q(status=0) | Q(status=4))
+        user = self.request.user
+        if user.is_college_user:
+            if user.is_college_representative():
+                return qs.filter(
+                    Q(user__college=user.college)
+                    | (
+                        ~Q(user__college=user.college)
+                        & Q(product__college=user.college)
+                        & Q(status=4)
+                    )
+                )
+            if user.is_department_representative():
+                return qs.filter(
+                    Q(user__department=user.department)
+                    | (
+                        ~Q(user__department=user.department)
+                        & Q(product__department=user.product)
+                        & Q(status=4)
+                    )
+                )
+            return qs.filter(status=None)
+        return qs
+
+
+class ActiveBorrowRequestDetailView(PermissionRequiredMixin, DetailView):
+    model = BorrowRequest
+    context_object_name = "borrow_request"
+    template_name = "core/borrow_request/active/detail.html"
+    permission_required = ("core.view_borrow_request",)
+    extra_context = {"title": "Active Borrow Request "}
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(Q(status=0) | Q(status=4))
+        user = self.request.user
+        if user.is_college_user:
+            if user.is_college_representative():
+                return qs.filter(product__college=user.college)
+            if user.is_department_representative():
+                return qs.filter(product__department=user.department)
+            return qs.filter(status=None)
+        return qs
+
+
+class ApproveBorrowRequestView(
+    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
+):
+    model = BorrowRequest
+    fields = ("status",)
+    permission_required = ("auser.can_change_borrow_request",)
+    success_message = "Borrow request has been approved successfully."
+    http_method_names = ["post"]
+    success_url =  reverse_lazy('core:active_borrow_requests_list')
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(Q(status=0) | Q(status=4))
+        user = self.request.user
+        if user.is_college_user:
+            if user.is_college_representative():
+                return qs.filter(product__college=user.college)
+            if user.is_department_representative():
+                return qs.filter(product__department=user.department)
+            return qs.filter(status=None)
+        return qs
+
+    def has_next_process(self):
+        if self.object.status == 4:
+            return False
+        if self.object.user.is_college_user:
+            if self.product.department == self.object.user.department:
+                return False
+            return True
+        return False
+
+    def is_quantify_valid(self, quantity, availables):
+        if quantity > availables:
+            return False
+        return True
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        if self.is_quantify_valid(self.object.quantity, self.object.product.availables):
+            borrow_request_approved.send(sender=self.model, instance=self.object)
+            return super().form_valid(form)
+        messages.error(
+            self.request,
+            "This request cann't be approved, since currently there is no enough quantity item available.",
+        )
+        return HttpResponseRedirect(
+            reverse_lazy("core:active_borrow_requests_detail", args=[self.object.pk])
+        )
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_data = form_kwargs.get("data", {}).copy()
+        new_status = 4 if self.has_next_process() else 1
+        form_data.update({"status": new_status})
+        form_kwargs.update({"data": form_data})
+        return form_kwargs
+
+
+class DeclineBorrowRequestView(
+    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
+):
+    model = BorrowRequest
+    fields = ("status",)
+    permission_required = ("auser.can_change_borrow_request",)
+    success_message = "Borrow request has been declined."
+    http_method_names = ["post"]
+    success_url =  reverse_lazy('core:active_borrow_requests_list')
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(Q(status=0) | Q(status=4))
+        user = self.request.user
+        if user.is_college_user:
+            if user.is_college_representative():
+                return qs.filter(product__college=user.college)
+            if user.is_department_representative():
+                return qs.filter(product__department=user.department)
+            return qs.filter(status=None)
+        return qs
+
+    def form_valid(self, form):
+        reason = self.request.POST.get("reason")
+        reason_form = ReasonForm(data={"description": reason})
+        if reason_form.is_valid():
+            reason_obj = reason_form.save(commit=False)
+            reason_obj.borrow_request = self.object
+            reason_obj.save()
+            borrow_request_declined.send(sender=self.model, instance=self.object)
+            return super().form_valid(form)
+        messages.error(
+            self.request,
+            "You have to give a reason before declining a request. Please try again.",
+        )
+        return HttpResponseRedirect(
+            reverse_lazy("core:active_borrow_requests_detail", args=[self.object.pk])
+        )
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_data = form_kwargs.get("data", {}).copy()
+        form_data.update({"status": 2})
+        form_kwargs.update({"data": form_data})
+        return form_kwargs
+
+
+class ListApprovedBorrowRequestView(PermissionRequiredMixin, ListView):
+    model = BorrowRequest
+    permission_required = ("core.view_borrow_request",)
+    context_object_name = "borrow_requests"
+    extra_context = {"title": "Approved Borrow Requests List"}
+    template_name = "core/borrow_request/approved/list.html"
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(Q(status=1))
+        user = self.request.user
+        if user.is_college_user:
+            if user.is_college_representative():
+                return qs.filter(product__college=user.college)
+            if user.is_department_representative():
+                return qs.filter(product__department=user.department)
+            return qs.filter(status=None)
+        return qs
+
+
+class ApprovedBorrowRequestDetailView(PermissionRequiredMixin, DetailView):
+    model = BorrowRequest
+    context_object_name = "borrow_request"
+    template_name = "core/borrow_request/approved/detail.html"
+    permission_required = ("core.view_borrow_request",)
+    extra_context = {"title": "Borrow Request "}
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(Q(status=1))
+        user = self.request.user
+        if user.is_college_user:
+            if user.is_college_representative():
+                return qs.filter(product__college=user.college)
+            if user.is_department_representative() or user.is_store_officer():
+                return qs.filter(product__department=user.department)
+            return qs.filter(status=None)
+        return qs
+
+
+class CompleteBorrowRequestView(
+    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
+):
+    model = BorrowRequest
+    fields = ("status",)
+    permission_required = ("auser.can_change_borrow_request",)
+    success_message = "Borrow request has been completed successfully."
+    http_method_names = ["post"]
+    success_url =  reverse_lazy('core:approved_borrow_requests_list')
+
+    def form_valid(self, form):
+        borrow_request_completed.send(sender=self.model, instance=self.object)
+        return super().form_valid(form)
+    def get_queryset(self):
+        qs = super().get_queryset().filter(Q(status=1))
+        user = self.request.user
+        if user.is_college_user:
+            if user.is_college_representative():
+                return qs.filter(product__college=user.college)
+            if user.is_department_representative() or user.is_store_officer():
+                return qs.filter(product__department=user.department)
+            return qs.filter(status=None)
+        return qs
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_data = form_kwargs.get("data", {}).copy()
+        form_data.update({"status": 6})
+        form_kwargs.update({"data": form_data})
+        return form_kwargs
+
+class RevokeBorrowRequestView(
+    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
+):
+    model = BorrowRequest
+    fields = ("status",)
+    permission_required = ("auser.can_change_borrow_request",)
+    success_message = "Borrow request has been revoked."
+    http_method_names = ["post"]
+    success_url =  reverse_lazy('core:approved_borrow_requests_list')
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(Q(status=1))
+        user = self.request.user
+        if user.is_college_user:
+            if user.is_college_representative():
+                return qs.filter(product__college=user.college)
+            if user.is_department_representative() or user.is_store_officer():
+                return qs.filter(product__department=user.department)
+            return qs.filter(status=None)
+        return qs
+
+    def form_valid(self, form):
+        reason = self.request.POST.get("reason")
+        reason_form = ReasonForm(data={"description": reason})
+        if reason_form.is_valid():
+            reason_obj = reason_form.save(commit=False)
+            reason_obj.borrow_request = self.object
+            reason_obj.save()
+            borrow_request_revoked.send(sender=self.model, instance=self.object)
+            return super().form_valid(form)
+        messages.error(
+            self.request,
+            "You have to give a reason before revoking a request. Please try again.",
+        )
+        return HttpResponseRedirect(
+            reverse_lazy("core:approved_borrow_requests_detail", args=[self.object.pk])
+        )
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_data = form_kwargs.get("data", {}).copy()
+        form_data.update({"status": 5})
+        form_kwargs.update({"data": form_data})
+        return form_kwargs
+
+class ListCompletedBorrowRequestView(PermissionRequiredMixin, ListView):
+    model = BorrowRequest
+    permission_required = ("core.view_borrow_request",)
+    context_object_name = "borrow_requests"
+    extra_context = {"title": "Completed Borrow Requests List"}
+    template_name = "core/borrow_request/completed/list.html"
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(Q(status=6))
+        user = self.request.user
+        if user.is_college_user:
+            if user.is_college_representative():
+                return qs.filter(product__college=user.college)
+            if user.is_department_representative():
+                return qs.filter(product__department=user.department)
+            return qs.filter(status=None)
+        return qs
+
+
+class CompletedBorrowRequestDetailView(PermissionRequiredMixin, DetailView):
+    model = BorrowRequest
+    context_object_name = "borrow_request"
+    template_name = "core/borrow_request/completed/detail.html"
+    permission_required = ("core.view_borrow_request",)
+    extra_context = {"title": "Completed Borrow Request "}
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(Q(status=6))
+        user = self.request.user
+        if user.is_college_user:
+            if user.is_college_representative():
+                return qs.filter(product__college=user.college)
+            if user.is_department_representative():
+                return qs.filter(product__department=user.department)
+            return qs.filter(status=None)
+        return qs
+
+class ReturnedBorrowRequestView(
+    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
+):
+    model = BorrowRequest
+    fields = ("status",)
+    permission_required = ("auser.can_change_borrow_request",)
+    success_message = "Borrowed product has been returned successfully."
+    http_method_names = ["post"]
+    success_url =  reverse_lazy('core:completed_borrow_requests_list')
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(Q(status=6) & Q(product__kind='NON_CONSUMABLE'))
+        user = self.request.user
+        if user.is_college_user:
+            if user.is_college_representative():
+                return qs.filter(product__college=user.college)
+            if user.is_department_representative():
+                return qs.filter(product__department=user.department)
+            return qs.filter(status=None)
+        return qs
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_data = form_kwargs.get("data", {}).copy()
+        form_data.update({"status": 7})
+        form_kwargs.update({"data": form_data})
+        return form_kwargs
+
+    def form_valid(self, form):
+        borrow_request_returned.send(sender=self.model, instance=self.object)
+        return super().form_valid(form)

@@ -172,3 +172,9 @@ MESSAGE_TAGS = {
 
 # used in django smart select
 USE_DJANGO_JQUERY = True
+
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+
+# The directory used by the file email backend to store output files.
+EMAIL_FILE_PATH = BASE_DIR / "emails"

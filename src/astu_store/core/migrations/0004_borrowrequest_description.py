@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_auto_20220630_1450'),
+        ("core", "0003_auto_20220630_1450"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='borrowrequest',
-            name='description',
-            field=models.TextField(default='description', verbose_name='description'),
+            model_name="borrowrequest",
+            name="description",
+            field=models.TextField(default="description", verbose_name="description"),
             preserve_default=False,
         ),
     ]

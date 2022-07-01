@@ -12,7 +12,31 @@
           <i class="fa-solid fa-building-columns me-2"></i>
         </div>
         <div class="col-10">
-          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'core:available_products_list' %}">Borrow Item</a>
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'core:available_products_list' %}">Borrow Product</a>
+        </div>
+      </li>{% endif  %}{% if perms.auser.view_borrow_request %}
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-building-columns me-2"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'core:active_borrow_requests_list' %}">Active Borrow Requests</a>
+        </div>
+      </li>{% endif  %}{% if perms.auser.view_borrow_request %}
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-building-columns me-2"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'core:approved_borrow_requests_list' %}">Approved Borrow Requests</a>
+        </div>
+      </li>{% endif  %}{% if perms.auser.view_borrow_request %}
+      <li class="nav-item my-2 mx-0 row flex-nowrap align-items-center border-bottom">
+        <div class="col p-2 ps-3 text-center">
+          <i class="fa-solid fa-building-columns me-2"></i>
+        </div>
+        <div class="col-10">
+          <a class="nav-link px-0 text-reset text-decoration-none" href="{% url 'core:completed_borrow_requests_list' %}">Completed Borrow Requests</a>
         </div>
       </li>{% endif  %}
       {% if perms.auser.add_college and perms.auser.view_college %}

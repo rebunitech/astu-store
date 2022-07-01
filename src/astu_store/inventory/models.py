@@ -261,6 +261,10 @@ class Product(models.Model):
         verbose_name = _("product")
         verbose_name_plural = _("products")
 
+    @property
+    def is_under_critical(self):
+        return self.availables < self.critical_no
+
     def __str__(self):
         return self.name
 
@@ -275,9 +279,10 @@ class Product(models.Model):
             "total_item"
         ]
         total_borrow_request = self.borrow_requests.aggregate(
-            total_borrow_request=Coalesce(Sum("quantity", filter=Q(status=1)), 0)
+            total_borrow_request=Coalesce(Sum("quantity", filter=Q(status=1) | Q(status=6)), 0)
         )["total_borrow_request"]
         return total_item - total_borrow_request
+
 
 class Item(models.Model):
     class StatusChoices(models.TextChoices):

@@ -1,0 +1,37 @@
+{% extends "layouts/main.html" %} {% block content %}
+<div class="row">
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="approved_borrow_request" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0 text-center">Product</th>
+                    <th class="border-bottom border-0 text-center">Quantity</th>
+                    <th class="border-bottom border-0 text-center">Start&nbsp;Date</th>
+                    <th class="border-bottom border-0 text-center">End&nbsp;Date</th>
+                    <th class="border-bottom border-0 text-center">User</th>
+                    <th class="border-bottom border-0"></th>
+                </tr>
+            </thead>
+            <tbody>{% if borrow_requests %}{% for borrow_request in borrow_requests %}
+                <tr>
+                    <td>{{ borrow_request.product }}</td>
+                    <td>{{ borrow_request.quantity }}</td>
+                    <td>{{ borrow_request.start_date|date:" d M, Y" }}</td>
+                    <td>{{ borrow_request.end_date|date:"d M, Y" }}</td>
+                    <td>{{ borrow_request.user.get_full_name }} ({{ borrow_request.user.username }})</td>
+                    <td class="text-center">
+                        <div class="dropdown">
+                          <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-gears fs-4"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">{% if perms.inventory.change_request %}
+                            <li><a class="dropdown-item py-2" href="{% url 'core:approved_borrow_requests_detail' borrow_request.pk %}"><i class="fa-solid fa-pen me-2"></i>View Detail</a></li>{% endif %}
+                          </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

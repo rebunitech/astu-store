@@ -1,0 +1,5 @@
+You request for a {{ borrow_request.quantity }} {{ borrow_request.product.measurment }} of {{ borrow_request.product }} {{ borrow_request.product.sub_category }} is approved.
+
+Thank you!
+{{ borrow_request.product.college.name }}
+{{ borrow_request.product.department.name }}

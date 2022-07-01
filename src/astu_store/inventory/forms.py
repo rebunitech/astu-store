@@ -54,13 +54,6 @@ class ProductForm(forms.ModelForm):
             "critical_no",
         )
 
-    def clean_name(self):
-        name = self.cleaned_data["name"]
-        if Product.objects.filter(slug=slugify(name)).exists():
-            raise ValidationError("Product with this name aleady exists.")
-        return name
-
-
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item

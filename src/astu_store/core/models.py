@@ -22,10 +22,11 @@ class BorrowRequest(models.Model):
             "Processing",
         )  # request has been transfered for futher verification
         REVOKED = 5, "Revoked"  # request has been denined by store/lab officer
-        PROCESSED = (
+        COMPLETED = (
             6,
-            "Processed",
+            "Completed",
         )  # request has been completed. item is given to requester
+        RETURNED = 7, "Returned"  # borrowed item is returned into store/lab
 
     product = models.ForeignKey(
         Product,
@@ -55,11 +56,15 @@ class BorrowRequest(models.Model):
         verbose_name = "borrow request"
         verbose_name_plural = "borrow requests"
 
+    @property
+    def leads_under_critical(self):
+        return (self.product.availables - self.quantity) <= self.product.critical_no
+
 
 class Reason(models.Model):
-    request = models.OneToOneField(
+    borrow_request = models.OneToOneField(
         BorrowRequest,
-        verbose_name="request",
+        verbose_name="borrow_request",
         related_name="response_reason",
         on_delete=models.CASCADE,
     )
