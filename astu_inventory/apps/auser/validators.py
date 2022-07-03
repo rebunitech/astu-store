@@ -19,7 +19,5 @@ class PhoneNumberValidator(RegexValidator):
     """
 
     regex = r"((\+2519|09)\d{8})$|(\+251\d{3})$"
-    message = _(
-        "Please enter your phone number in +2519********" " or 09******** format."
-    )
+    message = _("Please enter your phone number in +2519********" " or 09******** format.")
     code = "invalid_phone_number"

@@ -93,6 +93,8 @@ DATABASES = {
 # AUTHENTICATION AND AUTHORIZATION SETTINGS
 # ==============================================================================
 
+AUTH_USER_MODEL = "auser.User"
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
