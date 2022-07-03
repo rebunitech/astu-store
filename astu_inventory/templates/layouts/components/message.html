@@ -1,0 +1,6 @@
+<div class="container-fluid my-2 px-0">
+  {% for message in messages %}<div class="alert {{ message.tags }} alert-dismissible show fade"><div class="row">
+    <div class="col-11">{{ message }}</div>
+    <div class="form-control-icon close col-1" data-bs-dismiss="alert" aria-label="Close"><i class="fa-solid fa-xmark"></i></div>
+  </div>
+</div>{% endfor %}</div>
