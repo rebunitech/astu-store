@@ -13,7 +13,8 @@
     {% include 'layouts/components/sidebar.html' %}
     <main class="col px-0">
       {% include 'layouts/components/header.html' %}
-      <div class="ps-md-2 pt-2 m--5 mx-5">{% if not title_only %}
+      <div class="ps-md-2 pt-2 m--5 mx-5">
+        {% block breadcrumbs %}{% endblock breadcrumbs %}{% if not title_only %}
         <div class="pt-3">
           <h1 class="fw-light fs-3">{{ title }}</h1>
         </div>{% endif %}

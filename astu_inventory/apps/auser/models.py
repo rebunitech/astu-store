@@ -140,7 +140,11 @@ class User(AbstractUser, Address):
             "unique": _("A user with that staff ID already exists."),
         },
     )
-    email = models.EmailField(_("email address"), unique=True)
+    email = models.EmailField(
+        _("email address"),
+        unique=True,
+        help_text=_("Active email address. Use organizational email (@astu.edu.et) if you have."),
+    )
     department = models.ForeignKey(
         Department,
         verbose_name=_("department"),
