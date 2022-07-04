@@ -34,7 +34,7 @@ body {
     color: #222 !important;
 }
 
-#sidebar .nav-item:hover {
+#sidebar .nav-link:hover {
     background-color: var(--bs-gray-300);
 }
 
@@ -46,7 +46,8 @@ body {
     background-color: #fff;
     border-right: 1px solid #dcdcdc;
 }
-#sidebar, .accordion-body {
+#sidebar li .submenu{
+    list-style: none;
     font-size: 15px;
 }
 .sidebar-nav {

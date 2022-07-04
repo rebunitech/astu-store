@@ -4,4 +4,14 @@
       <a class="mx-auto mt-4 mb-5" href="{% url 'auser:dashboard' %}"><img src="{% static 'img/logo.svg' %}" alt="ASTU Store" class="img-fluid rounded-circle logo-img" /></a>
     </div>
   </div>
+  <ul class="nav flex-column" id="nav_accordion">
+    {% if perms.auth.view_roles %}
+    <li class="nav-item has-submenu">
+      <a class="nav-link" href="#"><i class="fa-solid fa-users me-4"></i>User</a>
+      <ul class="submenu collapse ps-3">{% if perms.auth.views_roles %}
+        <li><a class="nav-link" href="{% url 'auser:roles_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Roles</a></li>{% endif %}
+      </ul>
+    </li>
+    {% endif %}
+  </ul>
 </nav>

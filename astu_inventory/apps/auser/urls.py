@@ -62,4 +62,19 @@ urlpatterns = [
             ]
         ),
     ),
+    re_path(
+        r"^roles/",
+        include([
+            re_path(
+                r"^$",
+                views.ListRolesView.as_view(),
+                name='roles_list'
+            ),
+            re_path(
+                r"^update/(?P<pk>\d+)/$",
+                views.UpdateRoleView.as_view(),
+                name='update_role'
+            )
+        ])
+    ),
 ]

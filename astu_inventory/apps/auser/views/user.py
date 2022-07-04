@@ -1,8 +1,8 @@
 """ASTU Inventory auser views
 
-Each class represents a logic layer of the project.
+Each class represents a logic layer of the project, related to every user.
 
-    Date Created: 3 July, 2022
+    Date Created: 4 July, 2022
     Author: Wendirad Demelash(@wendirad)
 """
 
