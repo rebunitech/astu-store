@@ -76,8 +76,9 @@ class Department(models.Model):
         verbose_name_plural = _("departments")
         permissions = [
             ("can_list_departments", "Can list departments"),
-            ("can_activate_department", "Can acticate department"),
-            ("can_deactivate_department", "Can deacticate department"),
+            ("can_activate_department", "Can activate department"),
+            ("can_deactivate_department", "Can deactivate department"),
+            ("can_list_department_heads", "Can list department heads"),
         ]
 
     def __str__(self):
@@ -182,6 +183,16 @@ class User(AbstractUser, Address):
         db_table = "user"
         verbose_name = "user"
         verbose_name_plural = "users"
+        permissions = [
+            ("can_list_college_deans", "Can list college deans"),
+            ("can_add_college_dean", "Can add college dean"),
+            ("can_select_college_dean", "Can select college dean"),
+            ("can_change_college_dean", "Can change college dean"),
+            ("can_activate_college_dean", "Can activate college dean"),
+            ("can_deactivate_college_dean", "Can deactivate college dean"),
+            ("can_remove_college_dean", "Can remove college dean"),
+            ("can_delete_college_dean", "Can delete college dean"),
+        ]
 
     def __str__(self):
         """Return user staff ID and full name"""

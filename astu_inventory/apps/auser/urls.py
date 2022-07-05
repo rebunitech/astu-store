@@ -77,6 +77,49 @@ urlpatterns = [
             [
                 re_path(r"^$", views.ListDepartmentsView.as_view(), name="departments_list"),
                 re_path(r"^add/$", views.AddDepartmentView.as_view(), name="add_department"),
+                re_path(r"^heads/$", views.AllDepartmentHeadsListView.as_view(), name="all_department_heads_list"),
+                re_path(
+                    r"^college/deans/",
+                    include(
+                        [
+                            re_path(r"^$", views.CollegeDeansListView.as_view(), name="college_deans_list"),
+                            re_path(r"^add/$", views.AddCollegeDeanView.as_view(), name="add_college_dean"),
+                            re_path(r"^select/$", views.SelectCollegeDeanView.as_view(), name="select_college_dean"),
+                            re_path(
+                                r"^(?P<pk>\d+)/",
+                                include(
+                                    [
+                                        re_path(
+                                            r"^update/$",
+                                            views.CollegeDeanUpdateView.as_view(),
+                                            name="update_college_dean",
+                                        ),
+                                        re_path(
+                                            r"^activate/$",
+                                            views.CollegeDeanActivateView.as_view(),
+                                            name="activate_college_dean",
+                                        ),
+                                        re_path(
+                                            r"^deactivate/$",
+                                            views.CollegeDeanDeactivateView.as_view(),
+                                            name="deactivate_college_dean",
+                                        ),
+                                        re_path(
+                                            r"^remove/$",
+                                            views.RemoveFromCollegeDeanView.as_view(),
+                                            name="remove_college_dean",
+                                        ),
+                                        re_path(
+                                            r"^delete/$",
+                                            views.CollegeDeanDeleteView.as_view(),
+                                            name="delete_college_dean",
+                                        ),
+                                    ]
+                                ),
+                            ),
+                        ]
+                    ),
+                ),
                 re_path(
                     r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/",
                     include(

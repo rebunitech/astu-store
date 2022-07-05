@@ -6,10 +6,13 @@ Each class represents a single form.
     Author: Wendirad Demelash(@wendirad)
 """
 from django import forms
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.validators import ValidationError
 
 from astu_inventory.apps.auser.models import Department
+
+UserModel = get_user_model()
 
 
 class ChangePermissionForm(forms.ModelForm):
@@ -54,3 +57,9 @@ class DepartmentChangeForm(forms.ModelForm):
         if Department.objects.filter(short_name__iexact=short_name).exclude(pk=self.instance.pk).exists():
             raise ValidationError("Department with this short name exists.")
         return short_name
+
+
+class CollegeDeanSelectForm(forms.Form):
+    """Used to select users for a role college dean."""
+
+    user = forms.ModelChoiceField(queryset=UserModel.objects.exclude(groups__name="college dean"))

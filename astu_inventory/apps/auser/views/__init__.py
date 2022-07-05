@@ -1,13 +1,24 @@
 from .department import (
     ActivateDepartmentView,
     AddDepartmentView,
+    AllDepartmentHeadsListView,
     DeactivateDepartmentView,
     DeleteDepartmentView,
     ListDepartmentsView,
     UpdateDepartmentView,
 )
 from .role import ListRolesView, UpdateRoleView
-from .user import ProfileEditView
+from .user import (
+    AddCollegeDeanView,
+    CollegeDeanActivateView,
+    CollegeDeanDeactivateView,
+    CollegeDeanDeleteView,
+    CollegeDeansListView,
+    CollegeDeanUpdateView,
+    ProfileEditView,
+    RemoveFromCollegeDeanView,
+    SelectCollegeDeanView,
+)
 
 __all__ = [
     # User
@@ -22,4 +33,16 @@ __all__ = [
     "ActivateDepartmentView",
     "DeactivateDepartmentView",
     "DeleteDepartmentView",
+    # College Dean
+    "CollegeDeansListView",
+    "AddCollegeDeanView",
+    "SelectCollegeDeanView",
+    "CollegeDeanUpdateView",
+    "CollegeDeanActivateView",
+    "CollegeDeanDeactivateView",
+    "RemoveFromCollegeDeanView",
+    "CollegeDeanDeleteView",
+    # Department Head
+    "AllDepartmentHeadsListView",
+    "CollegeDeanActivateView",
 ]

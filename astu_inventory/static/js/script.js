@@ -11,7 +11,6 @@ $(document).ready(function() {
         }, ]
     })
 
-
     $('#specification_type_list, #active_borrow_request, #approved_borrow_request,#completed_borrow_request, #shelf_list, #store_list, #categories_list, #products_list, #labs_list, #table_list,  #specification_list').DataTable({
         columnDefs: [{
             orderable: false,
@@ -31,7 +30,7 @@ $(document).ready(function() {
         { responsivePriority: 3, targets: [3, 4]},
         ]
     })
-    $('#departments_list').DataTable({
+    $('#departments_list, #college_deans_list').DataTable({
         dom: "t",
         columnDefs: [{
             orderable: false,
