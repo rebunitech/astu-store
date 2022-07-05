@@ -22,14 +22,8 @@ def create_roles(sender, plan, *args, **kwargs):
 
     NB: The signal is connected to post_migration signal when the app is ready.
     """
-    ROLES = [
-        'college dean',
-        'department head',
-        'store officer',
-        'lab assistant',
-        'staff member'
-    ]
+    ROLES = ["college dean", "department head", "store officer", "lab assistant", "staff member"]
 
-    Group = apps.get_model('auth', 'Group')
+    Group = apps.get_model("auth", "Group")
     for role in ROLES:
         Group.objects.get_or_create(name=role)

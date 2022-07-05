@@ -18,6 +18,14 @@ class PhoneNumberValidator(RegexValidator):
         code: code name used to identify error when raises.
     """
 
-    regex = r"((\+2519|09)\d{8})$|(\+251\d{3})$"
+    regex = r"^((\+2519|09)\d{8})$|(\+251\d{3})$"
     message = _("Please enter your phone number in +2519********" " or 09******** format.")
     code = "invalid_phone_number"
+
+
+class ShortNameValidator(RegexValidator):
+    """Short  name validator, used to validate departments short name"""
+
+    regex = r"^[a-zA-Z0-9\_\-]+$"
+    message = _("Short name must not containt other than capital letters, small letters, digits, _ or -.")
+    code = "invalid_short_name"

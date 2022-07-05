@@ -4,6 +4,7 @@ $(document).ready(function() {
     })
     // Basic DataTables
     $('#roles_table').DataTable({
+        dom: "t",
         columnDefs: [{
             orderable: false,
             targets: -1
@@ -30,8 +31,8 @@ $(document).ready(function() {
         { responsivePriority: 3, targets: [3, 4]},
         ]
     })
-    $('#department_list').DataTable({
-        dom: 'QBfltipr',
+    $('#departments_list').DataTable({
+        dom: "t",
         columnDefs: [{
             orderable: false,
             targets: -1

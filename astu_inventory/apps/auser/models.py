@@ -9,7 +9,7 @@ from django.contrib.auth.models import AbstractUser, UserManager as SuperUserMan
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from astu_inventory.apps.auser.validators import PhoneNumberValidator
+from astu_inventory.apps.auser.validators import PhoneNumberValidator, ShortNameValidator
 
 
 class Address(models.Model):
@@ -49,7 +49,11 @@ class Department(models.Model):
 
     name = models.CharField(_("name"), max_length=150, help_text=_("Name of the department."))
     short_name = models.CharField(
-        _("short name"), max_length=10, help_text=_("Abbrivated name of the department. eg CSE, ECE, EPCE")
+        _("short name"),
+        max_length=10,
+        unique=True,
+        validators=[ShortNameValidator()],
+        help_text=_("Abbreviated name of the department. eg CSE, ECE, EPCE"),
     )
     description = models.TextField(
         _("description"), max_length=1000, help_text=_("Short description about the department.")
@@ -66,13 +70,22 @@ class Department(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.short_name
-
     class Meta:
         db_table = "department"
         verbose_name = _("department")
         verbose_name_plural = _("departments")
+        permissions = [
+            ("can_list_departments", "Can list departments"),
+            ("can_activate_department", "Can acticate department"),
+            ("can_deactivate_department", "Can deacticate department"),
+        ]
+
+    def __str__(self):
+        return self.short_name
+
+    @property
+    def is_active(self):
+        return self.status == 1
 
 
 class UserManager(SuperUserManager):

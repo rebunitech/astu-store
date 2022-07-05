@@ -64,17 +64,41 @@ urlpatterns = [
     ),
     re_path(
         r"^roles/",
-        include([
-            re_path(
-                r"^$",
-                views.ListRolesView.as_view(),
-                name='roles_list'
-            ),
-            re_path(
-                r"^update/(?P<pk>\d+)/$",
-                views.UpdateRoleView.as_view(),
-                name='update_role'
-            )
-        ])
+        include(
+            [
+                re_path(r"^$", views.ListRolesView.as_view(), name="roles_list"),
+                re_path(r"^update/(?P<pk>\d+)/$", views.UpdateRoleView.as_view(), name="update_role"),
+            ]
+        ),
+    ),
+    re_path(
+        r"^departments/",
+        include(
+            [
+                re_path(r"^$", views.ListDepartmentsView.as_view(), name="departments_list"),
+                re_path(r"^add/$", views.AddDepartmentView.as_view(), name="add_department"),
+                re_path(
+                    r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/",
+                    include(
+                        [
+                            re_path(r"^update/$", views.UpdateDepartmentView.as_view(), name="update_department"),
+                            re_path(
+                                r"^activate/$", views.ActivateDepartmentView.as_view(), name="activate_department"
+                            ),
+                            re_path(
+                                r"^deactivate/$",
+                                views.DeactivateDepartmentView.as_view(),
+                                name="deactivate_department",
+                            ),
+                            re_path(
+                                r"^delete/$",
+                                views.DeleteDepartmentView.as_view(),
+                                name="delete_department",
+                            ),
+                        ]
+                    ),
+                ),
+            ]
+        ),
     ),
 ]
