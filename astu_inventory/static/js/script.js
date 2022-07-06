@@ -3,7 +3,7 @@ $(document).ready(function() {
         $('.course-title').toggle();
     })
     // Basic DataTables
-    $('#roles_table').DataTable({
+    $('#roles_table,  #deapartment_heads_list').DataTable({
         dom: "t",
         columnDefs: [{
             orderable: false,

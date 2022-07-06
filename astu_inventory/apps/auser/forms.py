@@ -9,6 +9,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.validators import ValidationError
+from django.db.models import Q
 
 from astu_inventory.apps.auser.models import Department
 
@@ -63,3 +64,11 @@ class CollegeDeanSelectForm(forms.Form):
     """Used to select users for a role college dean."""
 
     user = forms.ModelChoiceField(queryset=UserModel.objects.exclude(groups__name="college dean"))
+
+
+class DepartmentHeadSelectForm(forms.Form):
+    """Used to select users for a role department head."""
+
+    user = forms.ModelChoiceField(
+        queryset=UserModel.objects.exclude(Q(groups__name="college dean") | Q(groups__name="department head"))
+    )

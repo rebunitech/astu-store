@@ -1,0 +1,109 @@
+{% extends "layouts/main.html" %}
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'auser:dashboard' %}">Dashboard</a></li>
+    {% if perms.auser.can_list_departments %}<li class="breadcrumb-item"><a href="{% url 'auser:departments_list' %}">Departments</a></li>{% endif %}
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
+<div class="row">
+    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3 d-flex justify-content-end">
+        {% if perms.auser.can_add_department_head %}<a href="{% url 'auser:add_department_head' view.kwargs.short_name %}" class="btn btn-md btn-success rounded-3 shadow-none me-3"><i class="fa-solid fa-circle-plus me-2"></i>Add Department Head</a>{% endif %}{% if perms.auser.can_select_department_head %}<a href="{% url 'auser:select_department_head' view.kwargs.short_name %}" class="btn btn-md btn-primary rounded-3 shadow-none"><i class="fa fa-circle-plus me-2"></i>Select Department Head</a>{% endif %}
+    </div>
+    <hr />
+    <div class="container-fluid p-sm-3">
+        <table id="deapartment_heads_list" class="table responsive">
+            <thead>
+                <th class="border-bottom border-0">First name</th>
+                <th class="border-bottom border-0">Last name</th>
+                <th class="border-bottom border-0">Staff ID</th>
+                <th class="border-bottom border-0">Email</th>
+                <th class="border-bottom border-0">Phone number</th>
+                <th class="border-bottom border-0">Sex</th>
+                <th class="border-bottom border-0">Status</th>
+                <th class="border-bottom border-0">Actions</th>
+            </thead>
+            <tbody>{% if department_heads %}{% for department_head in department_heads %}{% with department_head=department_head %}
+                <tr>
+                    <td>{{ department_head.first_name|default:"-" }}</td>
+                    <td>{{ department_head.last_name|default:"-" }}</td>
+                    <td>{{ department_head.staff_id }}</td>
+                    <td>{{ department_head.email }}</td>
+                    <td>{{ department_head.phone_number }}</td>
+                    <td>{{ department_head.get_sex_display }}</td>
+                    <td><span class="badge bg-{% if department_head.is_active %}success{% else %}danger{% endif %} w-100">{% if department_head.is_active %}Active{% else %}Deactivated{% endif %}</span></td>
+                    <td>
+
+                        <div class="dropdown">
+                          <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-gears fs-4"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                            {% if perms.auser.can_change_department_head %}
+                            <li><a class="dropdown-item py-2" href="{% url 'auser:update_department_head' view.kwargs.short_name department_head.pk %}"><i class="fa-solid fa-pen me-3"></i>Update</a></li>{% endif %}{% if perms.auser.can_deactivate_department_head and department_head.is_active %}
+                            <li><button class="dropdown-item py-2 text-warning" data-bs-toggle="modal" data-bs-target="#change-status-{{ department_head.staff_id|slugify }}"><i class="fa-solid fa-toggle-off me-3"></i>Deactivate</button></li>{% elif perms.auser.can_activate_department_head and not department_head.is_active %}
+                            <li><button class="dropdown-item py-2 text-success" data-bs-toggle="modal" data-bs-target="#change-status-{{ department_head.staff_id|slugify }}"><i class="fa-solid fa-toggle-on me-3"></i>Activate</button></li>
+                            {% endif %}{% if perms.auser.can_remove_department_head or perms.auser.can_delete_department_head %}
+                            <li><hr class="dropdown-divider"></li>
+                            {% if perms.auser.can_remove_department_head %}
+                            <li><button class="dropdown-item text-danger py-2" data-bs-toggle="modal" data-bs-target="#remove-{{ department_head.staff_id|slugify }}"><i class="fa-solid fa-circle-minus me-3"></i>Remove from head</button></li>
+                            {% endif %}{% if perms.auser.can_delete_department_head %}
+                            <li><button class="dropdown-item text-danger py-2 fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-{{ department_head.staff_id|slugify }}"><i class="fa-solid fa-trash-can me-3"></i>Delete</button></li>
+                            {% endif %}{% endif %}
+                          </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% if perms.auser.can_delete_department_dean %}<div class="modal fade" id="delete-{{ department_head.staff_id|slugify }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2"></i> This action is irreversable.</span>
+                      </div>
+                      <div class="modal-body">
+                       Do you really wants to delete <strong>{{ department_head.staff_id }}</strong>?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                        <form action="{% url 'auser:delete_department_head' view.kwargs.short_name department_head.pk %}" method="post">{% csrf_token %}
+                           <button class="btn btn-outline-danger btn-sm shadow-none" type="submit"><i class="fa-solid fa-trash-can me-2"></i>I understand, delete!</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>{% endif %}{% if perms.auser.can_activate_department_head or perms.auser.can_deactivate_department_head %}<div class="modal fade" id="change-status-{{ department_head.staff_id|slugify }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                       Do you really wants to {% if department_head.is_active %}deactivate{% else %}activate{% endif %} <strong>{{ department_head.staff_id|slugify }}</strong>?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                        <form action="{% if department_head.is_active %}{% url 'auser:deactivate_department_head' view.kwargs.short_name department_head.pk %}{% else %}{% url 'auser:activate_department_head' view.kwargs.short_name department_head.pk %}{% endif %}" method="post">{% csrf_token %}
+                           <button class="btn btn-outline-{% if department_head.is_active %}warning{% else %}success{% endif %} btn-sm shadow-none" type="submit"><i class="fa-solid fa-check-circle me-2"></i>Confirm</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>{% endif %}{% if perms.auser.can_remove_department_head %}<div class="modal fade" id="remove-{{ department_head.staff_id|slugify }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                       Do you really wants to remove <strong>{{ department_head.staff_id }}</strong> from department head?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                        <form action="{% url 'auser:remove_department_head' view.kwargs.short_name department_head.pk %}" method="post">{% csrf_token %}
+                           <button class="btn btn-outline-warning btn-sm shadow-none" type="submit"><i class="fa-solid fa-check-circle me-2"></i>Confirm</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>{% endif %}{% endwith %}
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

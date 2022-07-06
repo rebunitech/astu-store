@@ -10,8 +10,8 @@
       <ul class="dropdown-menu rounded-3 p-0  shadow" aria-labelledby="ProfileMenu" style="min-width: 10rem">
         <div class="card">
           <div class="card-header">
-            <div class="fw-bolder">{{ user.first_name }}&nbsp;{{ user.last_name }}</div>
-            <div class="text-success text-center">{{ user.get_username }}</div>
+            <div class="fw-bolder">{{ request.user.first_name }}&nbsp;{{ request.user.last_name }}</div>
+            <div class="text-success text-center">{{ request.user.get_username }}</div>
           </div>
           <div class="card-body p-0">
             <li>

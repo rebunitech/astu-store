@@ -77,42 +77,49 @@ urlpatterns = [
             [
                 re_path(r"^$", views.ListDepartmentsView.as_view(), name="departments_list"),
                 re_path(r"^add/$", views.AddDepartmentView.as_view(), name="add_department"),
-                re_path(r"^heads/$", views.AllDepartmentHeadsListView.as_view(), name="all_department_heads_list"),
                 re_path(
-                    r"^college/deans/",
+                    r"^heads/",
                     include(
                         [
-                            re_path(r"^$", views.CollegeDeansListView.as_view(), name="college_deans_list"),
-                            re_path(r"^add/$", views.AddCollegeDeanView.as_view(), name="add_college_dean"),
-                            re_path(r"^select/$", views.SelectCollegeDeanView.as_view(), name="select_college_dean"),
                             re_path(
-                                r"^(?P<pk>\d+)/",
+                                r"^$", views.AllDepartmentHeadsListView.as_view(), name="all_department_heads_list"
+                            ),
+                            re_path(
+                                r"^add/$", views.AddAllDepartmentHeadView.as_view(), name="all_add_department_head"
+                            ),
+                            re_path(
+                                r"^select/$",
+                                views.AllSelectDepartmentHeadView.as_view(),
+                                name="all_select_department_head",
+                            ),
+                            re_path(
+                                r"(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<pk>\d+)/",
                                 include(
                                     [
                                         re_path(
                                             r"^update/$",
-                                            views.CollegeDeanUpdateView.as_view(),
-                                            name="update_college_dean",
+                                            views.AllDepartmentHeadUpdateView.as_view(),
+                                            name="all_update_department_head",
                                         ),
                                         re_path(
                                             r"^activate/$",
-                                            views.CollegeDeanActivateView.as_view(),
-                                            name="activate_college_dean",
+                                            views.AllDepartmentHeadActivateView.as_view(),
+                                            name="all_activate_department_head",
                                         ),
                                         re_path(
                                             r"^deactivate/$",
-                                            views.CollegeDeanDeactivateView.as_view(),
-                                            name="deactivate_college_dean",
+                                            views.AllDepartmentHeadDeactivateView.as_view(),
+                                            name="all_deactivate_department_head",
                                         ),
                                         re_path(
                                             r"^remove/$",
-                                            views.RemoveFromCollegeDeanView.as_view(),
-                                            name="remove_college_dean",
+                                            views.AllRemoveFromDepartmentHeadView.as_view(),
+                                            name="all_remove_department_head",
                                         ),
                                         re_path(
                                             r"^delete/$",
-                                            views.CollegeDeanDeleteView.as_view(),
-                                            name="delete_college_dean",
+                                            views.AllDepartmentHeadDeleteView.as_view(),
+                                            name="all_delete_department_head",
                                         ),
                                     ]
                                 ),
@@ -137,6 +144,102 @@ urlpatterns = [
                                 r"^delete/$",
                                 views.DeleteDepartmentView.as_view(),
                                 name="delete_department",
+                            ),
+                            re_path(
+                                r"^heads/",
+                                include(
+                                    [
+                                        re_path(
+                                            r"^$",
+                                            views.DepartmentHeadsListView.as_view(),
+                                            name="department_heads_list",
+                                        ),
+                                        re_path(
+                                            r"^add/$",
+                                            views.AddDepartmentHeadView.as_view(),
+                                            name="add_department_head",
+                                        ),
+                                        re_path(
+                                            r"^select/$",
+                                            views.SelectDepartmentHeadView.as_view(),
+                                            name="select_department_head",
+                                        ),
+                                        re_path(
+                                            r"^(?P<pk>\d+)/",
+                                            include(
+                                                [
+                                                    re_path(
+                                                        r"^update/$",
+                                                        views.DepartmentHeadUpdateView.as_view(),
+                                                        name="update_department_head",
+                                                    ),
+                                                    re_path(
+                                                        r"^activate/$",
+                                                        views.DepartmentHeadActivateView.as_view(),
+                                                        name="activate_department_head",
+                                                    ),
+                                                    re_path(
+                                                        r"^deactivate/$",
+                                                        views.DepartmentHeadDeactivateView.as_view(),
+                                                        name="deactivate_department_head",
+                                                    ),
+                                                    re_path(
+                                                        r"^remove/$",
+                                                        views.RemoveFromDepartmentHeadView.as_view(),
+                                                        name="remove_department_head",
+                                                    ),
+                                                    re_path(
+                                                        r"^delete/$",
+                                                        views.DepartmentHeadDeleteView.as_view(),
+                                                        name="delete_department_head",
+                                                    ),
+                                                ]
+                                            ),
+                                        ),
+                                    ]
+                                ),
+                            ),
+                        ]
+                    ),
+                ),
+            ]
+        ),
+    ),
+    re_path(
+        r"^college/deans/",
+        include(
+            [
+                re_path(r"^$", views.CollegeDeansListView.as_view(), name="college_deans_list"),
+                re_path(r"^add/$", views.AddCollegeDeanView.as_view(), name="add_college_dean"),
+                re_path(r"^select/$", views.SelectCollegeDeanView.as_view(), name="select_college_dean"),
+                re_path(
+                    r"^(?P<pk>\d+)/",
+                    include(
+                        [
+                            re_path(
+                                r"^update/$",
+                                views.CollegeDeanUpdateView.as_view(),
+                                name="update_college_dean",
+                            ),
+                            re_path(
+                                r"^activate/$",
+                                views.CollegeDeanActivateView.as_view(),
+                                name="activate_college_dean",
+                            ),
+                            re_path(
+                                r"^deactivate/$",
+                                views.CollegeDeanDeactivateView.as_view(),
+                                name="deactivate_college_dean",
+                            ),
+                            re_path(
+                                r"^remove/$",
+                                views.RemoveFromCollegeDeanView.as_view(),
+                                name="remove_college_dean",
+                            ),
+                            re_path(
+                                r"^delete/$",
+                                views.CollegeDeanDeleteView.as_view(),
+                                name="delete_college_dean",
                             ),
                         ]
                     ),

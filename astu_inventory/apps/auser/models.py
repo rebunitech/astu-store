@@ -192,6 +192,14 @@ class User(AbstractUser, Address):
             ("can_deactivate_college_dean", "Can deactivate college dean"),
             ("can_remove_college_dean", "Can remove college dean"),
             ("can_delete_college_dean", "Can delete college dean"),
+            ("can_list_department_heads", "Can list department heads"),
+            ("can_add_department_head", "Can add department head"),
+            ("can_select_department_head", "Can select department head"),
+            ("can_change_department_head", "Can change department head"),
+            ("can_activate_department_head", "Can activate department head"),
+            ("can_deactivate_department_head", "Can deactivate department head"),
+            ("can_remove_department_head", "Can remove department head"),
+            ("can_delete_department_head", "Can delete department head"),
         ]
 
     def __str__(self):

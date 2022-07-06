@@ -77,7 +77,7 @@ class AddCollegeDeanView(PermissionRequiredMixin, SuccessMessageMixin, CreateVie
     )
     permission_required = "auser.can_add_college_dean"
     success_url = reverse_lazy("auser:college_deans_list")
-    success_message = _('Department "%(user)s" added successfully.')
+    success_message = _("College dean added successfully.")
     extra_context = {"title": "Add collge dean"}
     template_name = "auser/college_dean/add.html"
 
