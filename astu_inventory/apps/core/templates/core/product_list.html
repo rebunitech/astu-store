@@ -1,0 +1,66 @@
+{% extends "layouts/main.html" %} {% block content %}
+<div class="row">
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="available_products_list" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0 text-center">Name</th>
+                    <th class="border-bottom border-0 text-center">College</th>
+                    <th class="border-bottom border-0 text-center">Department</th>
+                    <th class="border-bottom border-0 text-center">Category</th>
+                    <th class="border-bottom border-0 text-center">Sub&nbsp;Category</th>
+                    <th class="border-bottom border-0 text-center">Available</th>
+                    <th class="border-bottom border-0 text-center">Critical&nbsp;Number</th>
+                    <th class="border-bottom border-0"></th>
+                </tr>
+            </thead>
+            <tbody>{% if products %}{% for product in products %}
+                <tr>
+                    <td>{{ product.name|capfirst }}</td>
+                    <td>{{ product.college }}</td>
+                    <td>{{ product.department }}</td>
+                    <td>{{ product.category }}</td>
+                    <td>{{ product.sub_category }}</td>
+                    <td>{{ product.availables }} {{ product.measurment }}</td>
+                    <td>{{ product.critical_no }}</td>
+                    <td class="text-center">
+                        <div class="dropdown">
+                          <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-gears fs-4"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                            {% if perms.inventory.view_specification %}
+                            <li><button class="dropdown-item py-2" data-bs-toggle="modal" data-bs-target="#view-product-specification-{{ product.slug }}"><i class="fa-solid fa-list me-2"></i>Specifications</button></li>{% endif %}{% if perms.inventory.change_product %}
+                            <li><a class="dropdown-item py-2 text-success" href="{% url 'core:initiate_borrow_request' product.slug %}"><i class="fa-solid fa-pen me-2"></i>Request Product</a></li>{% endif %}
+                          </ul>
+                        </div>
+                        {% if perms.inventory.view_specification %}
+                        <div class="modal fade" id="view-product-specification-{{ product.slug }}" tabindex="-1" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <span class="text-info fw-bolder"><i class="fa-solid fa-circle-info me-2"></i> {{ product.name }}&nbsp;Specifications</span>
+                              </div>
+                              <div class="modal-body">
+                               <table class="table responsive table-success">
+                                   <tbody>{% for specification in product.specifications.iterator %}
+                                    <tr class="text-start">
+                                        <td>{{ specification.specification_type }}</td>
+                                        <td>{{ specification.value }}</td>
+                                    </tr>
+                                   {% endfor %}</tbody>
+                               </table>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-primary shadow-none" data-bs-dismiss="modal" aria-label="Close">Done</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
