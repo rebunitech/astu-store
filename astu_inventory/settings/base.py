@@ -46,6 +46,11 @@ INSTALLED_APPS = [
     "widget_tweaks",
     # Local apps
     "astu_inventory.apps.auser",
+    "astu_inventory.apps.inventory",
+    "astu_inventory.apps.store",
+    "astu_inventory.apps.core",
+    
+
 ]
 
 # ==============================================================================
@@ -183,4 +188,4 @@ MESSAGE_TAGS = {
 # ==============================================================================
 # FIRST-PARTY SETTINGS
 # ==============================================================================
-ASTU_INVENTORY_ENVIRONMENT = config("ASTU_INVENTORY_ENVIRONMENT", default="local")
+ASTU_INVENTORY_ENVIRONMENT = config("ASTU_INVENTORY_ENVIRONMENT", default="production")
