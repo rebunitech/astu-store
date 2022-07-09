@@ -1,0 +1,58 @@
+{% extends "layouts/main.html" %} {% block content %}
+<div class="row">
+    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
+        {% if perms.inventory.add_specificationtype %}<a href="{% url 'inventory:add_specification_type' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Specification Type</a>{% endif %}
+    </div>
+    <hr />
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="specification_type_list" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0" style="max-width: 25px;"></th>
+                    <th class="border-bottom border-0 text-center">Name</th>
+                    <th class="border-bottom border-0 text-center">SI Unit</th>
+                    <th class="border-bottom border-0"></th>
+                </tr>
+            </thead>
+            <tbody>{% if specification_types %}{% for specification_type in specification_types %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td>{{ specification_type.name|capfirst }}</td>
+                    <td>{{ specification_type.si_unit|upper }}</td>
+                    <td class="text-center">
+                        <div class="dropdown">
+                          <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-gears fs-4"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                            {% if perms.inventory.change_specificationtype %}
+                            <li><a class="dropdown-item py-2" href="{% url 'inventory:update_specification_type' specification_type.pk %}"><i class="fa-solid fa-pen me-2"></i>Update</a></li>{% endif %} {% if perms.inventory.delete_specificationtype %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-st-{{ specification_type.pk }}"><i class="fa-solid fa-circle-minus me-2"></i>Delete</button></li>{% endif %}
+                          </ul>
+                        </div>
+
+
+                        {% if perms.inventory.delete_specificationtype %}
+                        <div class="modal fade" id="delete-st-{{ specification_type.pk }}" tabindex="-1" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-body">
+                               Do you really wants to delete <strong>{{specification_type.name }} ({{specification_type.si_unit|upper }})</strong>? This action is irreversable.
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-primary shadow-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                <form action="{% url 'inventory:delete_specification_type' specification_type.pk %}" method="post">{% csrf_token %}
+                                  <input class="btn btn-danger btn-sm shadow-none" type="submit" value="I understand, delete!" />
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
