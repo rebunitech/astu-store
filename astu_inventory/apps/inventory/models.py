@@ -16,7 +16,7 @@ from django.db.models import Q, Sum
 from django.db.models.functions import Coalesce
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
-# from smart_selects.db_fields import ChainedForeignKey
+from smart_selects.db_fields import ChainedForeignKey
 
 from astu_inventory.apps.auser.models import Department
 
