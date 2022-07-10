@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third party
     "widget_tweaks",
+    "smart_selects",
     # Local apps
     "astu_inventory.apps.auser",
     "astu_inventory.apps.inventory",
