@@ -234,7 +234,7 @@ urlpatterns = [
                             re_path(
                                 r"^remove/$",
                                 views.RemoveFromCollegeDeanView.as_view(),
-                                name="remove_college_dean",
+                                name="remove__dean",
                             ),
                             re_path(
                                 r"^delete/$",
