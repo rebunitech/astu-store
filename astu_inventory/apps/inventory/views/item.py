@@ -2,6 +2,8 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
+
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from astu_inventory.apps.inventory.forms import ItemForm
