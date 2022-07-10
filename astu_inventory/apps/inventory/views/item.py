@@ -1,12 +1,15 @@
+import queue
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.contrib.auth import get_user_model
 
 from astu_inventory.apps.inventory.forms import ItemForm
 from astu_inventory.apps.inventory.models import Item
+UserModel = get_user_model()
 
 
 class AddItemView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):

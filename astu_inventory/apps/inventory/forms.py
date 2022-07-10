@@ -13,7 +13,8 @@ from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 
 from astu_inventory.apps.inventory.models import Category, Item, Product, Shelf, SubCategory, Table
-
+from django.contrib.auth import get_user_model
+UserModel = get_user_model()
 class ShelfForm(forms.ModelForm):
     class Meta:
         model = Shelf
@@ -54,7 +55,6 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = (
             "name",
-            "college",
             "department",
             "category",
             "sub_category",

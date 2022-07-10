@@ -7,9 +7,11 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from astu_inventory.apps.auser.models import Department
+from astu_inventory.apps.auser.views.department import UserModel
 from astu_inventory.apps.inventory.forms import ShelfForm
 from astu_inventory.apps.inventory.models import Shelf, Store
-
+from django.contrib.auth import get_user_model
+UserModel = get_user_model()
 
 class AddShelfView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     model = Shelf
