@@ -18,7 +18,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from smart_selects.db_fields import ChainedForeignKey
 
-from astu_inventory.apps.auser.models import College,Department
+from astu_inventory.apps.auser.models import Department
 
 UserModel = get_user_model()
 
@@ -241,18 +241,7 @@ class Product(models.Model):
         sort=True,
         on_delete=models.PROTECT,
     )
-    college = models.ForeignKey(College, verbose_name=_("college"), on_delete=models.PROTECT)
-    department = ChainedForeignKey(
-        Department,
-        chained_field="college",
-        chained_model_field="college",
-        verbose_name="department",
-        related_name="products",
-        show_all=False,
-        auto_choose=True,
-        sort=True,
-        on_delete=models.PROTECT,
-    )
+    department = models.ForeignKey(Department, verbose_name=_("department"), on_delete=models.PROTECT)
     kind = models.CharField(
         max_length=25, verbose_name=_("kind"), choices=KindChoices.choices
     )
