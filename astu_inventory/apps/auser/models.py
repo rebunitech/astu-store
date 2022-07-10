@@ -205,3 +205,146 @@ class User(AbstractUser, Address):
     def __str__(self):
         """Return user staff ID and full name"""
         return "%s (%s)" % (self.get_full_name(), self.staff_id)
+    
+    
+    @property
+    def is_college_user(self):
+        return False
+
+    @property
+    def is_college_representative(self):
+        if self.is_superuser:
+            return True
+        return self.groups.filter(name="college_representative").exists()
+
+    @property
+    def is_department_representative(self):
+        if self.is_superuser:
+            return True
+        return self.groups.filter(name="department_representative").exists()
+
+    @property
+    def is_store_officer(self):
+        if self.is_superuser:
+            return True
+        return self.groups.filter(name="store_officer").exists()
+
+    @property
+    def is_staff_member(self):
+        if self.is_superuser:
+            return True
+        return self.groups.filter(name="staff_member").exists()
+
+    @property
+    def is_lab_assistant(self):
+        if self.is_superuser:
+            return True
+        return self.groups.filter(name="store_officer").exists()
+    
+class CollegeOrDepartment(models.Model):
+    """Abstruct model that used in college and departments."""
+
+    class StatusChoices(models.TextChoices):
+        ACTIVE = "active", _("Active")
+        DEACTIVATED = "deactivated", _("Deactivated")
+
+    name = models.CharField(_("name"), max_length=150)
+    short_name = models.CharField(_("short name"), max_length=10)
+    description = models.TextField(_("description"), max_length=1000)
+    status = models.CharField(
+        _("status"),
+        max_length=15,
+        choices=StatusChoices.choices,
+        default=StatusChoices.ACTIVE,
+    )
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.short_name
+
+    @property
+    def is_active(self):
+        return self.status == "active"
+
+    @property
+    def staff_members(self):
+        return self.users.filter(groups__name="staff_member")
+
+    @property
+    def store_officers(self):
+        return self.users.filter(groups__name="store_officer")
+
+    @property
+    def lab_assistants(self):
+        return self.users.filter(groups__name="lab_assistant")
+
+
+class College(CollegeOrDepartment):
+    class Meta:
+        verbose_name = _("college")
+        verbose_name_plural = _("colleges")
+        db_table = "college"
+        permissions = [
+            ("can_change_status", "Can activate status"),
+        ]
+        unique_together = [("short_name",)]
+
+    @property
+    def representatives(self):
+        return self.users.filter(groups__name="college_representative")
+    
+
+class Department(CollegeOrDepartment):
+    college = models.ForeignKey(
+        College,
+        verbose_name=_("college"),
+        related_name="departments",
+        on_delete=models.PROTECT,
+        limit_choices_to={"status": "active"},
+    )
+
+    class Meta:
+        verbose_name = _("department")
+        verbose_name_plural = _("departments")
+        db_table = "department"
+        unique_together = [
+            (
+                "college",
+                "short_name",
+            )
+        ]
+
+    @property
+    def representatives(self):
+        return self.users.filter(groups__name="department_representative").exclude(
+            groups__name="college_representative"
+        )
+
+class CollegeUser(User):
+    college = models.ForeignKey(
+        College,
+        verbose_name=_("college"),
+        related_name="users",
+        limit_choices_to={"status": "active"},
+        on_delete=models.PROTECT,
+    )
+    department = models.ForeignKey(
+        Department,
+        verbose_name=_("department"),
+        related_name="users",
+        limit_choices_to={"status": "active"},
+        on_delete=models.PROTECT,
+    )
+
+    class Meta:
+        db_table = _("college_user")
+        verbose_name = _("in college user")
+        verbose_name_plural = _("in college users")
+
+    @property
+    def is_college_user(self):
+        return True
