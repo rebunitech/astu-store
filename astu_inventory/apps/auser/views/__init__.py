@@ -22,6 +22,22 @@ from .department import (
     SelectDepartmentHeadView,
     UpdateDepartmentView,
 )
+from .officer import (
+    AddAllStoreOfficerView,
+    AddStoreOfficerView,
+    AllRemoveFromStoreOfficerView,
+    AllStoreOfficerActivateView,
+    AllStoreOfficerDeactivateView,
+    AllStoreOfficerDeleteView,
+    AllStoreOfficersListView,
+    AllStoreOfficerUpdateView,
+    RemoveFromStoreOfficerView,
+    StoreOfficerActivateView,
+    StoreOfficerDeactivateView,
+    StoreOfficerDeleteView,
+    StoreOfficersListView,
+    StoreOfficerUpdateView,
+)
 from .role import ListRolesView, UpdateRoleView
 from .user import (
     AddCollegeDeanView,

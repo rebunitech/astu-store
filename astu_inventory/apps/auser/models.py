@@ -205,3 +205,23 @@ class User(AbstractUser, Address):
     def __str__(self):
         """Return user staff ID and full name"""
         return "%s (%s)" % (self.get_full_name(), self.staff_id)
+
+    @property
+    def is_college_dean(self):
+        return self.groups.filter(name="college dean").exists()
+
+    @property
+    def is_department_head(self):
+        return self.groups.filter(name="department head").exists()
+
+    @property
+    def is_store_officer(self):
+        return self.groups.filter(name="store officer").exists()
+
+    @property
+    def is_staff_member(self):
+        return self.groups.filter(name="staff member").exists()
+
+    @property
+    def is_lab_assistant(self):
+        return self.groups.filter(name="lab assistant").exists()

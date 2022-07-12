@@ -18,16 +18,23 @@ $(document).ready(function() {
         }, ]
     })
     $('#available_products_list').DataTable({
-        dom: 'Qfltipr',
+        dom: 'QPfltipr',
         responsive: true,
+        searchPanes: true,
         columnDefs: [{
             orderable: false,
             targets: -1
         },
-        { responsivePriority: 0, targets: 0},
+        {
+        searchPanes:{
+                show: true,
+            },
+            targets: [1, 2, 3],
+        },
+        { responsivePriority: 0, targets: 1},
         { responsivePriority: 1, targets: -1},
-        { responsivePriority: 2, targets: [1, 2]},
-        { responsivePriority: 3, targets: [3, 4]},
+        { responsivePriority: 2, targets: [2, 3]},
+        { responsivePriority: 3, targets: [4, 5]},
         ]
     })
     $('#departments_list, #college_deans_list').DataTable({
@@ -62,6 +69,8 @@ $(document).ready(function() {
     $('[id*=_wrapper] > div:first-child').addClass('bg-secondary text-light')
     $('[id*=_wrapper] > div').addClass('p-2 px-4 my-1 rounded-top')
     $('[id*=_wrapper] select, [id*=_wrapper] input').addClass('form-control shadow-none')
+    $('.dtsp-searchPane > div:nth-child(2) > div:first-child').addClass('text-dark');
+    $('[data-bs-toggle="tooltip"]').tooltip();
     document.querySelectorAll('.choices').forEach(choice => {
         if (choice.classList.contains("multiple-remove")) {
             var initChoice = new Choices(choice, {

@@ -16,11 +16,11 @@ from astu_inventory.apps.auser import views
 app_name = "auser"
 
 urlpatterns = [
-    re_path(
-        r"^dashboard/$",
-        login_required(TemplateView.as_view(template_name="dashboard.html", extra_context={"title": "Dashboard"})),
-        name="dashboard",
-    ),
+    # re_path(
+    #     r"^dashboard/$",
+    #     login_required(TemplateView.as_view(template_name="dashboard.html", extra_context={"title": "Dashboard"})),
+    #     name="dashboard",
+    # ),
     re_path(
         r"^auth/",
         include(
