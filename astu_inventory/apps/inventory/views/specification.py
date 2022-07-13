@@ -7,7 +7,7 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from astu_inventory.apps.inventory.models import (Item, Measurment, Product, Specification,
                               SpecificationType)
-
+from astu_inventory.apps.inventory.forms import AddProductSpecificationForm, UpdateProductSpecificationForm, AddItemSpecificationForm, UpdateItemSpecificationForm
 
 class AddSpecificationTypeView(
     PermissionRequiredMixin, SuccessMessageMixin, CreateView
@@ -90,18 +90,14 @@ class AddItemSpecificationView(
     PermissionRequiredMixin, SuccessMessageMixin, CreateView
 ):
     model = Specification
-    fields = ("specification_type", "value", "remark")
+    form_class = AddItemSpecificationForm
     permission_required = ("inventory.add_specification",)
     success_message = _("Specification added successfully.")
     template_name = "inventory/item/specification/add.html"
     extra_context = {"title": _("Add specification")}
 
-    def get_item(self):
-        return get_object_or_404(Item, pk=self.kwargs.get("pk"))
-
-    def form_valid(self, form):
-        form.instance.item = self.get_item()
-        return super().form_valid(form)
+    def get_initial(self):
+        return self.kwargs
 
     def get_success_url(self):
         return reverse_lazy(
@@ -125,12 +121,15 @@ class UpdateItemSpecificationView(
     PermissionRequiredMixin, SuccessMessageMixin, UpdateView
 ):
     model = Specification
-    fields = ("specification_type", "value", "remark")
+    form_class = UpdateItemSpecificationForm
     permission_required = ("inventory.change_specification",)
     success_message = _("Specification updated successfully.")
     template_name = "inventory/item/specification/update.html"
     extra_context = {"title": _("Update item specification")}
     pk_url_kwarg = "s_pk"
+
+    def get_initial(self):
+        return self.kwargs
 
     def get_success_url(self):
         return reverse_lazy(
@@ -156,23 +155,19 @@ class AddProductSpecificationView(
     PermissionRequiredMixin, SuccessMessageMixin, CreateView
 ):
     model = Specification
-    fields = ("specification_type", "value", "remark")
+    form_class = AddProductSpecificationForm
     permission_required = ("inventory.add_specification",)
     success_message = _("Specification added successfully.")
     template_name = "inventory/product/specification/add.html"
     extra_context = {"title": _("Add specification")}
 
-    def get_product(self):
-        return get_object_or_404(Product, slug=self.kwargs.get("slug"))
-
-    def form_valid(self, form):
-        form.instance.product = self.get_product()
-        return super().form_valid(form)
+    def get_initial(self):
+        return self.kwargs
 
     def get_success_url(self):
         return reverse_lazy(
             "inventory:product_specifications_list",
-            kwargs={"slug": self.kwargs.get("slug")},
+            kwargs=self.kwargs,
         )
 
 
@@ -184,14 +179,14 @@ class ListProductSpecificationsView(PermissionRequiredMixin, ListView):
     extra_context = {"title": _("Specifications")}
 
     def get_queryset(self):
-        return super().get_queryset().filter(product__slug=self.kwargs.get("slug"))
+        return super().get_queryset().filter(product__slug=self.kwargs.get("slug"), product__department__short_name__iexact=self.kwargs['short_name'])
 
 
 class UpdateProductSpecificationView(
     PermissionRequiredMixin, SuccessMessageMixin, UpdateView
 ):
     model = Specification
-    fields = ("specification_type", "value", "remark")
+    form_class = UpdateProductSpecificationForm
     permission_required = ("inventory.change_specification",)
     success_message = _("Specification updated successfully.")
     template_name = "inventory/product/specification/update.html"
@@ -199,11 +194,17 @@ class UpdateProductSpecificationView(
     pk_url_kwarg = "s_pk"
 
     def get_success_url(self):
+        self.kwargs.pop('s_pk')
         return reverse_lazy(
             "inventory:product_specifications_list",
-            kwargs={"slug": self.kwargs["slug"]},
+            kwargs=self.kwargs,
         )
 
+    def get_initial(self):
+        return self.kwargs
+
+    def get_queryset(self):
+        return super().get_queryset().filter(product__slug=self.kwargs.get("slug"), product__department__short_name__iexact=self.kwargs['short_name'])
 
 class DeleteProductSpecificationView(PermissionRequiredMixin, DeleteView):
     model = Specification
@@ -212,7 +213,12 @@ class DeleteProductSpecificationView(PermissionRequiredMixin, DeleteView):
     pk_url_kwarg = "s_pk"
 
     def get_success_url(self):
+        self.kwargs.pop('s_pk')
         return reverse_lazy(
             "inventory:product_specifications_list",
-            kwargs={"slug": self.kwargs["slug"]},
+            kwargs=self.kwargs,
         )
+
+    def get_queryset(self):
+        return super().get_queryset().filter(product__slug=self.kwargs.get("slug"), product__department__short_name__iexact=self.kwargs['short_name'])
+

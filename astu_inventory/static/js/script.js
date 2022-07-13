@@ -50,7 +50,7 @@ $(document).ready(function() {
         ]
     })
     $('#colleges_list, #items_list').DataTable({
-        dom: 'QBfltipr',
+        dom: 'Qfltipr',
         responsive: true,
         columnDefs: [{
             orderable: false,
@@ -58,9 +58,10 @@ $(document).ready(function() {
         },
         { responsivePriority: 0, targets: 1},
         { responsivePriority: 1, targets: -1},
-        { responsivePriority: 2, targets: [3, 4, 5, 6, 7]},
+        { responsivePriority: 2, targets: [3, 4, 5]},
         { responsivePriority: 3, targets: 0},
-        { responsivePriority: 4, targets: 2}
+        { responsivePriority: 4, targets: 2},
+        { responsivePriority: 5, targets: [6, 7]}
         ]
     })
     $('[id*=_wrapper] label').addClass('d-flex flex-row align-items-center')

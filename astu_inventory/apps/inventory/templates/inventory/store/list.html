@@ -1,4 +1,11 @@
-{% extends "layouts/main.html" %} {% block content %}
+{% extends "layouts/main.html" %}{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
 <div class="row">
     <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
         {% if perms.inventory.add_store %}<a href="{% url 'inventory:add_store' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Store</a>{% endif %}
@@ -31,7 +38,7 @@
                             <i class="fa fa-gears fs-4"></i>
                           </button>
                           <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
-                          	{% if perms.store.view_shelf %}
+                          	{% if perms.store.can_list_shelves %}
 	                        <li><a class="dropdown-item py-2" href="{% url 'inventory:shelves_list' store.pk %}"><i class="fa-solid fa-table-cells-large me-2"></i>Shelves</a></li>{% endif %}{% if perms.store.change_store %}
 	                        <li><a class="dropdown-item py-2" href="{% url 'inventory:update_store' store.pk %}"><i class="fa-solid fa-pen me-2"></i>Update</a></li>{% endif %} {% if perms.inventory.delete_store %}
 	                        <li><hr class="dropdown-divider"></li>

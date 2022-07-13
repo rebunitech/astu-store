@@ -1,4 +1,12 @@
-{% extends "layouts/main.html" %} {% block content %}
+{% extends "layouts/main.html" %}
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
 <div class="row">
     <div class="container-fluid p-1 p-sm-3">
         <table id="active_borrow_request" class="table w-100 rounded-3">

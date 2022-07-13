@@ -1,4 +1,11 @@
-{% extends "layouts/main.html" %} {% block content %}
+{% extends "layouts/main.html" %}{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
 <div class="row">
     <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
         {% if perms.inventory.add_product %}<a href="{% url 'inventory:add_product' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Product</a>{% endif %}
@@ -10,7 +17,6 @@
                 <tr>
                     <th class="border-bottom border-0" style="max-width: 25px;"></th>
                     <th class="border-bottom border-0 text-center">Name</th>
-                    <th class="border-bottom border-0 text-center">College</th>
                     <th class="border-bottom border-0 text-center">Department</th>
                     <th class="border-bottom border-0 text-center">Category</th>
                     <th class="border-bottom border-0 text-center">Sub&nbsp;Category</th>
@@ -23,9 +29,7 @@
             <tbody>{% if products %}{% for product in products %}
                 <tr>
                     <td class="text-center">{{ forloop.counter }}</td>
-                    <td>{{ product.name|capfirst }}</td>
-                    <td>{{ product.college }}</td>
-                    <td>{{ product.department }}</td>
+                    <td>{{ product.name|capfirst }}</td>                    <td>{{ product.department }}</td>
                     <td>{{ product.category }}</td>
                     <td>{{ product.sub_category }}</td>
                     <td>{{ product.get_kind_display }}</td>
@@ -38,10 +42,10 @@
                           </button>
                           <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
                             {% if perms.inventory.view_specification %}
-                            <li><a class="dropdown-item py-2" href="{% url 'inventory:product_specifications_list' product.slug %}"><i class="fa-solid fa-list me-2"></i>Specifications</a></li>
+                            <li><a class="dropdown-item py-2" href="{% url 'inventory:product_specifications_list' product.department.short_name product.slug %}"><i class="fa-solid fa-list me-2"></i>Specifications</a></li>
                             {% endif %}
                             {% if perms.inventory.change_product %}
-                            <li><a class="dropdown-item py-2" href="{% url 'inventory:update_product' product.slug %}"><i class="fa-solid fa-pen me-2"></i>Update</a></li>{% endif %} {% if perms.inventory.delete_product %}
+                            <li><a class="dropdown-item py-2" href="{% url 'inventory:update_product' product.department.short_name product.slug %}"><i class="fa-solid fa-pen me-2"></i>Update</a></li>{% endif %} {% if perms.inventory.delete_product %}
                             <li><hr class="dropdown-divider"></li>
                             <li><button class="dropdown-item text-danger fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-product-{{ product.slug }}"><i class="fa-solid fa-circle-minus me-2"></i>Delete</button></li>{% endif %}
                           </ul>
@@ -55,7 +59,7 @@
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-sm btn-primary shadow-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                                <form action="{% url 'inventory:delete_product' product.slug %}" method="post">{% csrf_token %}
+                                <form action="{% url 'inventory:delete_product' product.department.short_name product.slug %}" method="post">{% csrf_token %}
                                   <input class="btn btn-danger btn-sm shadow-none" type="submit" value="I understand, delete!" />
                                 </form>
                               </div>

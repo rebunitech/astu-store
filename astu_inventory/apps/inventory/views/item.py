@@ -17,6 +17,14 @@ class AddItemView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = _("Item is successfully added!")
     extra_context = {"title": _("Add Item")}
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        user = self.request.user
+        if user.is_superuser or user.is_college_dean:
+            return form
+        form["product"].field.queryset = form["user"].field.queryset.filter(department=user.department)
+        return form
+
 
 class ListItemsView(PermissionRequiredMixin, ListView):
     model = Item
@@ -40,7 +48,7 @@ class UpdateItemView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = "inventory/item/update.html"
     success_url = reverse_lazy("inventory:items_list")
     permission_required = "inventory.change_item"
-    success_message = _("Item '%(name)s' is updated successfully!")
+    success_message = _("Item is updated successfully!")
     extra_context = {"title": _("Update Item")}
 
     def get_queryset(self):

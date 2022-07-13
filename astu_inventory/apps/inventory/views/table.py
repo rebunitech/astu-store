@@ -52,8 +52,8 @@ class UpdateTableView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = TableForm
     permission_required = "inventory.change_table",
     success_message = _("Table updated successfully.")
-    template_name = "inventory/store/shelf/update.html"
-    extra_context = {"title": _("Update shelf")}
+    template_name = "inventory/lab/table/update.html"
+    extra_context = {"title": _("Update table")}
     pk_url_kwarg = None
     slug_field = "table_id"
     slug_url_kwarg = "table_id"

@@ -1,16 +1,12 @@
-{% extends "layouts/main.html" %} {% load widget_tweaks %}
-
-{% block breadcrumbs %}
+{% extends "layouts/main.html" %} {% load widget_tweaks %}{% block breadcrumbs %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    {% if perms.inventory.view_item %}<li class="breadcrumb-item"><a href="{% url 'inventory:items_list' %}">Items</a></li>{% endif %}
     <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
   </ol>
 </nav>
-{% endblock breadcrumbs %}{% block content %}
-{% with WIDGET_ERROR_CLASS="is-invalid" %}
-
-<form method="post" class="py-5" enctype="multipart/form-data">{% csrf_token %}
+{% endblock breadcrumbs %}{% block content %}{% with WIDGET_ERROR_CLASS="is-invalid" %}<form method="post" class="py-5" enctype="multipart/form-data">{% csrf_token %}
   {% if form.non_field_errors %}{% include 'layouts/error.html' with error=form.non_field_errors|first %}{% endif %}
   <span class="text-danger">*</span> Requeired
   {% for field in form.hidden_fields %}{{ field }}{% endfor %}<div class="row">{% for field in form.visible_fields %}
@@ -34,9 +30,20 @@
       <button class="btn btn-primary shadow-none float-end px-3 mx-2"><i class="fa-solid fa-floppy-disk me-2"></i>Save</button>
     </div>
   </div>
-</form>{% endwith %}{% endblock content %}{% block js %}
-{{ form.media }}
-{{ block.super }}
-<script type="text/javascript">
-    $(document).ready(function() {$('#id_expiration_date').datepicker({startDate: new Date()});});
+</form>{% endwith %}{% endblock content %}{% block js %}{{ form.media }}{{ block.super }}<script type="text/javascript">
+  $(document).ready(function() { $('#id_store').on('change', e => {
+    if (e.target.value !== ""){
+      $('#id_lab, #id_table').each((i, el) => {el.value = ""; $(el).parents()[2].hidden = true;})
+    } else {
+      $('#id_lab, #id_table').each((i, el) => { $(el).parents()[2].hidden = false;})
+    }
+  })
+  $('#id_lab').on('change', e => {
+    if (e.target.value !== ""){
+      $('#id_store, #id_shelf').each((i, el) => {el.value = ""; $(el).parents()[2].hidden = true;})
+    } else {
+      $('#id_store, #id_shelf').each((i, el) => { $(el).parents()[2].hidden = false;})
+    }
+  })
+  $('#id_expiration_date').datepicker({startDate: new Date()});});
 </script>{% endblock js %}

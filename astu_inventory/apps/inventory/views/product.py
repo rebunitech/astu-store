@@ -4,21 +4,13 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-# from astu_inventory.apps.inventory.forms import ProductForm
+from astu_inventory.apps.inventory.forms import AddProductForm, UpdateProductForm
 from astu_inventory.apps.inventory.models import Product
 
 
 class AddProductView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     model = Product
-    fields = (
-            "name",
-            "department",
-            "category",
-            "sub_category",
-            "kind",
-            "measurment",
-            "critical_no",
-        )
+    form_class = AddProductForm
     template_name = "inventory/product/add.html"
     success_url = reverse_lazy("inventory:products_list")
     permission_required = "inventory.add_product"
@@ -28,15 +20,7 @@ class AddProductView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
 
 class UpdateProductView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Product
-    fields = (
-            "name",
-            "department",
-            "category",
-            "sub_category",
-            "kind",
-            "measurment",
-            "critical_no",
-        )
+    form_class = UpdateProductForm
     template_name = "inventory/product/update.html"
     success_url = reverse_lazy("inventory:products_list")
     permission_required = "inventory.change_product"
@@ -45,11 +29,10 @@ class UpdateProductView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView
 
     def get_queryset(self):
         user = self.request.user
-        qs = super().get_queryset()
+        qs = super().get_queryset().filter(department__short_name__iexact=self.kwargs['short_name'])
         if user.is_superuser or user.is_college_dean:
             return qs
-        return qs.filter(Q(department=user.department))
-
+        return qs.filter(department=user.department)
 
 class ListProductsView(PermissionRequiredMixin, ListView):
     model = Product
@@ -74,7 +57,7 @@ class DeleteProductView(PermissionRequiredMixin, DeleteView):
 
     def get_queryset(self):
         user = self.request.user
-        qs = super().get_queryset()
+        qs = super().get_queryset().filter(department__short_name__iexact=self.kwargs['short_name'])
         if user.is_superuser or user.is_college_dean:
             return qs
         return qs.filter(Q(department=user.department))

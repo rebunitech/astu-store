@@ -227,7 +227,7 @@ class Product(models.Model):
         NON_CONSUMABLE = "NON_CONSUMABLE", _("Non-Consumable")
 
     name = models.CharField(max_length=50, verbose_name=_("name"))
-    slug = models.SlugField(max_length=100, unique=True, verbose_name=_("slug"))
+    slug = models.SlugField(max_length=100, verbose_name=_("slug"))
     category = models.ForeignKey(
         Category, verbose_name=_("category"), on_delete=models.PROTECT
     )
@@ -252,13 +252,14 @@ class Product(models.Model):
         Measurment, verbose_name=_("measurement"), on_delete=models.PROTECT
     )
     critical_no = models.IntegerField(
-        help_text=_("min number of Item that must be in store")
+        help_text=_("Min number of item that must be in store.")
     )
 
     class Meta:
         db_table = "product"
         verbose_name = _("product")
         verbose_name_plural = _("products")
+        unique_together = (('slug', 'department'),)
 
     @property
     def is_under_critical(self):
@@ -374,7 +375,7 @@ class Item(models.Model):
         verbose_name_plural = _("items")
 
     def __str__(self):
-        return self.name
+        return f"{self.product} - {self.dead_stock_number}"
 
 
 class SpecificationType(models.Model):
@@ -426,3 +427,6 @@ class Specification(models.Model):
             ("item", "specification_type"),
             ("product", "specification_type"),
         )
+
+    def __str__(self):
+        return f'{self.product or self.item} - {self.specification_type}'

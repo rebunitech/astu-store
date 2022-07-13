@@ -1,4 +1,11 @@
-{% extends "layouts/main.html" %} {% block content %}
+{% extends "layouts/main.html" %}{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
 <div class="row">
     <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
         {% if perms.inventory.add_item %}<a href="{% url 'inventory:add_item' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Item</a>{% endif %}
@@ -8,7 +15,6 @@
         <table id="items_list" class="table w-100 rounded-3">
             <thead>
                 <tr>
-                    <th class="border-bottom border-0 text-center">Name</th>
                     <th class="border-bottom border-0 text-center">Product</th>
                     <th class="border-bottom border-0 text-center">DSN</th>
                     <th class="border-bottom border-0 text-center">Quantity</th>
@@ -24,7 +30,6 @@
             </thead>
             <tbody>{% if items %}{% for item in items %}
                 <tr>
-                    <td>{{ item.name|capfirst }}</td>
                     <td>{{ item.product.name }}</td>
                     <td>{{ item.dead_stock_number }}</td>
                     <td>{{ item.quantity }} {{ item.product.measurment }}</td>

@@ -5,6 +5,7 @@
       &copy; {% now "Y" %}
       <a href="#" class="nav-link d-inline"> Rebuni Accademy</a>
     </div>
+    {{ request.resolver_match.url_name }} {{ request.resolver_match.app_name }}
     <div class="text-info fw-bolder fs-6">
       <i class="fa-solid fa-circle-question me-2"></i>Help
     </div>

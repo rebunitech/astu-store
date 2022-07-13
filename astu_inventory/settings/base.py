@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "astu_inventory.apps.auser",
     "astu_inventory.apps.inventory",
     "astu_inventory.apps.core",
+    "astu_inventory.apps.help"
 ]
 
 # ==============================================================================

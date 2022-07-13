@@ -2,8 +2,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 
-from astu_inventory.apps.inventory.models import Category, Item, Product, Shelf, SubCategory, Table
-
+from astu_inventory.apps.inventory.models import Category, Item, Product, Shelf, SubCategory, Table, Specification
+from django.shortcuts import get_object_or_404
 
 class ShelfForm(forms.ModelForm):
     class Meta:
@@ -39,6 +39,55 @@ class SubCategoryForm(forms.ModelForm):
             "name",
         )
 
+class AddProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = (
+            "name",
+            "department",
+            "category",
+            "sub_category",
+            "kind",
+            "measurment",
+            "critical_no",
+        )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        slug = slugify(cleaned_data.get('name'))
+        department = cleaned_data.get("department")
+        if Product.objects.filter(slug=slug, department=department).exists():
+            raise ValidationError(
+                f"This product exists in {department} department."
+            )
+        return cleaned_data
+
+class UpdateProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = (
+            "name",
+            "department",
+            "category",
+            "sub_category",
+            "kind",
+            "measurment",
+            "critical_no",
+        )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        slug = slugify(cleaned_data.get('name'))
+        department = cleaned_data.get("department")
+        instance = self.instance
+        if Product.objects.exclude(pk=instance.pk).filter(slug=slug, department=department).exists():
+            raise ValidationError(
+                f"This product exists in {department} department."
+            )
+        return cleaned_data
+
+
+
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
@@ -64,9 +113,81 @@ class ItemForm(forms.ModelForm):
         lab = cleaned_data.get("lab")
         shelf = cleaned_data.get("shelf")
         table = cleaned_data.get("table")
-
+        if not ((store and shelf) or (lab and table)):
+            raise ValidationError(
+                "You must select either store and shelf or lab and table."
+            )
         if (store or shelf) and (lab or table):
             raise ValidationError(
-                "You cann't choose store and lab together. Please choose only one of them."
+                "You can't choose store and lab together. Please choose only one of them."
             )
         return cleaned_data
+
+class AddProductSpecificationForm(forms.ModelForm):
+    class Meta:
+        model = Specification
+        fields = ("specification_type", "value", "remark")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        specification_type = cleaned_data.get("specification_type")
+        department_short_name = self.initial.get('short_name')
+        product_slug = self.initial.get('slug')
+        product = get_object_or_404(Product, slug=product_slug, department__short_name__iexact=department_short_name)
+        if Specification.objects.filter(product=product, specification_type=specification_type).exists():
+            raise ValidationError(
+                    "This specification exists for this product. Please add other specification or update existing one."
+                )
+        self.instance.product = product
+        return cleaned_data
+
+class UpdateProductSpecificationForm(forms.ModelForm):
+    class Meta:
+        model = Specification
+        fields = ("specification_type", "value", "remark")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        specification_type = cleaned_data.get("specification_type")
+        department_short_name = self.initial.get('short_name')
+        product_slug = self.initial.get('slug')
+        product = get_object_or_404(Product, slug=product_slug, department__short_name__iexact=department_short_name)
+        if Specification.objects.exclude(pk=self.instance.pk).filter(product=product, specification_type=specification_type).exists():
+            raise ValidationError(
+                    "This specification exists for this product. Please add other specification or update existing one."
+                )
+        return cleaned_data
+
+class AddItemSpecificationForm(forms.ModelForm):
+    class Meta:
+        model = Specification
+        fields = ("specification_type", "value", "remark")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        specification_type = cleaned_data.get("specification_type")
+        item_pk = self.initial.get('pk')
+        item = get_object_or_404(Item, pk=item_pk)
+        if Specification.objects.filter(item=item, specification_type=specification_type).exists():
+            raise ValidationError(
+                    "This specification exists for this item. Please add other specification or update existing one."
+                )
+        self.instance.item = item
+        return cleaned_data
+
+class UpdateItemSpecificationForm(forms.ModelForm):
+    class Meta:
+        model = Specification
+        fields = ("specification_type", "value", "remark")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        specification_type = cleaned_data.get("specification_type")
+        item_pk = self.initial.get('pk')
+        item = get_object_or_404(Item, pk=item_pk)
+        if Specification.objects.exclude(pk=self.instance.pk).filter(item=item, specification_type=specification_type).exists():
+            raise ValidationError(
+                    "This specification exists for this item. Please add other specification or update existing one."
+                )
+        return cleaned_data
+

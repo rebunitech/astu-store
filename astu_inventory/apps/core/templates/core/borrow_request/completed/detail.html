@@ -1,4 +1,12 @@
-{% extends "layouts/main.html" %}{% load static %}{% block content %}
+{% extends "layouts/main.html" %}{% load static %}{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    {% if perms.core.can_list_completed_borrow_request %}<li class="breadcrumb-item"><a href="{% url 'core:completed_borrow_requests_list' %}">Completed Borrow Requests List</a></li>{% endif %}
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
 <div class="container pt-4">
   <div class="row py-4">
       <div class="col-12 col-sm-4 d-flex justify-content-center align-item-center">
