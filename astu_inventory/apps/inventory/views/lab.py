@@ -23,9 +23,7 @@ class AddLabView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
         user = self.request.user
         if user.is_superuser or user.is_college_dean:
             return form
-        form["department"].field.queryset = Department.objects.filter(
-            Q(department=user.department)
-        )
+        form["department"].field.queryset = Department.objects.filter(Q(department=user.department))
         return form
 
 
@@ -59,6 +57,7 @@ class UpdateLabView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
         if user.is_superuser or user.is_college_dean:
             return qs
         return qs.filter(Q(department=user.department))
+
 
 class DeleteLabView(PermissionRequiredMixin, DeleteView):
     model = Lab

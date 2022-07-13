@@ -50,7 +50,8 @@
         {% if perms.inventory.view_specificationtype %}<li><a class="nav-link" href="{% url 'inventory:specification_types_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Specification Types</a></li>{% endif  %}{% if perms.inventory.view_category %}
         <li><a class="nav-link" href="{% url 'inventory:categories_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Categories</a></li>{% endif  %}{% if perms.inventory.view_subcategory %}
         <li><a class="nav-link" href="{% url 'inventory:sub_categories_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Sub Categories</a></li>{% endif  %}{% if perms.inventory.view_measurement %}
-        <li><a class="nav-link" href="{% url 'inventory:measurments_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Measurments</a></li>{% endif  %}
+        <li><a class="nav-link" href="{% url 'inventory:measurments_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Measurments</a></li>{% endif  %}{% if perms.help.view_help %}
+        <li><a class="nav-link" href="{% url 'help:helps_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Helps</a></li>{% endif  %}
       </ul>
     </li>
   </ul>{% endif %}

@@ -27,9 +27,7 @@ class AddShelfView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy(
-            "inventory:shelves_list", kwargs={"pk": self.kwargs.get("pk")}
-        )
+        return reverse_lazy("inventory:shelves_list", kwargs={"pk": self.kwargs.get("pk")})
 
 
 class ListShelvesView(PermissionRequiredMixin, ListView):
@@ -59,9 +57,7 @@ class UpdateShelfView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     slug_url_kwarg = "shelf_id"
 
     def get_success_url(self):
-        return reverse_lazy(
-            "inventory:shelves_list", kwargs={"pk": self.kwargs.get("pk")}
-        )
+        return reverse_lazy("inventory:shelves_list", kwargs={"pk": self.kwargs.get("pk")})
 
     def get_queryset(self):
         user = self.request.user
@@ -80,9 +76,7 @@ class DeleteShelfView(PermissionRequiredMixin, DeleteView):
     http_method_names = ["post"]
 
     def get_success_url(self):
-        return reverse_lazy(
-            "inventory:shelves_list", kwargs={"pk": self.kwargs.get("pk")}
-        )
+        return reverse_lazy("inventory:shelves_list", kwargs={"pk": self.kwargs.get("pk")})
 
     def get_queryset(self):
         user = self.request.user

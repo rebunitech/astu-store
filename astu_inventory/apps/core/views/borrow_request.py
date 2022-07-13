@@ -8,15 +8,15 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
+from django_summernote.fields import SummernoteTextFormField
+
 from astu_inventory.apps.core.forms import ReasonForm
 from astu_inventory.apps.core.models import BorrowRequest
-from astu_inventory.apps.inventory.models import Product
-from django_summernote.fields import SummernoteTextFormField, SummernoteTextField
 from astu_inventory.apps.core.signals import *
+from astu_inventory.apps.inventory.models import Product
 
-class InitiateBorrowRequestView(
-    PermissionRequiredMixin, SuccessMessageMixin, CreateView
-):
+
+class InitiateBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     model = BorrowRequest
     fields = ("quantity", "start_date", "end_date", "reason")
     permission_required = "core.can_initiate_borrow_request"
@@ -25,8 +25,10 @@ class InitiateBorrowRequestView(
     success_url = reverse_lazy("core:dashboard")
 
     def get_success_message(self, *args, **kwargs):
-        return f"You have successfuly request {self.object.quantity}"\
-               f" {self.object.product.measurment} of {self.object.product}."
+        return (
+            f"You have successfuly request {self.object.quantity}"
+            f" {self.object.product.measurment} of {self.object.product}."
+        )
 
     def form_valid(self, form):
         if self.is_quantify_valid(form) and self.is_dates_valid(form):
@@ -59,24 +61,20 @@ class InitiateBorrowRequestView(
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
-        form['reason'].field = SummernoteTextFormField()
+        form["reason"].field = SummernoteTextFormField()
         form["quantity"].field.widget.attrs.update({"max": self.availables, "min": 0})
         return form
 
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
         self.product = get_object_or_404(Product, slug=self.kwargs["slug"])
-        self.availables = self.product.items.aggregate(
-            total=Coalesce(Sum("quantity"), 0)
-        )["total"]
+        self.availables = self.product.items.aggregate(total=Coalesce(Sum("quantity"), 0))["total"]
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data.update(
             {
-                "previous_borrow_requests": BorrowRequest.objects.filter(
-                    product=self.product, status=0
-                )
+                "previous_borrow_requests": BorrowRequest.objects.filter(product=self.product, status=0)
                 .order_by("date_requested")
                 .values("start_date", "end_date", "quantity")
             }
@@ -97,13 +95,9 @@ class ListActiveBorrowRequestView(PermissionRequiredMixin, ListView):
         if user.is_superuser or user.is_college_dean:
             return qs
         return qs.filter(
-                    Q(user__department=user.department)
-                    | (
-                        ~Q(user__department=user.department)
-                        & Q(product__department=user.department)
-                        & Q(status=4)
-                    )
-                )
+            Q(user__department=user.department)
+            | (~Q(user__department=user.department) & Q(product__department=user.department) & Q(status=4))
+        )
 
 
 class ActiveBorrowRequestDetailView(PermissionRequiredMixin, DetailView):
@@ -121,15 +115,13 @@ class ActiveBorrowRequestDetailView(PermissionRequiredMixin, DetailView):
         return qs.filter(product__department=user.department)
 
 
-class ApproveBorrowRequestView(
-    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
-):
+class ApproveBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = BorrowRequest
     fields = ("status",)
     permission_required = "auser.can_approve_borrow_request"
     success_message = "Borrow request has been approved successfully."
     http_method_names = ["post"]
-    success_url =  reverse_lazy('core:active_borrow_requests_list')
+    success_url = reverse_lazy("core:active_borrow_requests_list")
 
     def get_queryset(self):
         qs = super().get_queryset().filter(Q(status=0) | Q(status=4))
@@ -157,9 +149,7 @@ class ApproveBorrowRequestView(
             self.request,
             "This request cann't be approved, since currently there is no enough quantity item available.",
         )
-        return HttpResponseRedirect(
-            reverse_lazy("core:active_borrow_requests_detail", args=[self.object.pk])
-        )
+        return HttpResponseRedirect(reverse_lazy("core:active_borrow_requests_detail", args=[self.object.pk]))
 
     def get_form_kwargs(self):
         form_kwargs = super().get_form_kwargs()
@@ -170,15 +160,13 @@ class ApproveBorrowRequestView(
         return form_kwargs
 
 
-class DeclineBorrowRequestView(
-    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
-):
+class DeclineBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = BorrowRequest
     fields = ("status",)
     permission_required = "auser.can_declined_borrow_request"
     success_message = "Borrow request has been declined."
     http_method_names = ["post"]
-    success_url =  reverse_lazy('core:active_borrow_requests_list')
+    success_url = reverse_lazy("core:active_borrow_requests_list")
 
     def get_queryset(self):
         qs = super().get_queryset().filter(Q(status=0) | Q(status=4))
@@ -200,9 +188,7 @@ class DeclineBorrowRequestView(
             self.request,
             "You have to give a reason before declining a request. Please try again.",
         )
-        return HttpResponseRedirect(
-            reverse_lazy("core:active_borrow_requests_detail", args=[self.object.pk])
-        )
+        return HttpResponseRedirect(reverse_lazy("core:active_borrow_requests_detail", args=[self.object.pk]))
 
     def get_form_kwargs(self):
         form_kwargs = super().get_form_kwargs()
@@ -226,6 +212,7 @@ class ListApprovedBorrowRequestView(PermissionRequiredMixin, ListView):
             return qs
         return qs.filter(product__department=user.department)
 
+
 class ApprovedBorrowRequestDetailView(PermissionRequiredMixin, DetailView):
     model = BorrowRequest
     context_object_name = "borrow_request"
@@ -240,15 +227,14 @@ class ApprovedBorrowRequestDetailView(PermissionRequiredMixin, DetailView):
             return qs
         return qs.filter(product__department=user.department)
 
-class CompleteBorrowRequestView(
-    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
-):
+
+class CompleteBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = BorrowRequest
     fields = ("status",)
     permission_required = "auser.can_complete_borrow_request"
     success_message = "Borrow request has been completed successfully."
     http_method_names = ["post"]
-    success_url =  reverse_lazy('core:approved_borrow_requests_list')
+    success_url = reverse_lazy("core:approved_borrow_requests_list")
 
     def form_valid(self, form):
         borrow_request_completed.send(sender=self.model, instance=self.object)
@@ -268,15 +254,14 @@ class CompleteBorrowRequestView(
         form_kwargs.update({"data": form_data})
         return form_kwargs
 
-class RevokeBorrowRequestView(
-    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
-):
+
+class RevokeBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = BorrowRequest
     fields = ("status",)
     permission_required = "auser.can_revoke_borrow_request"
     success_message = "Borrow request has been revoked."
     http_method_names = ["post"]
-    success_url =  reverse_lazy('core:approved_borrow_requests_list')
+    success_url = reverse_lazy("core:approved_borrow_requests_list")
 
     def get_queryset(self):
         qs = super().get_queryset().filter(Q(status=1))
@@ -298,9 +283,7 @@ class RevokeBorrowRequestView(
             self.request,
             "You have to give a reason before revoking a request. Please try again.",
         )
-        return HttpResponseRedirect(
-            reverse_lazy("core:approved_borrow_requests_detail", args=[self.object.pk])
-        )
+        return HttpResponseRedirect(reverse_lazy("core:approved_borrow_requests_detail", args=[self.object.pk]))
 
     def get_form_kwargs(self):
         form_kwargs = super().get_form_kwargs()
@@ -308,6 +291,7 @@ class RevokeBorrowRequestView(
         form_data.update({"status": 5})
         form_kwargs.update({"data": form_data})
         return form_kwargs
+
 
 class ListCompletedBorrowRequestView(PermissionRequiredMixin, ListView):
     model = BorrowRequest
@@ -323,6 +307,7 @@ class ListCompletedBorrowRequestView(PermissionRequiredMixin, ListView):
             return qs
         return qs.filter(product__department=user.department)
 
+
 class CompletedBorrowRequestDetailView(PermissionRequiredMixin, DetailView):
     model = BorrowRequest
     context_object_name = "borrow_request"
@@ -337,15 +322,14 @@ class CompletedBorrowRequestDetailView(PermissionRequiredMixin, DetailView):
             return qs
         return qs.filter(product__department=user.department)
 
-class ReturnedBorrowRequestView(
-    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
-):
+
+class ReturnedBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = BorrowRequest
     fields = ("status",)
     permission_required = "auser.can_return_borrow_request"
     success_message = "Borrowed product has been returned successfully."
     http_method_names = ["post"]
-    success_url =  reverse_lazy('core:completed_borrow_requests_list')
+    success_url = reverse_lazy("core:completed_borrow_requests_list")
 
     def get_queryset(self):
         qs = super().get_queryset().filter(Q(status=6))

@@ -42,6 +42,7 @@ class ListItemsView(PermissionRequiredMixin, ListView):
             return qs.filter(Q(store__department=user.department))
         return qs.filter(Q(store__store_officers__pk=user.pk))
 
+
 class UpdateItemView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Item
     form_class = ItemForm
@@ -59,6 +60,7 @@ class UpdateItemView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
         if user.is_department_head:
             return qs.filter(Q(store__department=user.department))
         return qs.filter(Q(store__store_officers__pk=user.pk))
+
 
 class DeleteItemView(PermissionRequiredMixin, DeleteView):
     model = Item

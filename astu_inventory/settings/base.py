@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     "astu_inventory.apps.auser",
     "astu_inventory.apps.inventory",
     "astu_inventory.apps.core",
-    "astu_inventory.apps.help"
+    "astu_inventory.apps.help",
 ]
 
 # ==============================================================================
@@ -191,12 +191,11 @@ USE_DJANGO_JQUERY = True
 # Summernote
 
 SUMMERNOTE_CONFIG = {
-
-    'iframe': False,
-    'summernote': {
+    "iframe": False,
+    "summernote": {
         # Change editor size
-        'width': '100%',
-        'height': '480',
+        "width": "100%",
+        "height": "480",
     },
 }
 

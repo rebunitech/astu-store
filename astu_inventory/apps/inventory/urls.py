@@ -119,9 +119,7 @@ urlpatterns = [
                     views.ListCategoriesView.as_view(),
                     name="categories_list",
                 ),
-                re_path(
-                    r"^add/$", views.AddCategoryView.as_view(), name="add_category"
-                ),
+                re_path(r"^add/$", views.AddCategoryView.as_view(), name="add_category"),
                 re_path(
                     r"^(?P<slug>[-a-zA-Z0-9_]+)/",
                     include(
@@ -185,9 +183,7 @@ urlpatterns = [
                     views.ListMeasurmentsView.as_view(),
                     name="measurments_list",
                 ),
-                re_path(
-                    r"^add/$", views.AddMeasurmentView.as_view(), name="add_measurment"
-                ),
+                re_path(r"^add/$", views.AddMeasurmentView.as_view(), name="add_measurment"),
                 re_path(
                     r"^(?P<pk>\d+)/",
                     include(

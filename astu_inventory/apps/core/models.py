@@ -45,9 +45,7 @@ class BorrowRequest(models.Model):
         null=True,
     )
     reason = models.TextField("reason")
-    status = models.IntegerField(
-        choices=StatusChoice.choices, default=StatusChoice.PENDING
-    )
+    status = models.IntegerField(choices=StatusChoice.choices, default=StatusChoice.PENDING)
     date_requested = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -97,9 +95,7 @@ class BorrowHistory(models.Model):
         related_name="histories",
         on_delete=models.CASCADE,
     )
-    item = models.ForeignKey(
-        Item, verbose_name="item", related_name="items", on_delete=models.CASCADE
-    )
+    item = models.ForeignKey(Item, verbose_name="item", related_name="items", on_delete=models.CASCADE)
     quantity = models.SmallIntegerField("quantity")
 
     class Meta:

@@ -1,11 +1,17 @@
-from .borrow_request import (ActiveBorrowRequestDetailView,
-                             ApproveBorrowRequestView,
-                             ApprovedBorrowRequestDetailView,
-                             DeclineBorrowRequestView,
-                             InitiateBorrowRequestView,
-                             ListActiveBorrowRequestView,
-                             ListApprovedBorrowRequestView,
-                             CompleteBorrowRequestView, RevokeBorrowRequestView, ListCompletedBorrowRequestView, CompletedBorrowRequestDetailView, ReturnedBorrowRequestView)
+from .borrow_request import (
+    ActiveBorrowRequestDetailView,
+    ApproveBorrowRequestView,
+    ApprovedBorrowRequestDetailView,
+    CompleteBorrowRequestView,
+    CompletedBorrowRequestDetailView,
+    DeclineBorrowRequestView,
+    InitiateBorrowRequestView,
+    ListActiveBorrowRequestView,
+    ListApprovedBorrowRequestView,
+    ListCompletedBorrowRequestView,
+    ReturnedBorrowRequestView,
+    RevokeBorrowRequestView,
+)
 from .view import ListAvailableProductsView
 
 __all__ = [

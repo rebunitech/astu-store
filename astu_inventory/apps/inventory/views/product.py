@@ -29,10 +29,11 @@ class UpdateProductView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView
 
     def get_queryset(self):
         user = self.request.user
-        qs = super().get_queryset().filter(department__short_name__iexact=self.kwargs['short_name'])
+        qs = super().get_queryset().filter(department__short_name__iexact=self.kwargs["short_name"])
         if user.is_superuser or user.is_college_dean:
             return qs
         return qs.filter(department=user.department)
+
 
 class ListProductsView(PermissionRequiredMixin, ListView):
     model = Product
@@ -57,7 +58,7 @@ class DeleteProductView(PermissionRequiredMixin, DeleteView):
 
     def get_queryset(self):
         user = self.request.user
-        qs = super().get_queryset().filter(department__short_name__iexact=self.kwargs['short_name'])
+        qs = super().get_queryset().filter(department__short_name__iexact=self.kwargs["short_name"])
         if user.is_superuser or user.is_college_dean:
             return qs
         return qs.filter(Q(department=user.department))

@@ -27,9 +27,7 @@ class AddTableView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy(
-            "inventory:tables_list", kwargs={"pk": self.kwargs.get("pk")}
-        )
+        return reverse_lazy("inventory:tables_list", kwargs={"pk": self.kwargs.get("pk")})
 
 
 class ListTablesView(PermissionRequiredMixin, ListView):
@@ -50,7 +48,7 @@ class ListTablesView(PermissionRequiredMixin, ListView):
 class UpdateTableView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Table
     form_class = TableForm
-    permission_required = "inventory.change_table",
+    permission_required = ("inventory.change_table",)
     success_message = _("Table updated successfully.")
     template_name = "inventory/lab/table/update.html"
     extra_context = {"title": _("Update table")}
@@ -59,9 +57,7 @@ class UpdateTableView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     slug_url_kwarg = "table_id"
 
     def get_success_url(self):
-        return reverse_lazy(
-            "inventory:tables_list", kwargs={"pk": self.kwargs.get("pk")}
-        )
+        return reverse_lazy("inventory:tables_list", kwargs={"pk": self.kwargs.get("pk")})
 
     def get_queryset(self):
         user = self.request.user
@@ -82,9 +78,7 @@ class DeleteTableView(PermissionRequiredMixin, DeleteView):
     http_method_names = ["post"]
 
     def get_success_url(self):
-        return reverse_lazy(
-            "inventory:tables_list", kwargs={"pk": self.kwargs.get("pk")}
-        )
+        return reverse_lazy("inventory:tables_list", kwargs={"pk": self.kwargs.get("pk")})
 
     def get_queryset(self):
         user = self.request.user

@@ -1,10 +1,12 @@
 from django.db import models
-from django.urls import get_resolver, URLResolver
+from django.urls import URLResolver, get_resolver
+
 
 class Help(models.Model):
     app_name = models.CharField(max_length=150)
     view_name = models.CharField(max_length=150)
-    content = models.TextField()
+    is_visible = models.BooleanField(default=True)
+    content = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Help"

@@ -1,8 +1,9 @@
 import datetime
 
-import pytz
-from django.core.exceptions import ValidationError
 from django.conf import settings
+from django.core.exceptions import ValidationError
+
+import pytz
 
 tzinfo = pytz.timezone(settings.TIME_ZONE)
 

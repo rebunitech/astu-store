@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class HelpConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'astu_inventory.apps.help'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "astu_inventory.apps.help"

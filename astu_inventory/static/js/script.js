@@ -49,6 +49,10 @@ $(document).ready(function() {
         { responsivePriority: 3, targets: 2},
         ]
     })
+    $('#help_list').DataTable({
+        dom: 'Qfltipr'
+    })
+
     $('#colleges_list, #items_list').DataTable({
         dom: 'Qfltipr',
         responsive: true,

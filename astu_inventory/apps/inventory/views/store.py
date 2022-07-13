@@ -23,9 +23,7 @@ class AddStoreView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
         user = self.request.user
         if user.is_superuser or user.is_college_dean:
             return form
-        form["department"].field.queryset = Department.objects.filter(
-            Q(department=user.department)
-        )
+        form["department"].field.queryset = Department.objects.filter(Q(department=user.department))
         return form
 
 

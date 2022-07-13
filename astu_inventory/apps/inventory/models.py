@@ -7,6 +7,7 @@ from django.db.models import Q, Sum
 from django.db.models.functions import Coalesce
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
+
 from smart_selects.db_fields import ChainedForeignKey
 
 from astu_inventory.apps.auser.models import Department
@@ -33,10 +34,14 @@ class Store(models.Model):
         verbose_name="department",
         related_name="stores",
         on_delete=models.PROTECT,
-        help_text=_("Department new store belongs to.")
+        help_text=_("Department new store belongs to."),
     )
-    block = models.IntegerField(_("block"), validators=[MinValueValidator(1)], help_text=_("Block number the store will be found."))
-    room = models.IntegerField(_("room"), validators=[MinValueValidator(1)], help_text=_("Store room number inside block."))
+    block = models.IntegerField(
+        _("block"), validators=[MinValueValidator(1)], help_text=_("Block number the store will be found.")
+    )
+    room = models.IntegerField(
+        _("room"), validators=[MinValueValidator(1)], help_text=_("Store room number inside block.")
+    )
     status = models.CharField(
         _("status"),
         max_length=8,
@@ -51,9 +56,7 @@ class Store(models.Model):
         verbose_name = _("store")
         verbose_name_plural = _("stores")
         unique_together = (("block", "room"),)
-        permissions = (
-            ("can_list_stores", "Can list stores"),
-        )
+        permissions = (("can_list_stores", "Can list stores"),)
 
     def __str__(self):
         return f"{self.department.short_name} Store B{self.block} R{self.room}"
@@ -68,20 +71,20 @@ class Shelf(models.Model):
         _("shelf ID"), max_length=50, unique=True, default=get_ID, help_text=_("Unique identifier for new shelf.")
     )
     store = models.ForeignKey(
-        Store, verbose_name="store", related_name="shelves", on_delete=models.CASCADE, help_text=_("Store that the shelf will be stored.")
+        Store,
+        verbose_name="store",
+        related_name="shelves",
+        on_delete=models.CASCADE,
+        help_text=_("Store that the shelf will be stored."),
     )
-    no_row = models.IntegerField(
-        _("Number of row(s)"), validators=[MinValueValidator(1)]
-    )
-    no_column = models.IntegerField(
-        _("Number of column(s)"), validators=[MinValueValidator(1)]
-    )
+    no_row = models.IntegerField(_("Number of row(s)"), validators=[MinValueValidator(1)])
+    no_column = models.IntegerField(_("Number of column(s)"), validators=[MinValueValidator(1)])
     status = models.CharField(
         _("status"),
         max_length=8,
         choices=StatusChoices.choices,
         default=StatusChoices.ACTIVE,
-        help_text=_("Is the shelf on use?")
+        help_text=_("Is the shelf on use?"),
     )
     remark = models.TextField(_("remark"), max_length=255, blank=True, help_text=_("Additional note."))
 
@@ -89,9 +92,7 @@ class Shelf(models.Model):
         db_table = "shelf"
         verbose_name = _("shelf")
         verbose_name_plural = _("shelves")
-        permissions = (
-            ("can_list_shelves", "Can list shelves"),
-        )
+        permissions = (("can_list_shelves", "Can list shelves"),)
 
     def __str__(self):
         return self.shelf_id
@@ -112,10 +113,14 @@ class Lab(models.Model):
         verbose_name="department",
         related_name="labs",
         on_delete=models.PROTECT,
-        help_text=_("Department new lab belongs to.")
+        help_text=_("Department new lab belongs to."),
     )
-    block = models.IntegerField(_("block"), validators=[MinValueValidator(1)], help_text=_("Block number the lab will be found."))
-    room = models.IntegerField(_("room"), validators=[MinValueValidator(1)], help_text=_("Lab room number inside block."))
+    block = models.IntegerField(
+        _("block"), validators=[MinValueValidator(1)], help_text=_("Block number the lab will be found.")
+    )
+    room = models.IntegerField(
+        _("room"), validators=[MinValueValidator(1)], help_text=_("Lab room number inside block.")
+    )
     status = models.CharField(
         _("status"),
         max_length=8,
@@ -142,15 +147,13 @@ class Table(models.Model):
     table_id = models.CharField(
         _("table ID"), max_length=50, unique=True, default=get_ID, help_text=_("Unique identifier for new table.")
     )
-    lab = models.ForeignKey(
-        Lab, verbose_name="lab", related_name="tables", on_delete=models.CASCADE
-    )
+    lab = models.ForeignKey(Lab, verbose_name="lab", related_name="tables", on_delete=models.CASCADE)
     status = models.CharField(
         _("status"),
         max_length=8,
         choices=StatusChoices.choices,
         default=StatusChoices.ACTIVE,
-        help_text=_("Is the table on use?")
+        help_text=_("Is the table on use?"),
     )
     remark = models.TextField(_("remark"), max_length=255, blank=True, help_text=_("Additional note."))
 
@@ -228,9 +231,7 @@ class Product(models.Model):
 
     name = models.CharField(max_length=50, verbose_name=_("name"))
     slug = models.SlugField(max_length=100, verbose_name=_("slug"))
-    category = models.ForeignKey(
-        Category, verbose_name=_("category"), on_delete=models.PROTECT
-    )
+    category = models.ForeignKey(Category, verbose_name=_("category"), on_delete=models.PROTECT)
     sub_category = ChainedForeignKey(
         SubCategory,
         chained_field="category",
@@ -242,24 +243,16 @@ class Product(models.Model):
         sort=True,
         on_delete=models.PROTECT,
     )
-    department = models.ForeignKey(
-        Department, verbose_name=_("department"), on_delete=models.PROTECT
-    )
-    kind = models.CharField(
-        max_length=25, verbose_name=_("kind"), choices=KindChoices.choices
-    )
-    measurment = models.ForeignKey(
-        Measurment, verbose_name=_("measurement"), on_delete=models.PROTECT
-    )
-    critical_no = models.IntegerField(
-        help_text=_("Min number of item that must be in store.")
-    )
+    department = models.ForeignKey(Department, verbose_name=_("department"), on_delete=models.PROTECT)
+    kind = models.CharField(max_length=25, verbose_name=_("kind"), choices=KindChoices.choices)
+    measurment = models.ForeignKey(Measurment, verbose_name=_("measurement"), on_delete=models.PROTECT)
+    critical_no = models.IntegerField(help_text=_("Min number of item that must be in store."))
 
     class Meta:
         db_table = "product"
         verbose_name = _("product")
         verbose_name_plural = _("products")
-        unique_together = (('slug', 'department'),)
+        unique_together = (("slug", "department"),)
 
     @property
     def is_under_critical(self):
@@ -275,9 +268,7 @@ class Product(models.Model):
 
     @property
     def availables(self):
-        total_item = self.items.aggregate(total_item=Coalesce(Sum("quantity"), 0))[
-            "total_item"
-        ]
+        total_item = self.items.aggregate(total_item=Coalesce(Sum("quantity"), 0))["total_item"]
         total_borrow_request = self.borrow_requests.aggregate(
             total_borrow_request=Coalesce(Sum("quantity", filter=Q(status=1) | Q(status=6)), 0)
         )["total_borrow_request"]
@@ -296,6 +287,7 @@ class Item(models.Model):
             _("Postgraduate"),
         )
         BOTH = "BOTH", _("Undergraduate and Postgraduate")
+
     description = models.TextField(_("description"), blank=True, null=True)
     quantity = models.IntegerField(_("quantity"), validators=[MinValueValidator(1)])
     dead_stock_number = models.CharField(_("dead stock number"), max_length=50)
@@ -380,9 +372,7 @@ class Item(models.Model):
 
 class SpecificationType(models.Model):
     name = models.CharField(_("name"), max_length=255)
-    si_unit = models.CharField(
-        _("SI unit"), max_length=255, help_text=_("e.g. m, kg, etc.")
-    )
+    si_unit = models.CharField(_("SI unit"), max_length=255, help_text=_("e.g. m, kg, etc."))
 
     class Meta:
         db_table = "specification_type"
@@ -429,4 +419,4 @@ class Specification(models.Model):
         )
 
     def __str__(self):
-        return f'{self.product or self.item} - {self.specification_type}'
+        return f"{self.product or self.item} - {self.specification_type}"

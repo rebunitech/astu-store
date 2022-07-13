@@ -5,13 +5,16 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from astu_inventory.apps.inventory.models import (Item, Measurment, Product, Specification,
-                              SpecificationType)
-from astu_inventory.apps.inventory.forms import AddProductSpecificationForm, UpdateProductSpecificationForm, AddItemSpecificationForm, UpdateItemSpecificationForm
+from astu_inventory.apps.inventory.forms import (
+    AddItemSpecificationForm,
+    AddProductSpecificationForm,
+    UpdateItemSpecificationForm,
+    UpdateProductSpecificationForm,
+)
+from astu_inventory.apps.inventory.models import Item, Measurment, Product, Specification, SpecificationType
 
-class AddSpecificationTypeView(
-    PermissionRequiredMixin, SuccessMessageMixin, CreateView
-):
+
+class AddSpecificationTypeView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     model = SpecificationType
     fields = (
         "name",
@@ -32,9 +35,7 @@ class ListSpecificationTypesView(PermissionRequiredMixin, ListView):
     extra_context = {"title": _("Specification Types")}
 
 
-class UpdateSpecificationTypeView(
-    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
-):
+class UpdateSpecificationTypeView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = SpecificationType
     fields = ("name", "si_unit")
     permission_required = ("inventory.change_specificationtype",)
@@ -86,9 +87,7 @@ class DeleteMeasurmentView(PermissionRequiredMixin, DeleteView):
     http_method_names = ["post"]
 
 
-class AddItemSpecificationView(
-    PermissionRequiredMixin, SuccessMessageMixin, CreateView
-):
+class AddItemSpecificationView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     model = Specification
     form_class = AddItemSpecificationForm
     permission_required = ("inventory.add_specification",)
@@ -117,9 +116,7 @@ class ListItemSpecificationsView(PermissionRequiredMixin, ListView):
         return super().get_queryset().filter(item__pk=self.kwargs.get("pk"))
 
 
-class UpdateItemSpecificationView(
-    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
-):
+class UpdateItemSpecificationView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Specification
     form_class = UpdateItemSpecificationForm
     permission_required = ("inventory.change_specification",)
@@ -151,9 +148,7 @@ class DeleteItemSpecificationView(PermissionRequiredMixin, DeleteView):
         )
 
 
-class AddProductSpecificationView(
-    PermissionRequiredMixin, SuccessMessageMixin, CreateView
-):
+class AddProductSpecificationView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     model = Specification
     form_class = AddProductSpecificationForm
     permission_required = ("inventory.add_specification",)
@@ -179,12 +174,17 @@ class ListProductSpecificationsView(PermissionRequiredMixin, ListView):
     extra_context = {"title": _("Specifications")}
 
     def get_queryset(self):
-        return super().get_queryset().filter(product__slug=self.kwargs.get("slug"), product__department__short_name__iexact=self.kwargs['short_name'])
+        return (
+            super()
+            .get_queryset()
+            .filter(
+                product__slug=self.kwargs.get("slug"),
+                product__department__short_name__iexact=self.kwargs["short_name"],
+            )
+        )
 
 
-class UpdateProductSpecificationView(
-    PermissionRequiredMixin, SuccessMessageMixin, UpdateView
-):
+class UpdateProductSpecificationView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Specification
     form_class = UpdateProductSpecificationForm
     permission_required = ("inventory.change_specification",)
@@ -194,7 +194,7 @@ class UpdateProductSpecificationView(
     pk_url_kwarg = "s_pk"
 
     def get_success_url(self):
-        self.kwargs.pop('s_pk')
+        self.kwargs.pop("s_pk")
         return reverse_lazy(
             "inventory:product_specifications_list",
             kwargs=self.kwargs,
@@ -204,7 +204,15 @@ class UpdateProductSpecificationView(
         return self.kwargs
 
     def get_queryset(self):
-        return super().get_queryset().filter(product__slug=self.kwargs.get("slug"), product__department__short_name__iexact=self.kwargs['short_name'])
+        return (
+            super()
+            .get_queryset()
+            .filter(
+                product__slug=self.kwargs.get("slug"),
+                product__department__short_name__iexact=self.kwargs["short_name"],
+            )
+        )
+
 
 class DeleteProductSpecificationView(PermissionRequiredMixin, DeleteView):
     model = Specification
@@ -213,12 +221,18 @@ class DeleteProductSpecificationView(PermissionRequiredMixin, DeleteView):
     pk_url_kwarg = "s_pk"
 
     def get_success_url(self):
-        self.kwargs.pop('s_pk')
+        self.kwargs.pop("s_pk")
         return reverse_lazy(
             "inventory:product_specifications_list",
             kwargs=self.kwargs,
         )
 
     def get_queryset(self):
-        return super().get_queryset().filter(product__slug=self.kwargs.get("slug"), product__department__short_name__iexact=self.kwargs['short_name'])
-
+        return (
+            super()
+            .get_queryset()
+            .filter(
+                product__slug=self.kwargs.get("slug"),
+                product__department__short_name__iexact=self.kwargs["short_name"],
+            )
+        )

@@ -2,7 +2,7 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
-    {% if perms.inventory.view_subcategory %}<li class="breadcrumb-item"><a href="{% url 'inventory:sub_categories_list' %}">Sub Categories</a></li>{% endif %}
+    {% if perms.inventory.view_category %}<li class="breadcrumb-item"><a href="{% url 'inventory:categories_list' %}">Categories</a></li>{% endif %}
     <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
   </ol>
 </nav>
