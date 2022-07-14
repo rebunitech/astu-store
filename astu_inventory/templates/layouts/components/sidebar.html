@@ -5,7 +5,7 @@
     </div>
   </div>
   <ul class="nav flex-column" id="nav_accordion">
-    {% if perms.core.can_list_available_products %}<li class="nav-item">
+    {% if perms.core.can_list_available_product %}<li class="nav-item">
       <a class="nav-link" href="{% url 'core:dashboard' %}"><i class="fa-solid fa-tent-arrow-turn-left me-4"></i>Create Rrequest</a>
     </li>{% endif %}
     {% if perms.core.can_list_active_borrow_request or perms.core.can_list_approved_borrow_request or perms.core.can_list_completed_borrow_request%}
