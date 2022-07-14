@@ -3,7 +3,7 @@
 The `urlpatterns` list routes URLs to views.
 
     Date Created: 3 July, 2022
-    Author: Wendirad Demelash(@wendirad)
+    Author: Wendirad Demelash(@wendirad) and Ashenafi Zenebe
 """
 
 from django.contrib.auth.decorators import login_required
@@ -74,7 +74,7 @@ urlpatterns = [
     re_path(
         r"^departments/",
         include(
-            [
+            [     #TODO:
                 re_path(r"^$", views.ListDepartmentsView.as_view(), name="departments_list"),
                 re_path(r"^add/$", views.AddDepartmentView.as_view(), name="add_department"),
                 re_path(
@@ -145,11 +145,63 @@ urlpatterns = [
                                 views.DeleteDepartmentView.as_view(),
                                 name="delete_department",
                             ),
+
+                            re_path(
+                                    r"store_officers/",
+                                    include(
+                                        [
+                                            re_path(
+                                                r"^$",
+                                                views.StoreOfficersListView.as_view(),
+                                                name="store_officers_list"
+                                            ),
+                                            re_path(
+                                                r"^add/$",
+                                                views.AddStoreOfficerView.as_view(),
+                                                name="add_store_officer"
+                                            ),
+
+                                            re_path(
+                                                r"^(?P<pk>\d+)/",
+                                                include(
+                                                    [
+                                                        re_path(
+                                                            r"^update/$",
+                                                            views.StoreOfficerUpdateView.as_view(),
+                                                            name="update_store_officer"
+                                                        ),
+                                                        re_path(
+                                                            r"^activate/$",
+                                                            views.StoreOfficerActivateView.as_view(),
+                                                            name="activate_store_officer"
+                                                        ),
+                                                        re_path(
+                                                            r"^deactivate/$",
+                                                            views.StoreOfficerDeactivateView.as_view(),
+                                                            name="deactivate_store_officer"
+                                                        ),
+                                                        re_path(
+                                                            r"^remove/$",
+                                                            views.RemoveFromStoreOfficerView.as_view(),
+                                                            name="remove_store_officer"
+                                                        ),
+                                                        re_path(
+                                                            r"^delete/$",
+                                                            views.StoreOfficerDeleteView.as_view(),
+                                                            name="delete_store_officer",
+                                                        ),
+                                                    ],
+                                                ),
+                                            ),
+                                        ]
+                                    ),
+                                ),
+
                             re_path(
                                 r"^heads/",
                                 include(
                                     [
-                                        re_path(
+                                        re_path(   
                                             r"^$",
                                             views.DepartmentHeadsListView.as_view(),
                                             name="department_heads_list",
