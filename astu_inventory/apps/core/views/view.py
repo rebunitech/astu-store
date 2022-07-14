@@ -9,6 +9,6 @@ from astu_inventory.apps.inventory.models import Product
 class ListAvailableProductsView(PermissionRequiredMixin, ListView):
     model = Product
     context_object_name = "products"
-    permission_required = "inventory.can_list_available_product"
+    permission_required = "core.can_list_available_product"
     extra_context = {"title": "Products"}
     template_name = "core/product_list.html"
