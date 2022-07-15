@@ -9,7 +9,7 @@
 {% endblock breadcrumbs %}{% block content %}
 <div class="row">
     <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3 d-flex justify-content-end">
-        {% if perms.auser.can_add_department_head %}<a href="{% url 'auser:all_add_store_officer' %}" class="btn btn-md btn-success rounded-3 shadow-none me-3">
+        {% if perms.auser.can_add_store_officer %}<a href="{% url 'auser:all_store_officer_list' %}" class="btn btn-md btn-success rounded-3 shadow-none me-3">
           <i class="fa-solid fa-circle-plus me-2"></i>Add Store Officer</a>{% endif %}</div>
     <hr />
     <div class="container-fluid p-sm-3">
@@ -92,7 +92,7 @@
                         <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close">
                           <i class="fa-solid fa-xmark me-2"></i>Cancel</button>
                         <form action="{% if store_officer.is_active %}{% url 'auser:all_deactivate_store_officer' store_officer.department.short_name store_officer.pk %}{% else %}{% url 'auser:all_activate_store_officer' store_officer.department.short_name store_officer.pk %}{% endif %}" method="post">{% csrf_token %}
-                           <button class="btn btn-outline-{% if department_head.is_active %}warning{% else %}success{% endif %} btn-sm shadow-none" type="submit">
+                           <button class="btn btn-outline-{% if store_officer.is_active %}warning{% else %}success{% endif %} btn-sm shadow-none" type="submit">
                             <i class="fa-solid fa-check-circle me-2"></i>Confirm</button>
                         </form>
                       </div>
