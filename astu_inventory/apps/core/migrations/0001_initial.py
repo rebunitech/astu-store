@@ -13,56 +13,135 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('inventory', '0001_initial'),
+        ("inventory", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='BorrowRequest',
+            name="BorrowRequest",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('quantity', models.SmallIntegerField(validators=[django.core.validators.MinValueValidator(1)])),
-                ('start_date', models.DateTimeField(validators=[astu_inventory.apps.core.validators.validate_past], verbose_name='start date')),
-                ('end_date', models.DateTimeField(validators=[astu_inventory.apps.core.validators.validate_past], verbose_name='end date')),
-                ('reason', models.TextField(verbose_name='reason')),
-                ('status', models.IntegerField(choices=[(0, 'Pending'), (1, 'Approved'), (2, 'Declined'), (3, 'Cancelled'), (4, 'Processing'), (5, 'Revoked'), (6, 'Completed'), (7, 'Returned')], default=0)),
-                ('date_requested', models.DateTimeField(auto_now_add=True)),
-                ('date_updated', models.DateTimeField(auto_now=True)),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='borrow_requests', to='inventory.product', verbose_name='product')),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='borrow_requests', to=settings.AUTH_USER_MODEL, verbose_name='user/requester')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("quantity", models.SmallIntegerField(validators=[django.core.validators.MinValueValidator(1)])),
+                (
+                    "start_date",
+                    models.DateTimeField(
+                        validators=[astu_inventory.apps.core.validators.validate_past], verbose_name="start date"
+                    ),
+                ),
+                (
+                    "end_date",
+                    models.DateTimeField(
+                        validators=[astu_inventory.apps.core.validators.validate_past], verbose_name="end date"
+                    ),
+                ),
+                ("reason", models.TextField(verbose_name="reason")),
+                (
+                    "status",
+                    models.IntegerField(
+                        choices=[
+                            (0, "Pending"),
+                            (1, "Approved"),
+                            (2, "Declined"),
+                            (3, "Cancelled"),
+                            (4, "Processing"),
+                            (5, "Revoked"),
+                            (6, "Completed"),
+                            (7, "Returned"),
+                        ],
+                        default=0,
+                    ),
+                ),
+                ("date_requested", models.DateTimeField(auto_now_add=True)),
+                ("date_updated", models.DateTimeField(auto_now=True)),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="borrow_requests",
+                        to="inventory.product",
+                        verbose_name="product",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="borrow_requests",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="user/requester",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'borrow request',
-                'verbose_name_plural': 'borrow requests',
-                'db_table': 'borrow_request',
-                'permissions': (('can_list_available_product', 'Can list available products'), ('can_initiate_borrow_request', 'Can initiate borrow request'), ('can_list_active_borrow_request', 'Can list active borrow request'), ('can_view_active_borrow_request', 'Can view active borrow request'), ('can_approve_borrow_request', 'Can approve borrow request'), ('can_list_approved_borrow_request', 'Can list approved borrow request'), ('can_view_approved_borrow_request', 'Can view approved borrow request'), ('can_complete_borrow_request', 'Can complete borrow request'), ('can_revoke_borrow_request', 'Can revoke borrow request'), ('can_list_completed_borrow_request', 'Can list completed borrow request'), ('can_view_completed_borrow_request', 'Can view completed borrow request'), ('can_return_borrow_request', 'Can return borrow request')),
+                "verbose_name": "borrow request",
+                "verbose_name_plural": "borrow requests",
+                "db_table": "borrow_request",
+                "permissions": (
+                    ("can_list_available_product", "Can list available products"),
+                    ("can_initiate_borrow_request", "Can initiate borrow request"),
+                    ("can_list_active_borrow_request", "Can list active borrow request"),
+                    ("can_view_active_borrow_request", "Can view active borrow request"),
+                    ("can_approve_borrow_request", "Can approve borrow request"),
+                    ("can_list_approved_borrow_request", "Can list approved borrow request"),
+                    ("can_view_approved_borrow_request", "Can view approved borrow request"),
+                    ("can_complete_borrow_request", "Can complete borrow request"),
+                    ("can_revoke_borrow_request", "Can revoke borrow request"),
+                    ("can_list_completed_borrow_request", "Can list completed borrow request"),
+                    ("can_view_completed_borrow_request", "Can view completed borrow request"),
+                    ("can_return_borrow_request", "Can return borrow request"),
+                ),
             },
         ),
         migrations.CreateModel(
-            name='Reason',
+            name="Reason",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('description', models.TextField(verbose_name='description')),
-                ('borrow_request', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='response_reason', to='core.borrowrequest', verbose_name='borrow_request')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("description", models.TextField(verbose_name="description")),
+                (
+                    "borrow_request",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="response_reason",
+                        to="core.borrowrequest",
+                        verbose_name="borrow_request",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'reason',
-                'verbose_name_plural': 'reasons',
-                'db_table': 'reason',
+                "verbose_name": "reason",
+                "verbose_name_plural": "reasons",
+                "db_table": "reason",
             },
         ),
         migrations.CreateModel(
-            name='BorrowHistory',
+            name="BorrowHistory",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('quantity', models.SmallIntegerField(verbose_name='quantity')),
-                ('borrow_request', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='histories', to='core.borrowrequest', verbose_name='borrow requests')),
-                ('item', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='inventory.item', verbose_name='item')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("quantity", models.SmallIntegerField(verbose_name="quantity")),
+                (
+                    "borrow_request",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="histories",
+                        to="core.borrowrequest",
+                        verbose_name="borrow requests",
+                    ),
+                ),
+                (
+                    "item",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="items",
+                        to="inventory.item",
+                        verbose_name="item",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'borrow history',
-                'verbose_name_plural': 'borrow histories',
-                'db_table': 'borrow_history',
+                "verbose_name": "borrow history",
+                "verbose_name_plural": "borrow histories",
+                "db_table": "borrow_history",
             },
         ),
     ]

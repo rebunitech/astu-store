@@ -1,8 +1,8 @@
 from django import template
 
-register = template.Library()
-
 from astu_inventory.apps.help.models import Help
+
+register = template.Library()
 
 
 @register.inclusion_tag("help/help.html")

@@ -7,22 +7,21 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Help',
+            name="Help",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('app_name', models.CharField(max_length=150)),
-                ('view_name', models.CharField(max_length=150)),
-                ('content', models.TextField()),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("app_name", models.CharField(max_length=150)),
+                ("view_name", models.CharField(max_length=150)),
+                ("content", models.TextField()),
             ],
             options={
-                'verbose_name': 'Help',
-                'verbose_name_plural': 'Helps',
-                'unique_together': {('app_name', 'view_name')},
+                "verbose_name": "Help",
+                "verbose_name_plural": "Helps",
+                "unique_together": {("app_name", "view_name")},
             },
         ),
     ]

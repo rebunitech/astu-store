@@ -45,6 +45,10 @@
                           <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
                             {% if perms.auser.change_department %}
                             <li><a class="dropdown-item py-2" href="{% url 'auser:update_department' department.short_name %}"><i class="fa-solid fa-pen me-3"></i>Update </a></li>{% endif %}
+                            {% if perms.auser.delete_department %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item fw-bolder" data-bs-toggle="modal" data-bs-target="#ImportData-{{ department.short_name }}"><i class="fa-solid fa-trash-can me-3"></i>Import Staff</button></li>
+                            {% endif %}
                             {% if perms.auser.can_activate_department or perms.auser.can_deactivate_department %}{% if department.is_active and perms.auser.can_deactivate_department%}
                             <li><button class="dropdown-item py-2 text-warning" data-bs-toggle="modal" data-bs-target="#change-status-{{ department.short_name }}"><i class="fa-solid fa-toggle-off me-3"></i>Deactivate</button></li>{% elif not department.is_active and perms.auser.can_activate_department  %}
                             <li><button class="dropdown-item py-2 text-success" data-bs-toggle="modal" data-bs-target="#change-status-{{ department.short_name }}"><i class="fa-solid fa-toggle-on me-3"></i>Activate</button></li>
@@ -56,6 +60,32 @@
                         </div>
                     </td>
                 </tr>
+                {% if perms.auser.can_import_staff_member %}
+                <div class="modal fade" id="ImportData-{{ department.short_name }}" tabindex="-1" aria-labelledby="ImportData" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Import data from xlsx fiel.</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="{% url 'auser:import_staff_member' department.short_name %}" method="post" id="ImportDataForm-{{department.short_name}}" data-department="{{department.short_name}}" enctype="multipart/form-data"> {% csrf_token%}
+                          <input type="hidden" name="next" value="{{ request.path }}">
+                          <label for="FileImport">Select file</label>
+                          <input type="file" class="form-control shadow-none" name="file" id="FileImport" aria-describedby="FileImport" placeholder="Upload file" required>
+                          <div class="rounded my-3" role="group" aria-label="import buttons">
+                            <button type="button" class="btn btn-sm btn-danger shadow-none" data-bs-dismiss="modal"><i class="fa fa-cancel me-2"></i> Cancel</button>
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-upload me-2 shadow-none"></i> Import</button>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <a href="{% url 'auser:import_staff_member' department.short_name %}">Download template</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
                 {% if perms.auser.delete_department %}<div class="modal fade" id="delete-department-{{ department.short_name }}" tabindex="-1" aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
@@ -97,4 +127,38 @@
         </table>
     </div>
 </div>
-{% endblock content %}
+{% endblock content %}{% block js %}{{ block.super }}
+<script type="text/javascript">
+  document.querySelectorAll('[id^="ImportDataForm"]').forEach(from => {
+    from.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      let submitBtn = from[4];
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp;&nbsp;Importing ... '
+      let xhr = new XMLHttpRequest();
+      department = from.dataset.department
+      xhr.open('POST', from.action);
+      xhr.setRequestHeader("X-CSRFToken", from[0].value);
+      let formData = new FormData(from);
+      this.responseType = 'blob';
+      xhr.send(formData);
+      xhr.onload = function(e) {
+          if (this.status == 200) {
+              let responseContentType = this.getResponseHeader('content-type');
+              if (responseContentType == "text/csv"){
+                var blob = new Blob([this.response], {type: responseContentType});
+                let a = document.createElement("a");
+                a.style = "display: none";
+                document.body.appendChild(a);
+                let url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = 'invalid_data.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+              }
+          }
+          window.location.reload();
+        };
+    });
+  });
+</script>{% endblock js %}

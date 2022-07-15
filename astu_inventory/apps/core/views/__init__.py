@@ -12,7 +12,7 @@ from .borrow_request import (
     ReturnedBorrowRequestView,
     RevokeBorrowRequestView,
 )
-from .view import ListAvailableProductsView
+from .view import ImportView, ListAvailableProductsView
 
 __all__ = [
     # View
@@ -29,4 +29,7 @@ __all__ = [
     "RevokeBorrowRequestView",
     "ListCompletedBorrowRequestView",
     "CompletedBorrowRequestDetailView",
+    "ReturnedBorrowRequestView",
+    # Import View
+    "ImportView",
 ]

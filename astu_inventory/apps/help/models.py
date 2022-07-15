@@ -1,5 +1,4 @@
 from django.db import models
-from django.urls import URLResolver, get_resolver
 
 
 class Help(models.Model):

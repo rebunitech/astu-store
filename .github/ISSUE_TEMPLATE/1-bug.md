@@ -11,7 +11,7 @@ assignees: ''
 <!-- Next to Cc:, @ mention users who should be in the loop -->
 Cc:
 <!-- add intended user next to **Hi** -->
-Hi 
+Hi
 
 ### Describe the Bug
 <!-- A clear and concise description of what the bug is. -->
