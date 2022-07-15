@@ -275,6 +275,27 @@ class Product(models.Model):
         return total_item - total_borrow_request
 
 
+class ProductImage(models.Model):
+    product = models.ForeignKey(
+        Product,
+        verbose_name="product",
+        related_name="images",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    image = models.ImageField(_("image"), upload_to="uploads/", null=True, blank=True)
+    remark = models.CharField(_("remark"), max_length=250, blank=True)
+
+    class Meta:
+        db_table = "product_image"
+        verbose_name = _("image")
+        verbose_name_plural = _("images")
+
+    def __str__(self):
+        return f"{self.product} - Image"
+        
+
 class Item(models.Model):
     class StatusChoices(models.TextChoices):
         ACTIVE = "ACTIVE", "Active"
