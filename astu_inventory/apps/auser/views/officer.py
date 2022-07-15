@@ -4,6 +4,7 @@ Each class represents a logic layer of the project, related to department.
 
     Date Created: 5 July, 2022
     Author: Wendirad Demelash(@wendirad)
+    little update by : Ashenafi Zenebe
 """
 
 from django.contrib import messages
@@ -45,7 +46,7 @@ class StoreOfficersListView(PermissionRequiredMixin, ListView):
     """List all store officers inside specific department."""
 
     model = UserModel
-    context_object_name = "department_heads"
+    context_object_name = "store_officers"
     permission_required = "auser.can_list_store_officers"
     template_name = "auser/department/store_officer/list.html"
 
@@ -75,7 +76,7 @@ class AddAllStoreOfficerView(PermissionRequiredMixin, SuccessMessageMixin, Creat
         "phone_number",
     )
     permission_required = "auser.can_add_store_officer"
-    success_url = reverse_lazy("auser:all_store_officers_list")
+    success_url = reverse_lazy("auser:all_store_officer_list")
     success_message = _("Store officer added successfully.")
     extra_context = {"title": "Add store officer"}
     template_name = "auser/department/store_officer/all/add.html"
@@ -109,6 +110,7 @@ class AddStoreOfficerView(PermissionRequiredMixin, SuccessMessageMixin, CreateVi
         return response
 
     def get_success_url(self):
+        # print("Sinper")
         return reverse_lazy("auser:store_officers_list", args=[self.kwargs["short_name"]])
 
     def get_context_data(self, **kwargs):
@@ -138,7 +140,7 @@ class AllStoreOfficerUpdateView(PermissionRequiredMixin, SuccessMessageMixin, Up
         "po_box",
         "profile_picture",
     )
-    success_url = reverse_lazy("auser:all_store_officers_list")
+    success_url = reverse_lazy("auser:all_store_officer_list")
     template_name = "auser/department/store_officer/all/update.html"
     permission_required = "auser.can_change_store_officer"
     success_message = "%(first_name)s %(last_name)s updated successfully."
@@ -199,7 +201,7 @@ class AllStoreOfficerActivateView(PermissionRequiredMixin, SuccessMessageMixin, 
     model = UserModel
     fields = ("is_active",)
     permission_required = "auser.can_activate_store_officer"
-    success_url = reverse_lazy("auser:all_store_officers_list")
+    success_url = reverse_lazy("auser:all_store_officer_list")
     success_message = "%(first_name)s %(last_name)s activated successfully."
     http_method_names = ["post"]
 
@@ -267,7 +269,7 @@ class AllStoreOfficerDeactivateView(PermissionRequiredMixin, SuccessMessageMixin
     model = UserModel
     fields = ("is_active",)
     permission_required = "auser.can_deactivate_store_officer"
-    success_url = reverse_lazy("auser:all_store_officers_list")
+    success_url = reverse_lazy("auser:all_store_officer_list")
     success_message = "%(first_name)s %(last_name)s deactivated successfully."
     http_method_names = ["post"]
 
@@ -304,6 +306,7 @@ class StoreOfficerDeactivateView(PermissionRequiredMixin, SuccessMessageMixin, U
     http_method_names = ["post"]
 
     def get_success_url(self):
+        # print("ASHITI")
         return reverse_lazy("auser:store_officers_list", args=[self.kwargs["short_name"]])
 
     def get_queryset(self):
@@ -337,7 +340,7 @@ class AllRemoveFromStoreOfficerView(PermissionRequiredMixin, SuccessMessageMixin
     fields = ("groups",)
     permission_required = "auser.can_remove_store_officer"
     success_message = "%(first_name)s %(last_name)s successfully removed from store officers list."
-    success_url = reverse_lazy("auser:all_store_officers_list")
+    success_url = reverse_lazy("auser:all_store_officer_list")
     http_method_names = ["post"]
 
     def get_queryset(self):
@@ -385,7 +388,7 @@ class AllStoreOfficerDeleteView(PermissionRequiredMixin, DeleteView):
 
     model = UserModel
     permission_required = "auser.can_delete_store_officer"
-    success_url = reverse_lazy("auser:all_store_officers_list")
+    success_url = reverse_lazy("auser:all_store_officer_list")
     http_method_names = ["post"]
 
     def get_queryset(self):
