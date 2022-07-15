@@ -74,9 +74,91 @@ urlpatterns = [
     re_path(
         r"^departments/",
         include(
-            [     #TODO:
+            [
                 re_path(r"^$", views.ListDepartmentsView.as_view(), name="departments_list"),
                 re_path(r"^add/$", views.AddDepartmentView.as_view(), name="add_department"),
+
+                re_path(
+                    r"^staff_members/",
+                    include(
+                        [
+                            re_path(
+                                r"^$",
+                                views.AllStaffMemberListView.as_view(),
+                                name="all_staff_member_list"
+                            ),
+                            re_path(
+                                r"^add/$",
+                                views.AllAddStaffMemberView.as_view(),
+                                name="all_add_staff_member",
+                            ),
+
+                            re_path(
+                                r"(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<pk>\d+)/",
+                                include(
+                                    [
+                                        re_path(
+                                            r"^update/$",
+                                            views.AllUpdateStaffMemberView.as_view(),
+                                            name="all_change_staff_member"
+                                        ),
+                                    ],
+                                ),
+                            ),
+                        ],
+                    ),
+                ),
+
+                re_path(
+                    r"^store_officers/",
+                    include(
+                        [
+                            re_path(
+                                r"^$",
+                                views.AllStoreOfficersListView.as_view(),
+                                name="all_store_officer_list"
+                            ),
+                            re_path(
+                                r"^add/$",
+                                views.AddAllStoreOfficerView.as_view(),
+                                name="all_add_store_officer"
+                            ),
+
+                            re_path(
+                              r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<pk>\d+)/",
+                              include(
+                                [
+                                    re_path(
+                                        r"^update/$",
+                                        views.AllStoreOfficerUpdateView.as_view(),
+                                        name="all_update_store_officer"
+                                    ),
+                                    re_path(
+                                        r"^activate/$",
+                                        views.AllStoreOfficerActivateView.as_view(),
+                                        name="all_activate_store_officer"
+                                    ),
+                                    re_path(
+                                        r"^deactivate/$",
+                                        views.AllStoreOfficerDeactivateView.as_view(),
+                                        name="all_deactivate_store_officer"
+                                    ),
+                                    re_path(
+                                            r"^remove/$",
+                                            views.AllRemoveFromStoreOfficerView.as_view(),
+                                            name="all_remove_store_officer",
+                                        ),
+                                        re_path(
+                                            r"^delete/$",
+                                            views.AllStoreOfficerDeleteView.as_view(),
+                                            name="all_delete_store_officer",
+                                        ),
+                                ],
+                              ),
+                            ),
+                        ],
+                    ),
+                ),
                 re_path(
                     r"^heads/",
                     include(
@@ -93,7 +175,7 @@ urlpatterns = [
                                 name="all_select_department_head",
                             ),
                             re_path(
-                                r"(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<pk>\d+)/",
+                                r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<pk>\d+)/",
                                 include(
                                     [
                                         re_path(
@@ -147,7 +229,7 @@ urlpatterns = [
                             ),
 
                             re_path(
-                                    r"store_officers/",
+                                    r"^store_officers/",
                                     include(
                                         [
                                             re_path(
@@ -201,7 +283,7 @@ urlpatterns = [
                                 r"^heads/",
                                 include(
                                     [
-                                        re_path(   
+                                        re_path(
                                             r"^$",
                                             views.DepartmentHeadsListView.as_view(),
                                             name="department_heads_list",
