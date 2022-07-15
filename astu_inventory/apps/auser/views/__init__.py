@@ -51,6 +51,12 @@ from .user import (
     SelectCollegeDeanView,
 )
 
+from .staff_member import (
+    AllAddStaffMemberView,
+    AllStaffMemberListView,
+    AllUpdateStaffMemberView,
+)
+
 __all__ = [
     # User
     "ProfileEditView",
@@ -90,4 +96,23 @@ __all__ = [
     "DepartmentHeadDeleteView",
     "AllSelectDepartmentHeadView",
     "SelectDepartmentHeadView",
+    # store officer
+    "AddAllStoreOfficerView",
+    "AddStoreOfficerView",
+    "AllRemoveFromStoreOfficerView",
+    "AllStoreOfficerActivateView",
+    "AllStoreOfficerDeactivateView",
+    "AllStoreOfficerDeleteView",
+    "AllStoreOfficersListView",
+    "AllStoreOfficerUpdateView",
+    "RemoveFromStoreOfficerView",
+    "StoreOfficerActivateView",
+    "StoreOfficerDeactivateView",
+    "StoreOfficerDeleteView",
+    "StoreOfficersListView",
+    "StoreOfficerUpdateView",
+    # staff member
+    "AllAddStaffMemberView",
+    "AllStaffMemberListView",
+    "AllUpdateStaffMemberView",
 ]
