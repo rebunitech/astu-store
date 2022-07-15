@@ -61,11 +61,12 @@ __all__ = [
     "DeleteSpecificationTypeView",
     # Category
     "AddCategoryView",
-    "ListCategoriesView" "UpdateCategoryView",
-    "DeleteCategoryView"
+    "ListCategoriesView",
+    "UpdateCategoryView",
+    "DeleteCategoryView",
     # Sub Category
     "AddSubCategoryView",
-    "ListSubCategoryView",
+    "ListSubCategoriesView",
     "UpdateSubCategoryView",
     "DeleteSubCategoryView",
     # Measurment
@@ -75,14 +76,16 @@ __all__ = [
     "DeleteMeasurmentView",
     # Product
     "AddProductView",
+    "ImportProductsView",
     "ListProductsView",
     "UpdateProductView",
     "DeleteProductView",
     # Item
     "AddItemView",
+    "ImportItemsView",
     "ListItemsView",
     "UpdateItemView",
-    "DeleteItemView"
+    "DeleteItemView",
     # Item Specification
     "AddItemSpecificationView",
     "ListItemSpecificationsView",

@@ -3,8 +3,6 @@ import io
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import BadRequest
-from django.db.models import F, Q, Sum
-from django.db.models.functions import Coalesce
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView, View
 
@@ -23,8 +21,6 @@ class ListAvailableProductsView(PermissionRequiredMixin, ListView):
     template_name = "core/product_list.html"
 
     def get_queryset(self):
-        from django.db.models import Count, OuterRef, Value
-
         return (
             super()
             .get_queryset()

@@ -29,6 +29,7 @@ __all__ = [
     "RevokeBorrowRequestView",
     "ListCompletedBorrowRequestView",
     "CompletedBorrowRequestDetailView",
+    "ReturnedBorrowRequestView",
     # Import View
     "ImportView",
 ]

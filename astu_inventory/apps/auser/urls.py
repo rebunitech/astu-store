@@ -6,10 +6,8 @@ The `urlpatterns` list routes URLs to views.
     Author: Wendirad Demelash(@wendirad)
 """
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetConfirmView, PasswordResetView
 from django.urls import include, path, re_path, reverse_lazy
-from django.views.generic import TemplateView
 
 from astu_inventory.apps.auser import views
 

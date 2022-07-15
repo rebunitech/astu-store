@@ -6,21 +6,17 @@ Each class represents a logic layer of the project, related to every user.
     Author: Wendirad Demelash(@wendirad)
 """
 
-import csv
-import io
-
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Group
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core.exceptions import BadRequest
 from django.db.models import ProtectedError, Q
-from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, DeleteView, FormView, ListView, UpdateView, View
+from django.views.generic import CreateView, DeleteView, FormView, ListView, UpdateView
 
 from astu_inventory.apps.auser.forms import CollegeDeanSelectForm
 from astu_inventory.apps.auser.models import Department

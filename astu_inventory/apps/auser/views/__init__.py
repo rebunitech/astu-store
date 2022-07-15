@@ -91,4 +91,21 @@ __all__ = [
     "DepartmentHeadDeleteView",
     "AllSelectDepartmentHeadView",
     "SelectDepartmentHeadView",
+    # Officer
+    "AddAllStoreOfficerView",
+    "AddStoreOfficerView",
+    "AllRemoveFromStoreOfficerView",
+    "AllStoreOfficerActivateView",
+    "AllStoreOfficerDeactivateView",
+    "AllStoreOfficerDeleteView",
+    "AllStoreOfficersListView",
+    "AllStoreOfficerUpdateView",
+    "RemoveFromStoreOfficerView",
+    "StoreOfficerActivateView",
+    "StoreOfficerDeactivateView",
+    "StoreOfficerDeleteView",
+    "StoreOfficersListView",
+    "StoreOfficerUpdateView",
+    # Staff Member
+    "ImportStaffMembersView",
 ]
