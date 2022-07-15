@@ -131,6 +131,11 @@ urlpatterns = [
                     r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/",
                     include(
                         [
+                            re_path(
+                                r"^import/staff/member/$",
+                                views.ImportStaffMembersView.as_view(),
+                                name="import_staff_member",
+                            ),
                             re_path(r"^update/$", views.UpdateDepartmentView.as_view(), name="update_department"),
                             re_path(
                                 r"^activate/$", views.ActivateDepartmentView.as_view(), name="activate_department"

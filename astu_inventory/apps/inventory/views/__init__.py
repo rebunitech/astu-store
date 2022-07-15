@@ -8,9 +8,9 @@ from .category import (
     UpdateCategoryView,
     UpdateSubCategoryView,
 )
-from .item import AddItemView, DeleteItemView, ListItemsView, UpdateItemView
+from .item import AddItemView, DeleteItemView, ImportItemsView, ListItemsView, UpdateItemView
 from .lab import AddLabView, DeleteLabView, ListLabsView, UpdateLabView
-from .product import AddProductView, DeleteProductView, ListProductsView, UpdateProductView
+from .product import AddProductView, DeleteProductView, ImportProductsView, ListProductsView, UpdateProductView
 from .shelf import AddShelfView, DeleteShelfView, ListShelvesView, UpdateShelfView
 from .specification import (
     AddItemSpecificationView,

@@ -46,6 +46,7 @@ from .user import (
     CollegeDeanDeleteView,
     CollegeDeansListView,
     CollegeDeanUpdateView,
+    ImportStaffMembersView,
     ProfileEditView,
     RemoveFromCollegeDeanView,
     SelectCollegeDeanView,

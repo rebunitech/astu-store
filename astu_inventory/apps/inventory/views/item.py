@@ -4,8 +4,9 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
+from astu_inventory.apps.core.views import ImportView
 from astu_inventory.apps.inventory.forms import ItemForm
-from astu_inventory.apps.inventory.models import Item
+from astu_inventory.apps.inventory.models import Item, Product
 
 
 class AddItemView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
@@ -35,7 +36,7 @@ class ListItemsView(PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        qs = super().get_queryset()
+        qs = super().get_queryset().select_related("product", "product__measurment")
         if user.is_superuser or user.is_college_dean:
             return qs
         if user.is_department_head:
@@ -76,3 +77,48 @@ class DeleteItemView(PermissionRequiredMixin, DeleteView):
         if user.is_department_head:
             return qs.filter(Q(store__department=user.department))
         return qs.filter(Q(store__store_officers__pk=user.pk))
+
+
+class ImportItemsView(PermissionRequiredMixin, ImportView):
+    model = Item
+    required_fields = ("Product", "Dead Stock Number", "Quantity")
+    db_field_name = ("product", "dead_stock_number", "quantity")
+    success_url = reverse_lazy("inventory:items_list")
+    permission_required = "auser.can_import_items"
+    choices_list_work_sheet_name = "Choices"
+
+    def get_product(self, data):
+        name, department = data.split(" | ")
+        return Product.objects.get(name=name, department__short_name__iexact=department)
+
+    def get_foreign_keys(self):
+        return {"product": self.get_product}
+
+    def add_validation(self, worksheet):
+        worksheet.data_validation(
+            1,
+            0,
+            1048575,
+            0,
+            {
+                "validate": "list",
+                "source": f"={self.choices_list_work_sheet_name}!$A$1:$A${self.product_count}",
+                "input_title": "Select a department",
+                "input_message": "Please select department from a given list only.",
+                "error_title": "Invalid department selected.",
+                "error_message": "Please select department from a given list only.",
+            },
+        )
+
+    def _write_product_choice(self, worksheet):
+        product_choices = [
+            "%s | %s" % (product["name"], product["department__short_name"][:5])
+            for product in Product.objects.values("name", "department__short_name")
+        ]
+        self.product_count = 0
+        for ix, choice in enumerate(product_choices):
+            self.product_count += 1
+            worksheet.write(ix, 0, choice)
+
+    def write_choices(self, worksheet):
+        self._write_product_choice(worksheet)
