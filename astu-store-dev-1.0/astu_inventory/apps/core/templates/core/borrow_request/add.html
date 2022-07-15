@@ -1,0 +1,61 @@
+{% extends "layouts/main.html" %} {% load widget_tweaks %}{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
+{% with WIDGET_ERROR_CLASS="is-invalid" %}
+
+<form method="post" class="py-5" enctype="multipart/form-data">{% csrf_token %}
+  {% if form.non_field_errors %}{% include 'layouts/error.html' with error=form.non_field_errors|first %}{% endif %}
+  <span class="text-danger">*</span> Requeired
+  {% for field in form.hidden_fields %}{{ field }}{% endfor %}<div class="row">{% for field in form.visible_fields %}
+    <div class="col-md-10 col-lg-8">
+      <div class="form-group my-3 row">
+        <div class="col-sm-3 col-12 fw-light my-1 my-md-0">
+          <label for="{{ field.id_for_label }}">{{ field.label }} {% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+        </div>
+        <div class="col">
+          {% if field.field.widget.input_type == 'checkbox' %} {% render_field field class+="form-check-input shadow-none" %} {% else %} {% render_field field class+="form-control shadow-none" %} {% endif %}
+          <span class="small text-muted">{{ field.help_text }}</span> {% if field.errors %}
+          <div class="invalid-feedback">
+            <i class="bx bx-radio-circle"></i>{{ field.errors|first }}
+          </div>{% endif %}
+        </div>
+      </div>
+    </div>{% endfor %}
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-lg-8">
+      <button class="btn btn-primary shadow-none float-end px-3 mx-2"><i class="fa-solid fa-floppy-disk me-2"></i>Save</button>
+    </div>
+  </div>
+</form>{% endwith %}
+<div class="container-fluid">
+        <h3 class="fw-bolder mb-4">Active Requests</h3>
+        <table class="table responsive table-info">
+            <thead>
+                <th></th>
+                <th>Quantity</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </thead>
+            <tbody>{% for borrow_request in previous_borrow_requests.iterator %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ borrow_request.quantity }}</td>
+                    <td>{{ borrow_request.start_date|date:"d M, Y" }}</td>
+                    <td>{{ borrow_request.end_date|date:"d M, Y"}}</td>
+                </tr>
+            {% endfor %}</tbody>
+        </table>
+    </div>{% endblock content %}{% block js %}{{ block.super }}{{ form.media }}<script type="text/javascript">
+    $(document).ready(function() {
+        let endDate = $('#id_end_date').datepicker({startDate: new Date()});
+        let startDate = $('#id_start_date').datepicker({startDate: new Date(),}).on('show, changeDate', (e) => {
+            $('#id_end_date').datepicker('setStartDate', e.date);
+        });
+    });
+</script>{% endblock js %}
