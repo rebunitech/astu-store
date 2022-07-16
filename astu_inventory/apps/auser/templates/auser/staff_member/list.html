@@ -15,7 +15,7 @@
           <i class="fa-solid fa-circle-plus me-2"></i>Add Staff Member</a>{% endif %}</div>
     <hr />
     <div class="container-fluid p-sm-3">
-        <table id="deapartment_heads_list" class="table responsive">
+        <table id="staff_members_list" class="table responsive">
             <thead>
                 <th class="border-bottom border-0">No</th>
                 <th class="border-bottom border-0">First name</th>
@@ -27,7 +27,7 @@
                 <th class="border-bottom border-0">Sex</th>
                 <th class="border-bottom border-0">Status</th>
                 <th class="border-bottom border-0">Actions</th>
-            </thead>staff_members
+            </thead>
             <tbody>{% if staff_members %}{% for staff_member in staff_members %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
