@@ -16,7 +16,7 @@ urlpatterns = [
                     name="add_store",
                 ),
                 re_path(
-                    r"^(?P<pk>\d+)/",  
+                    r"^(?P<pk>\d+)/",
                     include(
                         [
                             re_path(
@@ -329,7 +329,7 @@ urlpatterns = [
         ),
     ),
     re_path(
-        r"^lab/", #TODO: 
+        r"^lab/",  # TODO:
         include(
             [
                 re_path(r"^$", views.ListLabsView.as_view(), name="labs_list"),
