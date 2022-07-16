@@ -1,3 +1,4 @@
+# flake8: noqa
 from django.apps import AppConfig
 
 
@@ -6,4 +7,4 @@ class CoreConfig(AppConfig):
     name = "astu_inventory.apps.core"
 
     def ready(self):
-        from astu_inventory.apps.core import signals
+        from astu_inventory.apps.core import signals  # NOQA

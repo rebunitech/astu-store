@@ -9,7 +9,34 @@
 <div class="row">
     <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
         {% if perms.inventory.add_item %}<a href="{% url 'inventory:add_item' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Item</a>{% endif %}
-    </div>
+      {% if perms.inventory.can_import_items %}
+          <button class="btn btn-md btn-info rounded-3 shadow-none fw-bolder float-end mx-3" data-bs-toggle="modal" data-bs-target="#ImportData"><i class="fa fa-upload me-2"></i> Import Items</button>
+          <div class="modal fade" id="ImportData" tabindex="-1" aria-labelledby="ImportData" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Import data from xlsx fiel.</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="{% url 'inventory:import_items' %}" method="post" enctype="multipart/form-data"> {% csrf_token%}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <label for="FileImport">Select file</label>
+                    <input type="file" class="form-control shadow-none" name="file" id="FileImport" aria-describedby="FileImport" placeholder="Upload file" required>
+                    <div class="rounded my-3" role="group" aria-label="import buttons">
+                      <button type="button" class="btn btn-sm btn-danger shadow-none" data-bs-dismiss="modal"><i class="fa fa-cancel me-2"></i> Cancel</button>
+                      <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-upload me-2"></i> Import</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <a href="{% url 'inventory:import_items' %}">Download template</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
     <hr />
     <div class="container-fluid p-1 p-sm-3">
         <table id="items_list" class="table w-100 rounded-3">

@@ -10,9 +10,9 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from django_summernote.fields import SummernoteTextFormField
 
+import astu_inventory.apps.core.signals as signals
 from astu_inventory.apps.core.forms import ReasonForm
 from astu_inventory.apps.core.models import BorrowRequest
-from astu_inventory.apps.core.signals import *
 from astu_inventory.apps.inventory.models import Product
 
 
@@ -34,8 +34,9 @@ class InitiateBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, Cr
         if self.is_quantify_valid(form) and self.is_dates_valid(form):
             form.instance.product = self.product
             form.instance.user = self.request.user
-            return super().form_valid(form)
-        borrow_request_initialized.send(sender=self.model, instance=self.object)
+            response = super().form_valid(form)
+            signals.borrow_request_initialized.send(sender=self.model, instance=self.object)
+            return response
         return super().form_invalid(form)
 
     def is_dates_valid(self, form):
@@ -143,8 +144,9 @@ class ApproveBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, Upd
     def form_valid(self, form):
         self.object = form.save(commit=False)
         if self.is_quantify_valid(self.object.quantity, self.object.product.availables):
-            borrow_request_approved.send(sender=self.model, instance=self.object)
-            return super().form_valid(form)
+            response = super().form_valid(form)
+            signals.borrow_request_approved.send(sender=self.model, instance=self.object)
+            return response
         messages.error(
             self.request,
             "This request cann't be approved, since currently there is no enough quantity item available.",
@@ -179,11 +181,12 @@ class DeclineBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, Upd
         reason = self.request.POST.get("reason")
         reason_form = ReasonForm(data={"description": reason})
         if reason_form.is_valid():
+            response = super().form_valid(form)
             reason_obj = reason_form.save(commit=False)
             reason_obj.borrow_request = self.object
             reason_obj.save()
-            borrow_request_declined.send(sender=self.model, instance=self.object)
-            return super().form_valid(form)
+            signals.borrow_request_declined.send(sender=self.model, instance=self.object)
+            return response
         messages.error(
             self.request,
             "You have to give a reason before declining a request. Please try again.",
@@ -237,8 +240,9 @@ class CompleteBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, Up
     success_url = reverse_lazy("core:approved_borrow_requests_list")
 
     def form_valid(self, form):
-        borrow_request_completed.send(sender=self.model, instance=self.object)
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        signals.borrow_request_completed.send(sender=self.model, instance=self.object)
+        return response
 
     def get_queryset(self):
         qs = super().get_queryset().filter(Q(status=1))
@@ -274,11 +278,12 @@ class RevokeBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, Upda
         reason = self.request.POST.get("reason")
         reason_form = ReasonForm(data={"description": reason})
         if reason_form.is_valid():
+            response = super().form_valid(form)
             reason_obj = reason_form.save(commit=False)
             reason_obj.borrow_request = self.object
             reason_obj.save()
-            borrow_request_revoked.send(sender=self.model, instance=self.object)
-            return super().form_valid(form)
+            signals.borrow_request_revoked.send(sender=self.model, instance=self.object)
+            return response
         messages.error(
             self.request,
             "You have to give a reason before revoking a request. Please try again.",
@@ -346,9 +351,9 @@ class ReturnedBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, Up
         return form_kwargs
 
     def form_valid(self, form):
-        borrow_request_returned.send(sender=self.model, instance=self.object)
-        return super().form_valid(form)
-
+        response = super().form_valid(form)
+        signals.borrow_request_returned.send(sender=self.model, instance=self.object)
+        return response
 
 class ListBorrowRequestHistoryView(PermissionRequiredMixin, SuccessMessageMixin, ListView):
     model = BorrowRequest

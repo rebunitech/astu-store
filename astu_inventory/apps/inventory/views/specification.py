@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
@@ -11,7 +10,7 @@ from astu_inventory.apps.inventory.forms import (
     UpdateItemSpecificationForm,
     UpdateProductSpecificationForm,
 )
-from astu_inventory.apps.inventory.models import Item, Measurment, Product, Specification, SpecificationType
+from astu_inventory.apps.inventory.models import Measurment, Specification, SpecificationType
 
 
 class AddSpecificationTypeView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):

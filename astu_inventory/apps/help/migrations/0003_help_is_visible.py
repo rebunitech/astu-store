@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('help', '0002_alter_help_content'),
+        ("help", "0002_alter_help_content"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='help',
-            name='is_visible',
+            model_name="help",
+            name="is_visible",
             field=models.BooleanField(default=True),
         ),
     ]

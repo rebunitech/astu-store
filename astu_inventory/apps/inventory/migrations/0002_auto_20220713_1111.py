@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auser', '0001_initial'),
-        ('inventory', '0001_initial'),
+        ("auser", "0001_initial"),
+        ("inventory", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='product',
-            name='critical_no',
-            field=models.IntegerField(help_text='Min number of item that must be in store.'),
+            model_name="product",
+            name="critical_no",
+            field=models.IntegerField(help_text="Min number of item that must be in store."),
         ),
         migrations.AlterField(
-            model_name='product',
-            name='slug',
-            field=models.SlugField(max_length=100, verbose_name='slug'),
+            model_name="product",
+            name="slug",
+            field=models.SlugField(max_length=100, verbose_name="slug"),
         ),
         migrations.AlterUniqueTogether(
-            name='product',
-            unique_together={('slug', 'department')},
+            name="product",
+            unique_together={("slug", "department")},
         ),
     ]

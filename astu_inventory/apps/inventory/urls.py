@@ -210,6 +210,7 @@ urlpatterns = [
             [
                 re_path(r"^$", views.ListProductsView.as_view(), name="products_list"),
                 re_path(r"^add/$", views.AddProductView.as_view(), name="add_product"),
+                re_path(r"^import/products/$", views.ImportProductsView.as_view(), name="import_products"),
                 re_path(
                     r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<slug>[-a-zA-Z0-9_]+)/",
                     include(
@@ -297,6 +298,7 @@ urlpatterns = [
         r"^item/",
         include(
             [
+                re_path(r"^import/items/$", views.ImportItemsView.as_view(), name="import_items"),
                 re_path(r"^$", views.ListItemsView.as_view(), name="items_list"),
                 re_path(
                     r"^add/$",

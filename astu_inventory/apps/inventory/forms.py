@@ -72,6 +72,21 @@ class AddProductForm(forms.ModelForm):
         return cleaned_data
 
 
+class ImportProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ("name", "department", "sub_category", "kind", "measurment", "critical_no")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        slug = slugify(cleaned_data.get("name"))
+        department = cleaned_data.get("department")
+        if Product.objects.filter(slug=slug, department=department).exists():
+            raise ValidationError(f"This product exists in {department} department.")
+        self.instance.category = cleaned_data.get("sub_category").category
+        return cleaned_data
+
+
 class UpdateProductForm(forms.ModelForm):
     class Meta:
         model = Product
