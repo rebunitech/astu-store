@@ -59,7 +59,7 @@ class Store(models.Model):
         permissions = (("can_list_stores", "Can list stores"),)
 
     def __str__(self):
-        return f"{self.department.short_name} Store B{self.block} R{self.room}"
+        return f"Store B{self.block} R{self.room}"
 
 
 class Shelf(models.Model):
@@ -136,7 +136,7 @@ class Lab(models.Model):
         unique_together = ("block", "room")
 
     def __str__(self):
-        return f"{self.department.short_name} Lab B{self.block} R{self.room}"
+        return f"Lab B{self.block} R{self.room}"
 
 
 class Table(models.Model):

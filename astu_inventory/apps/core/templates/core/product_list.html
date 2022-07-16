@@ -18,10 +18,10 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ product.name|capfirst }}</td>
-                    <td>{{ product.department }}</td>
-                    <td>{{ product.category }}</td>
-                    <td>{{ product.sub_category }}</td>
-                    <td>{{ product.availables }} {{ product.measurment }}</td>
+                    <td>{{ product.department__short_name }}</td>
+                    <td>{{ product.category__name }}</td>
+                    <td>{{ product.sub_category__name }}</td>
+                    <td>{{ product.specifications }} {{ product.measurment__name }}</td>
                     <td>{{ product.critical_no }}</td>
                     <td class="text-center">
                         <div class="dropdown">

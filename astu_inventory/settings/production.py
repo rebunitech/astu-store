@@ -31,23 +31,23 @@ EMAIL_PORT = config("EMAIL_PORT", default=25, cast=int)
 # SECURITY SETTINGS
 # ==============================================================================
 
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 
-CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
 
 SECURE_HSTS_SECONDS = 60 * 60 * 24 * 7 * 52  # one year
 
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 
-SECURE_BROWSER_XSS_FILTER = True
+SECURE_BROWSER_XSS_FILTER = False
 
-SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_CONTENT_TYPE_NOSNIFF = False
 
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False
 
 # ==============================================================================
 # THIRD-PARTY APPS SETTINGS

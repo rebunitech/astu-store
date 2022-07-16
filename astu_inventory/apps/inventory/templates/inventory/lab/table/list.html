@@ -41,8 +41,6 @@
                             <li><button class="dropdown-item text-danger fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-table-{{ table.pk }}"><i class="fa-solid fa-circle-minus me-2"></i>Delete</button></li>{% endif %}
                           </ul>
                         </div>
-
-                        
                         {% if perms.inventory.delete_table %}
                         <div class="modal fade" id="delete-table-{{ table.pk }}" tabindex="-1" aria-hidden="true">
                           <div class="modal-dialog">

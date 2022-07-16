@@ -18,7 +18,7 @@ class ListHelpsView(PermissionRequiredMixin, ListView):
 
 class UpdateHelpView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Help
-    fields = ("content",)
+    fields = ("content", "is_visible")
     template_name = "help/update.html"
     success_url = reverse_lazy("help:helps_list")
     permission_required = "help.change_help"

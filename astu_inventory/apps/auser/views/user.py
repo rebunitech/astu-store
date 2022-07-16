@@ -13,11 +13,14 @@ from django.contrib.auth.models import Group
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import ProtectedError, Q
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, FormView, ListView, UpdateView
 
 from astu_inventory.apps.auser.forms import CollegeDeanSelectForm
+from astu_inventory.apps.auser.models import Department
+from astu_inventory.apps.core.views import ImportView
 
 UserModel = get_user_model()
 
@@ -221,3 +224,25 @@ class CollegeDeanDeleteView(PermissionRequiredMixin, DeleteView):
                 "related datas. try to delete related objects first.",
             )
             return HttpResponseRedirect(self.success_url)
+
+
+class ImportStaffMembersView(PermissionRequiredMixin, ImportView):
+    model = UserModel
+    required_fields = ["Staff ID", "Email", "Phone number"]
+    db_field_name = ["staff_id", "email", "phone_number", "department"]
+    permission_required = "auser.can_import_staff_member"
+    object_types = {"Phone number": "string"}
+
+    @staticmethod
+    def run_on_object(user):
+        user.groups.add(Group.objects.get(name="staff member"))
+
+    def get_phone_number_format(self, workbook):
+        return workbook.add_format({"num_format": "@"})
+
+    def post(self, request, *args, **kwargs):
+        self.department = get_object_or_404(Department, short_name__iexact=self.kwargs["short_name"])
+        return super().post(request, *args, **kwargs)
+
+    def get_defaults(self):
+        return {"department": self.department}
