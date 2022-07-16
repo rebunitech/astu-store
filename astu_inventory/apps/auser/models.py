@@ -8,7 +8,6 @@ from django.apps import apps
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, UserManager as SuperUserManager
 from django.db import models
-from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from astu_inventory.apps.auser.validators import PhoneNumberValidator, ShortNameValidator
@@ -240,4 +239,3 @@ class User(AbstractUser, Address):
     @property
     def is_lab_assistant(self):
         return self.groups.filter(name="lab assistant").exists()
-

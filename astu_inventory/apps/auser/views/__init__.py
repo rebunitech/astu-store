@@ -40,18 +40,18 @@ from .officer import (
 )
 from .role import ListRolesView, UpdateRoleView
 from .staff_member import (
+    ActivateStaffMemberView,
+    AddStaffMemberView,
     AllAddStaffMemberView,
+    AllDeactivateStaffMemberView,
+    AllStaffMemberActivateView,
+    AllStaffMemberDeleteView,
     AllStaffMemberListView,
     AllUpdateStaffMemberView,
-    UpdateStaffMemberView,
-    StaffMemberListView,
-    AddStaffMemberView,
-    AllStaffMemberActivateView,
-    ActivateStaffMemberView,
     DeactivateStaffMemberView,
-    AllDeactivateStaffMemberView,
-    AllStaffMemberDeleteView,
     DeleteStaffMemberView,
+    StaffMemberListView,
+    UpdateStaffMemberView,
 )
 from .user import (
     AddCollegeDeanView,

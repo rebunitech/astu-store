@@ -21,7 +21,6 @@ urlpatterns = [
     #     login_required(TemplateView.as_view(template_name="dashboard.html", extra_context={"title": "Dashboard"})),
     #     name="dashboard",
     # ),
-
     re_path(
         r"^auth/",
         include(
@@ -78,7 +77,6 @@ urlpatterns = [
             [
                 re_path(r"^$", views.ListDepartmentsView.as_view(), name="departments_list"),
                 re_path(r"^add/$", views.AddDepartmentView.as_view(), name="add_department"),
-
                 re_path(
                     r"^staff_members/",
                     include(
@@ -99,19 +97,19 @@ urlpatterns = [
                                             name="all_change_staff_member",
                                         ),
                                         re_path(
-                                                r"^activate/$",
-                                                views.AllStaffMemberActivateView.as_view(),
-                                                name="all_activate_staff_member"
-                                            ),
+                                            r"^activate/$",
+                                            views.AllStaffMemberActivateView.as_view(),
+                                            name="all_activate_staff_member",
+                                        ),
                                         re_path(
                                             r"^deactivate/$",
                                             views.AllDeactivateStaffMemberView.as_view(),
-                                            name="all_deactivate_staff_member"
+                                            name="all_deactivate_staff_member",
                                         ),
                                         re_path(
                                             r"^delete/$",
                                             views.AllStaffMemberDeleteView.as_view(),
-                                            name="all_delete_staff_member"
+                                            name="all_delete_staff_member",
                                         ),
                                     ],
                                 ),
@@ -228,22 +226,14 @@ urlpatterns = [
                                 views.DeleteDepartmentView.as_view(),
                                 name="delete_department",
                             ),
-
                             re_path(
                                 r"^staff_member/",
                                 include(
                                     [
+                                        re_path(r"^$", views.StaffMemberListView.as_view(), name="staff_members_list"),
                                         re_path(
-                                            r"^$",
-                                            views.StaffMemberListView.as_view(),
-                                            name="staff_members_list"
+                                            r"^add/$", views.AddStaffMemberView.as_view(), name="add_staff_member"
                                         ),
-                                        re_path(
-                                            r"^add/$",
-                                            views.AddStaffMemberView.as_view(),
-                                            name="add_staff_member"
-                                        ),
-
                                         re_path(
                                             r"^(?P<pk>\d+)/",
                                             include(
@@ -251,30 +241,29 @@ urlpatterns = [
                                                     re_path(
                                                         r"^update/$",
                                                         views.UpdateStaffMemberView.as_view(),
-                                                        name="update_staff_member"
+                                                        name="update_staff_member",
                                                     ),
                                                     re_path(
                                                         r"^activate/$",
                                                         views.ActivateStaffMemberView.as_view(),
-                                                        name="activate_staff_member"
+                                                        name="activate_staff_member",
                                                     ),
                                                     re_path(
                                                         r"^deactivate/",
                                                         views.DeactivateStaffMemberView.as_view(),
-                                                        name="deactivate_staff_member"
+                                                        name="deactivate_staff_member",
                                                     ),
                                                     re_path(
                                                         r"^delete/$",
                                                         views.DeleteStaffMemberView.as_view(),
-                                                        name="delete_staff_member"
-                                                    )
+                                                        name="delete_staff_member",
+                                                    ),
                                                 ]
-                                            )
-                                        )
+                                            ),
+                                        ),
                                     ],
                                 ),
                             ),
-
                             re_path(
                                 r"^store_officers/",
                                 include(
