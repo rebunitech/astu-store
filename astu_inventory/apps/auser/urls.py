@@ -10,7 +10,7 @@ from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordRes
 from django.urls import include, path, re_path, reverse_lazy
 
 from astu_inventory.apps.auser import views
-from astu_inventory.apps.inventory.views import SpecificListStoreView, SpecificLabListView
+from astu_inventory.apps.inventory.views import SpecificLabListView, SpecificListStoreView
 
 app_name = "auser"
 
@@ -230,11 +230,7 @@ urlpatterns = [
                                 views.DeleteDepartmentView.as_view(),
                                 name="delete_department",
                             ),
-                            re_path(
-                                r"^stores/",
-                                SpecificListStoreView.as_view(),
-                                name="list_specific_store"
-                            ),
+                            re_path(r"^stores/", SpecificListStoreView.as_view(), name="list_specific_store"),
                             re_path(
                                 r"^labs/",
                                 SpecificLabListView.as_view(),

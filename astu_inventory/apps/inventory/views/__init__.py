@@ -9,7 +9,7 @@ from .category import (
     UpdateSubCategoryView,
 )
 from .item import AddItemView, DeleteItemView, ImportItemsView, ListItemsView, UpdateItemView
-from .lab import AddLabView, DeleteLabView, ListLabsView, UpdateLabView, SpecificLabListView
+from .lab import AddLabView, DeleteLabView, ListLabsView, SpecificLabListView, UpdateLabView
 from .product import AddProductView, DeleteProductView, ImportProductsView, ListProductsView, UpdateProductView
 from .shelf import AddShelfView, DeleteShelfView, ListShelvesView, UpdateShelfView
 from .specification import (
@@ -30,7 +30,7 @@ from .specification import (
     UpdateProductSpecificationView,
     UpdateSpecificationTypeView,
 )
-from .store import AddStoreView, DeleteStoreView, ListStoresView, UpdateStoreView, SpecificListStoreView
+from .store import AddStoreView, DeleteStoreView, ListStoresView, SpecificListStoreView, UpdateStoreView
 from .table import AddTableView, DeleteTableView, ListTablesView, UpdateTableView
 
 __all__ = [

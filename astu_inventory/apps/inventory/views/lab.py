@@ -43,7 +43,7 @@ class ListLabsView(PermissionRequiredMixin, ListView):
 
 
 class SpecificLabListView(PermissionRequiredMixin, ListView):
-    """ List of labs for specific department. """
+    """List of labs for specific department."""
 
     model = Lab
     permission_required = "inventory.view_lab"
@@ -52,16 +52,12 @@ class SpecificLabListView(PermissionRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data()
-        context_data.update({"title": f"{self.kwargs['short_name'].upper()} labs"} )
+        context_data.update({"title": f"{self.kwargs['short_name'].upper()} labs"})
         return context_data
 
     def get_queryset(self):
-        return (
-            super().get_queryset()
-            .filter(
-                Q(department__short_name__iexact=self.kwargs["short_name"])
-            )
-        )
+        return super().get_queryset().filter(Q(department__short_name__iexact=self.kwargs["short_name"]))
+
 
 class UpdateLabView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Lab
