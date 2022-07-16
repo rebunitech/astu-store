@@ -8,6 +8,7 @@ from django.apps import apps
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, UserManager as SuperUserManager
 from django.db import models
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from astu_inventory.apps.auser.validators import PhoneNumberValidator, ShortNameValidator
@@ -208,6 +209,12 @@ class User(AbstractUser, Address):
             ("can_deactivate_store_officer", "Can deactivate store officer"),
             ("can_remove_store_officer", "Can remove store officer"),
             ("can_delete_store_officer", "Can delete store officer"),
+            ("can_list_staff_members", "Can list staff member"),
+            ("can_add_staff_member", "Can add staff member"),
+            ("can_change_staff_member", "Can change staff member"),
+            ("can_activate_staff_member", "Can activate staff member"),
+            ("can_deactivate_staff_member", "Can deactivate staff member"),
+            ("can_delete_staff_member", "Can delete staff member"),
         ]
 
     def __str__(self):
@@ -233,3 +240,4 @@ class User(AbstractUser, Address):
     @property
     def is_lab_assistant(self):
         return self.groups.filter(name="lab assistant").exists()
+
