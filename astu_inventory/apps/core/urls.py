@@ -34,6 +34,11 @@ urlpatterns = [
                                 name="completed_borrow_requests_list",
                             ),
                             re_path(
+                                r"^history/$",
+                                views.ListBorrowRequestHistoryView.as_view(),
+                                name="borrow_request_history_list",
+                            ),
+                            re_path(
                                 r"^active/(?P<pk>\d+)/$",
                                 views.ActiveBorrowRequestDetailView.as_view(),
                                 name="active_borrow_requests_detail",

@@ -3,7 +3,16 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
 
-from astu_inventory.apps.inventory.models import Category, Item, Product, Shelf, Specification, SubCategory, Table
+from astu_inventory.apps.inventory.models import (
+    Category,
+    Item,
+    Product,
+    ProductImage,
+    Shelf,
+    Specification,
+    SubCategory,
+    Table,
+)
 
 
 class ShelfForm(forms.ModelForm):
@@ -195,4 +204,18 @@ class UpdateItemSpecificationForm(forms.ModelForm):
             raise ValidationError(
                 "This specification exists for this item. Please add other specification or update existing one."
             )
+        return cleaned_data
+
+
+class AddProductImageForm(forms.ModelForm):
+    class Meta:
+        model = ProductImage
+        fields = ("image",)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        department_short_name = self.initial.get("short_name")
+        product_slug = self.initial.get("slug")
+        product = get_object_or_404(Product, slug=product_slug, department__short_name__iexact=department_short_name)
+        self.instance.product = product
         return cleaned_data

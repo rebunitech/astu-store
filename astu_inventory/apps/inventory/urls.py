@@ -258,6 +258,35 @@ urlpatterns = [
                                     ]
                                 ),
                             ),
+                            re_path(
+                                r"^image/",
+                                include(
+                                    [
+                                        re_path(
+                                            r"^$",
+                                            views.ListProductImageView.as_view(),
+                                            name="product_image_list",
+                                        ),
+                                        re_path(
+                                            r"^add/$",
+                                            views.AddProductImageView.as_view(),
+                                            name="add_product_image",
+                                        ),
+                                        re_path(
+                                            r"^(?P<img_pk>\d+)/",
+                                            include(
+                                                [
+                                                    re_path(
+                                                        r"^delete/$",
+                                                        views.DeleteProductImageView.as_view(),
+                                                        name="delete_product_image",
+                                                    ),
+                                                ]
+                                            ),
+                                        ),
+                                    ]
+                                ),
+                            ),
                         ]
                     ),
                 ),

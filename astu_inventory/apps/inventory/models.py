@@ -294,7 +294,7 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"{self.product} - Image"
-        
+
 
 class Item(models.Model):
     class StatusChoices(models.TextChoices):

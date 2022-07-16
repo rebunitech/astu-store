@@ -348,3 +348,20 @@ class ReturnedBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, Up
     def form_valid(self, form):
         borrow_request_returned.send(sender=self.model, instance=self.object)
         return super().form_valid(form)
+
+
+class ListBorrowRequestHistoryView(PermissionRequiredMixin, SuccessMessageMixin, ListView):
+    model = BorrowRequest
+    permission_required = "core.can_list_borrow_request_history"
+    context_object_name = "borrow_requests"
+    extra_context = {"title": "Borrow Requests History List"}
+    template_name = "core/borrow_request/history_list.html"
+
+    def get_queryset(self):
+        current_user = self.request.user
+        return (
+            super()
+            .get_queryset()
+            .filter(user=current_user)
+            .values("product__name", "quantity", "start_date", "end_date", "status")
+        )

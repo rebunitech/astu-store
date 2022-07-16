@@ -10,7 +10,15 @@ from .category import (
 )
 from .item import AddItemView, DeleteItemView, ListItemsView, UpdateItemView
 from .lab import AddLabView, DeleteLabView, ListLabsView, UpdateLabView
-from .product import AddProductView, DeleteProductView, ListProductsView, UpdateProductView
+from .product import (
+    AddProductImageView,
+    AddProductView,
+    DeleteProductImageView,
+    DeleteProductView,
+    ListProductImageView,
+    ListProductsView,
+    UpdateProductView,
+)
 from .shelf import AddShelfView, DeleteShelfView, ListShelvesView, UpdateShelfView
 from .specification import (
     AddItemSpecificationView,
@@ -73,11 +81,14 @@ __all__ = [
     "ListMeasurmentsView",
     "UpdateMeasurmentView",
     "DeleteMeasurmentView",
+    "AddProductImageView",
     # Product
     "AddProductView",
     "ListProductsView",
     "UpdateProductView",
     "DeleteProductView",
+    "ListProductImageView",
+    "DeleteProductImageView",
     # Item
     "AddItemView",
     "ListItemsView",
