@@ -32,7 +32,6 @@ class AllStaffMemberListView(PermissionRequiredMixin, SuccessMessageMixin, ListV
     extra_context = {"title": "All Staff Members List"}
 
     def get_queryset(self):
-        print("*(*(")
         return super().get_queryset().filter(groups__name="staff member").exclude(Q(groups__name="college dean"))
 
 
@@ -104,7 +103,6 @@ class AddStaffMemberView(PermissionRequiredMixin, SuccessMessageMixin, CreateVie
         return response
 
     def get_success_url(self):
-        # print("Sinper")
         return reverse_lazy("auser:staff_members_list", args=[self.kwargs["short_name"]])
 
     def setup(self, request, *args, **kwargs):
@@ -205,7 +203,6 @@ class AllStaffMemberActivateView(PermissionRequiredMixin, SuccessMessageMixin, U
         )
 
     def get_form_kwargs(self):
-        print("testttt")
         form_kwargs = super().get_form_kwargs()
         form_data = form_kwargs.get("data", {}).copy()
         form_data.update({"is_active": True})
@@ -266,7 +263,6 @@ class DeactivateStaffMemberView(PermissionRequiredMixin, SuccessMessageMixin, Up
         return reverse_lazy("auser:staff_members_list", args=[self.kwargs["short_name"]])
 
     def get_queryset(self):
-        print("ASHITI")
         return (
             super()
             .get_queryset()
@@ -279,7 +275,6 @@ class DeactivateStaffMemberView(PermissionRequiredMixin, SuccessMessageMixin, Up
         )
 
     def get_form_kwargs(self):
-        print("SINPER")
         form_kwargs = super().get_form_kwargs()
         form_data = form_kwargs.get("data", {}).copy()
         form_data.update({"is_active": False})

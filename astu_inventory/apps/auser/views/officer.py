@@ -110,7 +110,6 @@ class AddStoreOfficerView(PermissionRequiredMixin, SuccessMessageMixin, CreateVi
         return response
 
     def get_success_url(self):
-        # print("Sinper")
         return reverse_lazy("auser:store_officers_list", args=[self.kwargs["short_name"]])
 
     def get_context_data(self, **kwargs):
@@ -306,7 +305,6 @@ class StoreOfficerDeactivateView(PermissionRequiredMixin, SuccessMessageMixin, U
     http_method_names = ["post"]
 
     def get_success_url(self):
-        # print("ASHITI")
         return reverse_lazy("auser:store_officers_list", args=[self.kwargs["short_name"]])
 
     def get_queryset(self):
