@@ -35,8 +35,8 @@
                     <td><a class="nav-link" href="{% url 'auser:staff_members_list' department.short_name %}"><i class="fa fa-user-group me-2"></i>Staff Member</a></td>
                     <td><a class="nav-link" href="{% url 'auser:store_officers_list' department.short_name %}"><i class="fa fa-person-shelter me-2"></i>Store Officer</a></td>
                     <td><a class="nav-link" href=""><i class="fa fa-person-shelter me-2"></i>TBD</a></td>
-                    <td><a class="nav-link" href="{% url 'inventory:stores_list' %}"><i class="fa fa-store me-2"></i>Store</a></td></a></td>
-                    <td><a class="nav-link" href="{% url 'inventory:labs_list'  %}"><i class="fa fa-person-shelter me-2"></i>TBD</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:list_specific_store' department.short_name %}"><i class="fa fa-store me-2"></i>Store</a></td></a></td>
+                    <td><a class="nav-link" href="{% url 'auser:list_labs' department.short_name %}"><i class="fa fa-person-shelter me-2"></i>TBD</a></td>
                     <td>
                        <div class="dropdown">
                           <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
