@@ -10,8 +10,8 @@
 {% endblock breadcrumbs %}{% block content %}
 <div class="row">
     <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3 d-flex justify-content-end">
-        {% if perms.auser.can_add_store_officer %}<a href="{% url 'auser:add_store_officer' view.kwargs.short_name %}" class="btn 
-        btn-md btn-success rounded-3 shadow-none me-3"><i class="fa-solid fa-circle-plus me-2">            
+        {% if perms.auser.can_add_store_officer %}<a href="{% url 'auser:add_store_officer' view.kwargs.short_name %}" class="btn
+        btn-md btn-success rounded-3 shadow-none me-3"><i class="fa-solid fa-circle-plus me-2">
         </i>Add Store Officer</a>{% endif %}
     </div>
     <hr />
@@ -50,7 +50,7 @@
                             {% endif %}{% if perms.auser.can_remove_store_officer or perms.auser.can_delete_store_officer %}
                             <li><hr class="dropdown-divider"></li>
                             {% if perms.auser.can_remove_store_officer %}
-                            <li><button class="dropdown-item text-danger py-2" data-bs-toggle="modal" data-bs-target="#remove-{{ store_officer.staff_id|slugify }}"><i class="fa-solid fa-circle-minus me-3"></i>Remove from head</button></li>
+                            <li><button class="dropdown-item text-danger py-2" data-bs-toggle="modal" data-bs-target="#remove-{{ store_officer.staff_id|slugify }}"><i class="fa-solid fa-circle-minus me-3"></i>Remove from store officer?</button></li>
                             {% endif %}{% if perms.auser.can_delete_store_officer %}
                             <li><button class="dropdown-item text-danger py-2 fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-{{ store_officer.staff_id|slugify }}"><i class="fa-solid fa-trash-can me-3"></i>Delete</button></li>
                             {% endif %}{% endif %}
