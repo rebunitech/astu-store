@@ -39,6 +39,20 @@ from .officer import (
     StoreOfficerUpdateView,
 )
 from .role import ListRolesView, UpdateRoleView
+from .staff_member import (
+    AllAddStaffMemberView,
+    AllStaffMemberListView,
+    AllUpdateStaffMemberView,
+    UpdateStaffMemberView,
+    StaffMemberListView,
+    AddStaffMemberView,
+    AllStaffMemberActivateView,
+    ActivateStaffMemberView,
+    DeactivateStaffMemberView,
+    AllDeactivateStaffMemberView,
+    AllStaffMemberDeleteView,
+    DeleteStaffMemberView,
+)
 from .user import (
     AddCollegeDeanView,
     CollegeDeanActivateView,
@@ -49,12 +63,6 @@ from .user import (
     ProfileEditView,
     RemoveFromCollegeDeanView,
     SelectCollegeDeanView,
-)
-
-from .staff_member import (
-    AllAddStaffMemberView,
-    AllStaffMemberListView,
-    AllUpdateStaffMemberView,
 )
 
 __all__ = [
@@ -115,4 +123,13 @@ __all__ = [
     "AllAddStaffMemberView",
     "AllStaffMemberListView",
     "AllUpdateStaffMemberView",
+    "UpdateStaffMemberView",
+    "StaffMemberListView",
+    "AddStaffMemberView",
+    "AllStaffMemberActivateView",
+    "ActivateStaffMemberView",
+    "DeactivateStaffMemberView",
+    "AllDeactivateStaffMemberView",
+    "AllStaffMemberDeleteView",
+    "DeleteStaffMemberView",
 ]
