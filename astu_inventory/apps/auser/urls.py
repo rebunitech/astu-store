@@ -21,6 +21,7 @@ urlpatterns = [
     #     login_required(TemplateView.as_view(template_name="dashboard.html", extra_context={"title": "Dashboard"})),
     #     name="dashboard",
     # ),
+
     re_path(
         r"^auth/",
         include(
@@ -82,25 +83,35 @@ urlpatterns = [
                     r"^staff_members/",
                     include(
                         [
-                            re_path(
-                                r"^$",
-                                views.AllStaffMemberListView.as_view(),
-                                name="all_staff_member_list"
-                            ),
+                            re_path(r"^$", views.AllStaffMemberListView.as_view(), name="all_staff_member_list"),
                             re_path(
                                 r"^add/$",
                                 views.AllAddStaffMemberView.as_view(),
                                 name="all_add_staff_member",
                             ),
-
                             re_path(
-                                r"(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<pk>\d+)/",
+                                r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<pk>\d+)/",
                                 include(
                                     [
                                         re_path(
                                             r"^update/$",
                                             views.AllUpdateStaffMemberView.as_view(),
-                                            name="all_change_staff_member"
+                                            name="all_change_staff_member",
+                                        ),
+                                        re_path(
+                                                r"^activate/$",
+                                                views.AllStaffMemberActivateView.as_view(),
+                                                name="all_activate_staff_member"
+                                            ),
+                                        re_path(
+                                            r"^deactivate/$",
+                                            views.AllDeactivateStaffMemberView.as_view(),
+                                            name="all_deactivate_staff_member"
+                                        ),
+                                        re_path(
+                                            r"^delete/$",
+                                            views.AllStaffMemberDeleteView.as_view(),
+                                            name="all_delete_staff_member"
                                         ),
                                     ],
                                 ),
@@ -108,42 +119,32 @@ urlpatterns = [
                         ],
                     ),
                 ),
-
                 re_path(
                     r"^store_officers/",
                     include(
                         [
+                            re_path(r"^$", views.AllStoreOfficersListView.as_view(), name="all_store_officer_list"),
+                            re_path(r"^add/$", views.AddAllStoreOfficerView.as_view(), name="all_add_store_officer"),
                             re_path(
-                                r"^$",
-                                views.AllStoreOfficersListView.as_view(),
-                                name="all_store_officer_list"
-                            ),
-                            re_path(
-                                r"^add/$",
-                                views.AddAllStoreOfficerView.as_view(),
-                                name="all_add_store_officer"
-                            ),
-
-                            re_path(
-                              r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<pk>\d+)/",
-                              include(
-                                [
-                                    re_path(
-                                        r"^update/$",
-                                        views.AllStoreOfficerUpdateView.as_view(),
-                                        name="all_update_store_officer"
-                                    ),
-                                    re_path(
-                                        r"^activate/$",
-                                        views.AllStoreOfficerActivateView.as_view(),
-                                        name="all_activate_store_officer"
-                                    ),
-                                    re_path(
-                                        r"^deactivate/$",
-                                        views.AllStoreOfficerDeactivateView.as_view(),
-                                        name="all_deactivate_store_officer"
-                                    ),
-                                    re_path(
+                                r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<pk>\d+)/",
+                                include(
+                                    [
+                                        re_path(
+                                            r"^update/$",
+                                            views.AllStoreOfficerUpdateView.as_view(),
+                                            name="all_update_store_officer",
+                                        ),
+                                        re_path(
+                                            r"^activate/$",
+                                            views.AllStoreOfficerActivateView.as_view(),
+                                            name="all_activate_store_officer",
+                                        ),
+                                        re_path(
+                                            r"^deactivate/$",
+                                            views.AllStoreOfficerDeactivateView.as_view(),
+                                            name="all_deactivate_store_officer",
+                                        ),
+                                        re_path(
                                             r"^remove/$",
                                             views.AllRemoveFromStoreOfficerView.as_view(),
                                             name="all_remove_store_officer",
@@ -153,8 +154,8 @@ urlpatterns = [
                                             views.AllStoreOfficerDeleteView.as_view(),
                                             name="all_delete_store_officer",
                                         ),
-                                ],
-                              ),
+                                    ],
+                                ),
                             ),
                         ],
                     ),
@@ -229,56 +230,96 @@ urlpatterns = [
                             ),
 
                             re_path(
-                                    r"^store_officers/",
-                                    include(
-                                        [
-                                            re_path(
-                                                r"^$",
-                                                views.StoreOfficersListView.as_view(),
-                                                name="store_officers_list"
-                                            ),
-                                            re_path(
-                                                r"^add/$",
-                                                views.AddStoreOfficerView.as_view(),
-                                                name="add_store_officer"
-                                            ),
+                                r"^staff_member/",
+                                include(
+                                    [
+                                        re_path(
+                                            r"^$",
+                                            views.StaffMemberListView.as_view(),
+                                            name="staff_members_list"
+                                        ),
+                                        re_path(
+                                            r"^add/$",
+                                            views.AddStaffMemberView.as_view(),
+                                            name="add_staff_member"
+                                        ),
 
-                                            re_path(
-                                                r"^(?P<pk>\d+)/",
-                                                include(
-                                                    [
-                                                        re_path(
-                                                            r"^update/$",
-                                                            views.StoreOfficerUpdateView.as_view(),
-                                                            name="update_store_officer"
-                                                        ),
-                                                        re_path(
-                                                            r"^activate/$",
-                                                            views.StoreOfficerActivateView.as_view(),
-                                                            name="activate_store_officer"
-                                                        ),
-                                                        re_path(
-                                                            r"^deactivate/$",
-                                                            views.StoreOfficerDeactivateView.as_view(),
-                                                            name="deactivate_store_officer"
-                                                        ),
-                                                        re_path(
-                                                            r"^remove/$",
-                                                            views.RemoveFromStoreOfficerView.as_view(),
-                                                            name="remove_store_officer"
-                                                        ),
-                                                        re_path(
-                                                            r"^delete/$",
-                                                            views.StoreOfficerDeleteView.as_view(),
-                                                            name="delete_store_officer",
-                                                        ),
-                                                    ],
-                                                ),
-                                            ),
-                                        ]
-                                    ),
+                                        re_path(
+                                            r"^(?P<pk>\d+)/",
+                                            include(
+                                                [
+                                                    re_path(
+                                                        r"^update/$",
+                                                        views.UpdateStaffMemberView.as_view(),
+                                                        name="update_staff_member"
+                                                    ),
+                                                    re_path(
+                                                        r"^activate/$",
+                                                        views.ActivateStaffMemberView.as_view(),
+                                                        name="activate_staff_member"
+                                                    ),
+                                                    re_path(
+                                                        r"^deactivate/",
+                                                        views.DeactivateStaffMemberView.as_view(),
+                                                        name="deactivate_staff_member"
+                                                    ),
+                                                    re_path(
+                                                        r"^delete/$",
+                                                        views.DeleteStaffMemberView.as_view(),
+                                                        name="delete_staff_member"
+                                                    )
+                                                ]
+                                            )
+                                        )
+                                    ],
                                 ),
+                            ),
 
+                            re_path(
+                                r"^store_officers/",
+                                include(
+                                    [
+                                        re_path(
+                                            r"^$", views.StoreOfficersListView.as_view(), name="store_officers_list"
+                                        ),
+                                        re_path(
+                                            r"^add/$", views.AddStoreOfficerView.as_view(), name="add_store_officer"
+                                        ),
+                                        re_path(
+                                            r"^(?P<pk>\d+)/",
+                                            include(
+                                                [
+                                                    re_path(
+                                                        r"^update/$",
+                                                        views.StoreOfficerUpdateView.as_view(),
+                                                        name="update_store_officer",
+                                                    ),
+                                                    re_path(
+                                                        r"^activate/$",
+                                                        views.StoreOfficerActivateView.as_view(),
+                                                        name="activate_store_officer",
+                                                    ),
+                                                    re_path(
+                                                        r"^deactivate/$",
+                                                        views.StoreOfficerDeactivateView.as_view(),
+                                                        name="deactivate_store_officer",
+                                                    ),
+                                                    re_path(
+                                                        r"^remove/$",
+                                                        views.RemoveFromStoreOfficerView.as_view(),
+                                                        name="remove_store_officer",
+                                                    ),
+                                                    re_path(
+                                                        r"^delete/$",
+                                                        views.StoreOfficerDeleteView.as_view(),
+                                                        name="delete_store_officer",
+                                                    ),
+                                                ],
+                                            ),
+                                        ),
+                                    ]
+                                ),
+                            ),
                             re_path(
                                 r"^heads/",
                                 include(
