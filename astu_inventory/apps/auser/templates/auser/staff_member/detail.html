@@ -1,0 +1,94 @@
+{% extends "layouts/main.html" %}{% load widget_tweaks static %}{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    {% if perms.core.can_list_staff_members %}<li class="breadcrumb-item"><a href="{% url 'auser:all_staff_member_list' %}">Staff Member List</a></li>{% endif %}
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
+
+<div class="container pt-4">
+
+    <div class="row py-4">
+        <div class="col-12 col-sm-4 d-flex justify-content-center align-item-center">
+            <img src="{{ borrow_request.user.profile_picture.url }}" class="img-fluid border-0" style="width: 12rem; height: 12rem; object-fit: cover; border-radius: 5px;">
+        </div>
+        <div class="col-12 col-sm-4 offset-2">{% with user=borrow_request.user %}
+            <table class="table responsive table-bordered table-secondary table-striped">
+                <tbody>
+                    <tr>
+                        <td>First name</td>
+                        <td>{{ user.first_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Last name</td>
+                        <td>{{ user.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Staff ID</td>
+                        <td>{{ user.staff_id }}</td>
+                    </tr>
+                    <tr>
+                        <td>Department</td>
+                        <td>{{ user.department.short_name }}</td>
+                    </tr>
+                </tbody>
+            </table>{% endwith %}
+        </div>
+    </div>
+    <!-- <img src="{{ user.profile_picture.url }}" alt="staff member image"> -->
+    {{ user.is_staff_member }}here
+    {{ user.groups }}
+
+    <h4 class="fw-bold mb-4">Request History</h4>
+    <div class="container-fluid p-sm-3">
+        <table class="table responsive table-bordered table-secondary table-striped">{% with product=borrow_request.product %}
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>item name</th>
+              <th>Department of item</th>
+              <th>Store</th>
+              <th>Measurment</th>
+              <th>Quantity</th>
+              <th>Date</th>
+              <th>Is item  returned </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+
+            </tr>
+          </tbody>
+            {% endwith %}
+        </table>
+
+    </div>
+    {% if perms.core.can_approve_borrow_request and borrow_request.quantity <= borrow_request.product.availables %}
+    <div class="modal fade" id="approve-borrow-request" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2"></i> This action is irreversable.</span>
+          </div>
+          <div class="modal-body">
+           Do you really wants to approve requst for {{ borrow_request.quantity }} {{ borrow_request.product.measurment }} or {{ borrow_request.product }} {{ borrow_request.product.sub_category }}?
+           {% if borrow_request.product.is_under_critical %}
+            <div class="alert alert-danger show mt-3">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i>This Product is under critical number
+            </div>{% elif borrow_request.leads_under_critical %}
+            <div class="alert alert-warning show mt-3">
+                <i class="fa-solid fa-circle-info me-2"></i>Approving this product leads the product to be under critical number!
+            </div>{% endif %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+            <form action="{% url 'core:approve_borrow_request' borrow_request.pk %}" method="post">{% csrf_token %}
+               <button class="btn btn-sm btn-outline-success shadow-none mx-1" type="submit"><i class="fa-solid fa-check-circle me-2"></i>Approve</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}{% endblock content %}

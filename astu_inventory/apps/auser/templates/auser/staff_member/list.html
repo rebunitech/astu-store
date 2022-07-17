@@ -31,9 +31,17 @@
             <tbody>{% if staff_members %}{% for staff_member in staff_members %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ staff_member.first_name|default:"-" }}</td>
+                    <td>{% if perms.auser.can_view_detail_staff_member %}
+                      <a  class="nav-link" href="{% url 'auser:detail_staff_member' staff_member.department.short_name staff_member.pk %}">
+                        {{ staff_member.first_name|default:"-" }}
+                      </a>{% endif %}
+                    </td>
                     <td>{{ staff_member.last_name|default:"-" }}</td>
-                    <td>{{ staff_member.staff_id }}</td>
+                    <td>{% if perms.auser.can_view_detail_staff_member %}
+                      <a  class="nav-link" href="{% url 'auser:detail_staff_member' staff_member.department.short_name staff_member.pk %}">
+                        {{ staff_member.staff_id }}
+                      </a>{% endif %}
+                    </td>
                     <td>{{ staff_member.department }}</td>
                     <td>{{ staff_member.email }}</td>
                     <td>{{ staff_member.phone_number }}</td>
@@ -45,6 +53,9 @@
                             <i class="fa fa-gears fs-4"></i>
                           </button>
                           <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                            {% if perms.auser.can_view_detail_staff_member %}
+                            <li><a class="dropdown-item py-2" href="{% url 'auser:detail_staff_member' staff_member.department.short_name staff_member.pk %}">
+                              <i class="fa-solid fa-pen me-3"></i>Detail</a></li>{% endif %}
                             {% if perms.auser.can_change_staff_member %}
                             <li><a class="dropdown-item py-2" href="{% url 'auser:update_staff_member' staff_member.department.short_name staff_member.pk %}">
                               <i class="fa-solid fa-pen me-3"></i>Update</a></li>{% endif %}{% if perms.auser.can_deactivate_staff_member and staff_member.is_active %}
