@@ -62,7 +62,7 @@ class LabAssistantListView(PermissionRequiredMixin, ListView):
 
 
 class AddAllLabAssistantView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
-    """Create a new store officer, from all departments."""
+    """Create a new lab assistant, from all departments."""
 
     model = UserModel
     fields = (
@@ -234,7 +234,7 @@ class LabAssistantActivateView(PermissionRequiredMixin, SuccessMessageMixin, Upd
     http_method_names = ["post"]
 
     def get_success_url(self):
-        return reverse_lazy("auser:store_officers_list", args=[self.kwargs["short_name"]])
+        return reverse_lazy("auser:lab_assistants_list", args=[self.kwargs["short_name"]])
 
     def get_queryset(self):
         return (
@@ -242,7 +242,7 @@ class LabAssistantActivateView(PermissionRequiredMixin, SuccessMessageMixin, Upd
             .get_queryset()
             .filter(
                 Q(is_active=False)
-                & Q(groups__name="store officer")
+                & Q(groups__name="lab assistant")
                 & Q(department__short_name__iexact=self.kwargs["short_name"])
             )
             .exclude(Q(groups__name="college dean") | Q(groups__name="department head"))
@@ -335,7 +335,7 @@ class AllRemoveFromLabAssistantView(PermissionRequiredMixin, SuccessMessageMixin
     fields = ("groups",)
     permission_required = "auser.can_remove_lab_assistant"
     success_message = "%(first_name)s %(last_name)s successfully removed from lab assistant list."
-    success_url = reverse_lazy("auser:all_lab_assiatants_list")
+    success_url = reverse_lazy("auser:all_lab_assistants_list")
     http_method_names = ["post"]
 
     def get_queryset(self):
