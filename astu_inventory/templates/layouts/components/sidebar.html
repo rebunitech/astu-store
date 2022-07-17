@@ -43,7 +43,7 @@
           <li>
             <a  class="nav-link" href="{% url 'auser:all_staff_member_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Staff Member</a>
           </li>{% endif %}{% if perms.auser.can_list_lab_assistant %}
-          <li><a class="nav-link" href="{% url 'auser:all_list_lab_assistant' %}"><i class="fa-solid fa-circle-dot me-4" ></i>Lab Assistant</a></li>
+          <li><a class="nav-link" href="{% url 'auser:all_lab_assistants_list' %}"><i class="fa-solid fa-circle-dot me-4" ></i>Lab Assistant</a></li>
           {% endif %}
       </ul>
     </li>{% endif %}
