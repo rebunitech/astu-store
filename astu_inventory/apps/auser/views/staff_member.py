@@ -15,7 +15,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from astu_inventory.apps.auser.models import Department
 
@@ -387,3 +387,23 @@ class DeleteStaffMemberView(PermissionRequiredMixin, SuccessMessageMixin, Delete
                 "related datas. try to delete related objects first.",
             )
             return HttpResponseRedirect(self.success_url)
+
+
+class DetailStaffMemberView(PermissionRequiredMixin, DetailView):
+    """detail of staff member view logic."""
+
+    model = UserModel
+    permission_required = "auser.can_view_detail_staff_member"
+    template_name = "auser/staff_member/detail.html"
+
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .filter(Q(groups__name="staff member") & Q(department__short_name__iexact=self.kwargs["short_name"]))
+        )
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data.update({"title": f"Detail of {self.object.get_full_name()}"})
+        return context_data
