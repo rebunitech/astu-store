@@ -220,7 +220,7 @@ urlpatterns = [
                             re_path(
                                 r"^$",
                                 views.AllLabAssistantListView.as_view(),
-                                name="all_list_lab_assistant",
+                                name="all_lab_assistants_list",
                             ),
                             re_path(r"^add/$", views.AddAllLabAssistantView.as_view(), name="all_add_lab_assistant"),
                             re_path(
@@ -407,7 +407,7 @@ urlpatterns = [
                                                     re_path(
                                                         r"^remove/$",
                                                         views.RemoveFromLabAssistantView.as_view(),
-                                                        name="remove_all_lab_assistant",
+                                                        name="remove_lab_assistant",
                                                     ),
                                                 ],
                                             ),
