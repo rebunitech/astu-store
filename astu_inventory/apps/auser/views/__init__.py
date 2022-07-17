@@ -1,3 +1,19 @@
+from .assistant import (
+    AddAllLabAssistantView,
+    AddLabAssistantView,
+    AllLabAssistantActivateView,
+    AllLabAssistantDeactivateView,
+    AllLabAssistantDeleteView,
+    AllLabAssistantListView,
+    AllLabAssistantUpdateView,
+    AllRemoveFromLabAssistantView,
+    LabAssistantActivateView,
+    LabAssistantDeactivateView,
+    LabAssistantDeleteView,
+    LabAssistantListView,
+    LabAssistantUpdateView,
+    RemoveFromLabAssistantView,
+)
 from .department import (
     ActivateDepartmentView,
     AddAllDepartmentHeadView,
@@ -50,6 +66,7 @@ from .staff_member import (
     AllUpdateStaffMemberView,
     DeactivateStaffMemberView,
     DeleteStaffMemberView,
+    DetailStaffMemberView,
     StaffMemberListView,
     UpdateStaffMemberView,
 )
@@ -133,6 +150,21 @@ __all__ = [
     "AllDeactivateStaffMemberView",
     "AllStaffMemberDeleteView",
     "DeleteStaffMemberView",
-    # Staff Member
     "ImportStaffMembersView",
+    "DetailStaffMemberView",
+    # assistant
+    "AddAllLabAssistantView",
+    "AddLabAssistantView",
+    "AllRemoveFromLabAssistantView",
+    "AllLabAssistantActivateView",
+    "AllLabAssistantDeactivateView",
+    "AllLabAssistantDeleteView",
+    "AllLabAssistantListView",
+    "AllLabAssistantUpdateView",
+    "RemoveFromLabAssistantView",
+    "LabAssistantActivateView",
+    "LabAssistantDeactivateView",
+    "LabAssistantDeleteView",
+    "LabAssistantListView",
+    "LabAssistantUpdateView",
 ]

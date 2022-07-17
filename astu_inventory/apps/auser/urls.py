@@ -6,6 +6,7 @@ The `urlpatterns` list routes URLs to views.
     Author: Wendirad Demelash(@wendirad) and Ashenafi Zenebe
 """
 
+
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetConfirmView, PasswordResetView
 from django.urls import include, path, re_path, reverse_lazy
 
@@ -90,6 +91,11 @@ urlpatterns = [
                                 r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<pk>\d+)/",
                                 include(
                                     [
+                                        re_path(
+                                            r"^detail/$",
+                                            views.DetailStaffMemberView.as_view(),
+                                            name="detail_staff_member",
+                                        ),
                                         re_path(
                                             r"^update/$",
                                             views.AllUpdateStaffMemberView.as_view(),
@@ -208,6 +214,51 @@ urlpatterns = [
                     ),
                 ),
                 re_path(
+                    r"^lab_assistant/",
+                    include(
+                        [
+                            re_path(
+                                r"^$",
+                                views.AllLabAssistantListView.as_view(),
+                                name="all_list_lab_assistant",
+                            ),
+                            re_path(r"^add/$", views.AddAllLabAssistantView.as_view(), name="all_add_lab_assistant"),
+                            re_path(
+                                r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<pk>\d+)/",
+                                include(
+                                    [
+                                        re_path(
+                                            r"^update/$",
+                                            views.AllLabAssistantUpdateView.as_view(),
+                                            name="all_update_lab_assistant",
+                                        ),
+                                        re_path(
+                                            r"^activate/$",
+                                            views.AllLabAssistantActivateView.as_view(),
+                                            name="all_activate_lab_assistant",
+                                        ),
+                                        re_path(
+                                            "^deactivate/$",
+                                            views.AllLabAssistantDeactivateView.as_view(),
+                                            name="all_deactivate_lab_assistant",
+                                        ),
+                                        re_path(
+                                            r"^remove/$",
+                                            views.AllRemoveFromLabAssistantView.as_view(),
+                                            name="all_remove_lab_assistant",
+                                        ),
+                                        re_path(
+                                            r"^delete/$",
+                                            views.AllLabAssistantDeleteView.as_view(),
+                                            name="all_delete_lab_assistant",
+                                        ),
+                                    ],
+                                ),
+                            ),
+                        ],
+                    ),
+                ),
+                re_path(
                     r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/",
                     include(
                         [
@@ -317,6 +368,51 @@ urlpatterns = [
                                             ),
                                         ),
                                     ]
+                                ),
+                            ),
+                            re_path(
+                                r"^lab_assistant/",
+                                include(
+                                    [
+                                        re_path(
+                                            r"^$", views.LabAssistantListView.as_view(), name="lab_assistants_list"
+                                        ),
+                                        re_path(
+                                            r"^add/$", views.AddLabAssistantView.as_view(), name="add_lab_assistant"
+                                        ),
+                                        re_path(
+                                            r"^(?P<pk>\d+)/",
+                                            include(
+                                                [
+                                                    re_path(
+                                                        r"^update/$",
+                                                        views.LabAssistantUpdateView.as_view(),
+                                                        name="update_lab_assistant",
+                                                    ),
+                                                    re_path(
+                                                        r"^delete/$",
+                                                        views.LabAssistantDeleteView.as_view(),
+                                                        name="delete_lab_assistant",
+                                                    ),
+                                                    re_path(
+                                                        r"^activate/$",
+                                                        views.LabAssistantActivateView.as_view(),
+                                                        name="activate_lab_assistant",
+                                                    ),
+                                                    re_path(
+                                                        r"^deactivate/$",
+                                                        views.LabAssistantDeactivateView.as_view(),
+                                                        name="deactivate_lab_assistant",
+                                                    ),
+                                                    re_path(
+                                                        r"^remove/$",
+                                                        views.RemoveFromLabAssistantView.as_view(),
+                                                        name="remove_all_lab_assistant",
+                                                    ),
+                                                ],
+                                            ),
+                                        ),
+                                    ],
                                 ),
                             ),
                             re_path(
