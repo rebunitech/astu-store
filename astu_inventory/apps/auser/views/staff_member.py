@@ -18,6 +18,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from astu_inventory.apps.auser.models import Department
+from astu_inventory.apps.core.models import BorrowRequest
 
 UserModel = get_user_model()
 
@@ -395,15 +396,24 @@ class DetailStaffMemberView(PermissionRequiredMixin, DetailView):
     model = UserModel
     permission_required = "auser.can_view_detail_staff_member"
     template_name = "auser/staff_member/detail.html"
+    context_object_name = "staff_member"
 
     def get_queryset(self):
         return (
             super()
             .get_queryset()
             .filter(Q(groups__name="staff member") & Q(department__short_name__iexact=self.kwargs["short_name"]))
+            .values("staff_id", "email", "first_name", "last_name", "department__short_name", "profile_picture")
         )
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data.update({"title": f"Detail of {self.object.get_full_name()}"})
+        context_data.update({"title": f"Detail of {self.object['staff_id']}"})
+        non_returned_requests = BorrowRequest.objects.filter(user__staff_id=self.object["staff_id"], status=0).values(
+            "product__name", "product__department__short_name", "quantity", "product__measurment__name", "date_updated"
+        )
+        requests = BorrowRequest.objects.filter(Q(user__staff_id=self.object["staff_id"]) & ~Q(status=0)).values(
+            "product__name", "product__department__short_name", "quantity", "product__measurment__name", "date_updated"
+        )
+        context_data.update({"non_returned_requests": non_returned_requests, "requests": requests})
         return context_data
