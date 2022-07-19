@@ -12,8 +12,8 @@ assignees: ''
 <!-- Next to Cc:, @ mention users who should be in the loop -->
 Cc:
 <!-- add intended user next to **Hi** -->
-Hi 
-  
+Hi
+
 ### Pain
 <!-- Explain the pain you are experiencing -->
 

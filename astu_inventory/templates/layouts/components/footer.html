@@ -1,12 +1,15 @@
-{% load static %}
+{% load static help %}
 <footer class="px-3 sticky-bottom">
   <div class="d-flex flex-row justify-content-between bordered border-1 border-top p-3 mx-1">
     <div class="">
       &copy; {% now "Y" %}
-      <a href="#" class="nav-link d-inline"> Rebuni Accademy</a>
+      <a href="http://rebuniacademy.epizy.com/" target="_blank" class="nav-link d-inline"> Rebuni Academy</a>
     </div>
     <div class="text-info fw-bolder fs-6">
-      <i class="fa-solid fa-circle-question me-2"></i>Help
+      <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#helpPage" role="button" aria-controls="helpPage">
+        <i class="fa-solid fa-circle-question me-2"></i>Help
+      </a>
     </div>
   </div>
+  {% get_help request.resolver_match.app_name request.resolver_match.url_name perms.help.change_help %}
 </footer>

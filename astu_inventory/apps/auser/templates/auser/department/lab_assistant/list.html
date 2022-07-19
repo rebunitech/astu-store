@@ -1,0 +1,129 @@
+{% extends "layouts/main.html" %}
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    {% if perms.auser.can_list_departments %}<li class="breadcrumb-item"><a href="{% url 'auser:departments_list' %}">Departments</a>
+    </li>{% endif %}
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}
+{% block content %}
+<div class="row">
+  <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3 d-flex justify-content-end">
+      {% if perms.auser.can_add_lab_assistant %}<a href="{% url 'auser:add_lab_assistant' view.kwargs.short_name  %}" class="btn btn-md btn-success rounded-3 shadow-none me-3">
+        <i class="fa-solid fa-circle-plus me-2"></i>Add Lab Assistant</a>{% endif %}</div>
+  <hr />
+  <div class="container-fluid p-sm-3">
+      <table id="staff_members_list" class="table responsive">
+          <thead>
+              <th class="border-bottom border-0">No</th>
+              <th class="border-bottom border-0">First name</th>
+              <th class="border-bottom border-0">Last name</th>
+              <th class="border-bottom border-0">Staff ID</th>
+              <th class="border-bottom border-0">Department</th>
+              <th class="border-bottom border-0">Email</th>
+              <th class="border-bottom border-0">Phone number</th>
+              <th class="border-bottom border-0">Sex</th>
+              <th class="border-bottom border-0">Status</th>
+              <th class="border-bottom border-0">Actions</th>
+          </thead>
+          <tbody>{% if lab_assistants %}{% for assistant in lab_assistants %}
+              <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ assistant.first_name|default:"-" }}</td>
+                  <td>{{ assistant.last_name|default:"-" }}</td>
+                  <td>{{ assistant.staff_id }}</td>
+                  <td>{{ assistant.department }}</td>
+                  <td>{{ assistant.email }}</td>
+                  <td>{{ assistant.phone_number }}</td>
+                  <td>{{ assistant.get_sex_display }}</td>
+                  <td><span class="badge bg-{% if assistant.is_active %}success{% else %}danger{% endif %} w-100">{% if assistant.is_active %}Active{% else %}Deactivated{% endif %}</span></td>
+                  <td>
+                      <div class="dropdown">
+                        <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="fa fa-gears fs-4"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                         {% if perms.auser.can_change_lab_assistant %}
+                          <li><a class="dropdown-item py-2" href="{% url 'auser:update_lab_assistant' view.kwargs.short_name assistant.pk %}">
+                            <i class="fa-solid fa-pen me-3"></i>Update</a></li>{% endif %}{% if perms.auser.can_deactivate_lab_assistant and assistant.is_active %}
+                          <li><button class="dropdown-item py-2 text-warning" data-bs-toggle="modal" data-bs-target="#change-status-{{ assistant.staff_id|slugify }}">
+                            <i class="fa-solid fa-toggle-off me-3"></i>Deactivate</button></li>{% elif perms.auser.can_activate_lab_assistant and not assistant.is_active %}
+                          <li><button class="dropdown-item py-2 text-success" data-bs-toggle="modal" data-bs-target="#change-status-{{ assistant.staff_id|slugify }}">
+                            <i class="fa-solid fa-toggle-on me-3"></i>Activate</button></li>
+                          {% endif %}{% if  perms.auser.can_remove_lab_assistant or perms.auser.can_delete_lab_assistant %}
+                          <li><hr class="dropdown-divider"></li>
+                          {% if perms.auser.can_remove_lab_assistant %}
+                            <li><button class="dropdown-item text-danger py-2"  data-bs-toggle="modal" data-bs-target="#remove-{{ assistant.staff_id|slugify }}">
+                              <i class="fa-solid fa-circle-minus me-3"></i>Remove from lab assistant?</button></li>
+                          {% endif %}
+                          {% if perms.auser.can_delete_lab_assistant %}
+                          <li><button class="dropdown-item text-danger py-2 fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-{{ assistant.staff_id|slugify }}">
+                            <i class="fa-solid fa-trash-can me-3"></i>Delete</button></li>
+                          {% endif %}{% endif %}
+                        </ul>
+                      </div>
+                  </td>
+              </tr>
+              {% if perms.auser.can_delete_lab_assistant %}<div class="modal fade" id="delete-{{ assistant.staff_id|slugify }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2"></i> This action is irreversable.</span>
+                    </div>
+                    <div class="modal-body">
+                     Do you really wants to delete <strong>{{ assistant.staff_id }}</strong>?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                      <form action="{% url 'auser:delete_lab_assistant' view.kwargs.short_name assistant.pk %}" method="post">{% csrf_token %}
+                         <button class="btn btn-outline-danger btn-sm shadow-none" type="submit"><i class="fa-solid fa-trash-can me-2"></i>I understand, delete!</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>{% endif %}
+              {% if perms.auser.can_remove_lab_assistant %}<div class="modal fade" id="remove-{{ assistant.staff_id|slugify }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2"></i> This action is irreversable.</span>
+                    </div>
+                    <div class="modal-body">
+                     Do you really wants to remove <strong>{{ assistant.staff_id }}</strong> frome lab assistant ?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                      <form action="{% url 'auser:remove_lab_assistant' view.kwargs.short_name assistant.pk %}" method="post">{% csrf_token %}
+                         <button class="btn btn-outline-danger btn-sm shadow-none" type="submit"><i class="fa-solid fa-trash-can me-2"></i>Confirm</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>{% endif %}
+              {% if perms.auser.can_activate_lab_assistant or perms.auser.can_deactivate_lab_assistant %}<div class="modal fade" id="change-status-{{ assistant.staff_id|slugify }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-body">
+                     Do you really wants to {% if assistant.is_active %}deactivate{% else %}activate{% endif %} <strong>{{ assistant.staff_id|slugify }}</strong>?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                      <form action="{% if assistant.is_active %}{% url 'auser:deactivate_lab_assistant' view.kwargs.short_name assistant.pk %}{% else %}{% url 'auser:activate_lab_assistant' view.kwargs.short_name assistant.pk %} {% endif %}" method="post">{% csrf_token %}
+                         <button class="btn btn-outline-{% if assistant.is_active %}warning{% else %}success{% endif %} btn-sm shadow-none" type="submit">
+                          <i class="fa-solid fa-check-circle me-2"></i>Confirm</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>{% endif %}
+              {% endfor %}{% endif %}</tbody>
+      </table>
+  </div>
+</div>
+{% endblock content %}

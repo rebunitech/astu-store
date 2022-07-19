@@ -13,6 +13,7 @@
 body {
     /*background-color: rgba(120, 120, 120, 0) !important;*/
     font-family: 'Ubuntu', sans-serif;
+    font-size: 12px;
     background-color: var(--main-color-dark);
     overflow-x: hidden;
 }
@@ -51,7 +52,7 @@ body {
     font-size: 15px;
 }
 .sidebar-nav {
-    width: 300px;
+    width: 260px;
 }
 
 .collapsing.collapse-horizontal {
@@ -88,4 +89,30 @@ a:focus {
 
 .manageMenu {
     min-width: 12rem;
+}
+
+.error-img {
+    width: 100vw;
+    height: 100vh;
+    background-size: auto 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    padding-bottom: 7%;
+    padding-left: 15%;
+
+}
+.error-400 {
+    background-image: url("../img/errors/400.svg");
+}
+.error-403 {
+    background-image: url("../img/errors/403.svg");
+}
+.error-404 {
+    background-image: url("../img/errors/404.svg");
+}
+.error-500 {
+    background-image: url("../img/errors/500.svg");
 }

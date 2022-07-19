@@ -15,10 +15,15 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     re_path(r"", include("astu_inventory.apps.auser.urls")),
+    re_path(r"", include("astu_inventory.apps.core.urls")),
+    re_path(r"^inventory/", include("astu_inventory.apps.inventory.urls")),
+    re_path(r"^help/", include("astu_inventory.apps.help.urls")),
     re_path(r"^admin/", admin.site.urls),
+    re_path(r"^chaining/", include("smart_selects.urls")),
+    re_path(r"^summernote/", include("django_summernote.urls")),
     *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
-    re_path(r"^$", RedirectView.as_view(url=reverse_lazy("auser:dashboard"))),
+    re_path(r"^$", RedirectView.as_view(url=reverse_lazy("core:dashboard"))),
 ]
 
 if settings.DEBUG:

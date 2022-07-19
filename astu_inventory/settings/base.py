@@ -44,8 +44,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third party
     "widget_tweaks",
+    "smart_selects",
+    "django_summernote",
     # Local apps
     "astu_inventory.apps.auser",
+    "astu_inventory.apps.inventory",
+    "astu_inventory.apps.core",
+    "astu_inventory.apps.help",
 ]
 
 # ==============================================================================
@@ -119,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_URL = reverse_lazy("auser:login")
 
 # The URL or named URL pattern where requests are redirected after login
-LOGIN_REDIRECT_URL = reverse_lazy("auser:dashboard")
+LOGIN_REDIRECT_URL = reverse_lazy("core:dashboard")
 
 # The URL or named URL pattern where requests are redirected after logout
 LOGOUT_REDIRECT_URL = LOGIN_URL
@@ -179,6 +184,20 @@ MESSAGE_TAGS = {
 # THIRD-PARTY SETTINGS
 # ==============================================================================
 
+# django smart select
+
+USE_DJANGO_JQUERY = True
+
+# Summernote
+
+SUMMERNOTE_CONFIG = {
+    "iframe": False,
+    "summernote": {
+        # Change editor size
+        "width": "100%",
+        "height": "480",
+    },
+}
 
 # ==============================================================================
 # FIRST-PARTY SETTINGS

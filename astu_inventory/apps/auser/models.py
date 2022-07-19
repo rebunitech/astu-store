@@ -2,6 +2,7 @@
 
     Date Created: 3 July, 2022
     Author: Wendirad Demelash(@wendirad)
+    updated by : Ashenafi Zeneb -)
 """
 from django.apps import apps
 from django.contrib.auth.hashers import make_password
@@ -200,8 +201,48 @@ class User(AbstractUser, Address):
             ("can_deactivate_department_head", "Can deactivate department head"),
             ("can_remove_department_head", "Can remove department head"),
             ("can_delete_department_head", "Can delete department head"),
+            ("can_add_store_officer", "Can add store officer"),
+            ("can_list_store_officers", "Can list store officer"),
+            ("can_change_store_officer", "Can change store officer"),
+            ("can_activate_store_officer", "Can activate store officer"),
+            ("can_deactivate_store_officer", "Can deactivate store officer"),
+            ("can_remove_store_officer", "Can remove store officer"),
+            ("can_delete_store_officer", "Can delete store officer"),
+            ("can_list_staff_members", "Can list staff member"),
+            ("can_add_staff_member", "Can add staff member"),
+            ("can_change_staff_member", "Can change staff member"),
+            ("can_activate_staff_member", "Can activate staff member"),
+            ("can_deactivate_staff_member", "Can deactivate staff member"),
+            ("can_delete_staff_member", "Can delete staff member"),
+            ("can_list_lab_assistant", "Can list lab assistant"),
+            ("can_add_lab_assistant", "Can add lab assistant"),
+            ("can_change_lab_assistant", "Can change lab assistant"),
+            ("can_activate_lab_assistant", "Can activate lab assistant"),
+            ("can_deactivate_lab_assistant", "Can deactivate lab assistant"),
+            ("can_remove_lab_assistant", "Can remove lab assistant"),
+            ("can_delete_lab_assistant", "Can delete lab assistant"),
         ]
 
     def __str__(self):
         """Return user staff ID and full name"""
         return "%s (%s)" % (self.get_full_name(), self.staff_id)
+
+    @property
+    def is_college_dean(self):
+        return self.groups.filter(name="college dean").exists()
+
+    @property
+    def is_department_head(self):
+        return self.groups.filter(name="department head").exists()
+
+    @property
+    def is_store_officer(self):
+        return self.groups.filter(name="store officer").exists()
+
+    @property
+    def is_staff_member(self):
+        return self.groups.filter(name="staff member").exists()
+
+    @property
+    def is_lab_assistant(self):
+        return self.groups.filter(name="lab assistant").exists()

@@ -3,7 +3,7 @@
 {% block breadcrumbs %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{% url 'auser:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
     {% if perms.auser.can_list_college_deans %}<li class="breadcrumb-item"><a href="{% url 'auser:college_deans_list' %}">College deans</a></li>{% endif %}
     <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
   </ol>

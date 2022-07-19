@@ -1,11 +1,26 @@
-{% load static %}<nav id="sidebar" data-bs-spy="scroll" class="col-auto collapse d-md-block collapse-horizontal pt-1 px-0 mx-0 sticky-md-top shadow-md">
+{% load static %}<nav id="sidebar"  class="col-auto collapse d-md-block collapse-horizontal pt-1 px-0 mx-0 sticky-md-top shadow-md">
   <div class="row sidebar-nav px-0">
     <div class="d-flex justify-content-center">
-      <a class="mx-auto mt-4 mb-5" href="{% url 'auser:dashboard' %}"><img src="{% static 'img/logo.svg' %}" alt="ASTU Store" class="img-fluid rounded-circle logo-img" /></a>
+      <a class="mx-auto mt-4 mb-5" href="{% url 'core:dashboard' %}"><img src="{% static 'img/logo.svg' %}" alt="ASTU Store" class="img-fluid rounded-circle logo-img" /></a>
     </div>
   </div>
   <ul class="nav flex-column" id="nav_accordion">
-    {% if perms.auth.view_roles or perms.auser.can_list_college_deans %}
+    {% if perms.core.can_list_available_product %}<li class="nav-item">
+      <a class="nav-link" href="{% url 'core:dashboard' %}"><i class="fa-solid fa-tent-arrow-turn-left me-4"></i>Create Rrequest</a>
+    </li>{% endif %}
+    {% if perms.core.can_list_active_borrow_request or perms.core.can_list_approved_borrow_request or perms.core.can_list_completed_borrow_request%}
+    <li class="nav-item has-submenu">
+      <a class="nav-link" href="#"><i class="fa-solid fa-laptop-code me-4"></i>Request</a>
+      <ul class="submenu collapse ps-3">{% if perms.core.can_list_active_borrow_request %}
+        <li><a class="nav-link" href="{% url 'core:active_borrow_requests_list' %}">
+          <i class="fa-solid fa-circle-dot me-4"></i>Active Requests</a></li>{% endif  %}{% if perms.core.can_list_approved_borrow_request %}
+        <li><a class="nav-link" href="{% url 'core:approved_borrow_requests_list' %}">
+          <i class="fa-solid fa-circle-dot me-4"></i>Approved Requests</a></li>{% endif  %}{% if perms.core.can_list_completed_borrow_request %}
+        <li><a class="nav-link" href="{% url 'core:completed_borrow_requests_list' %}">
+          <i class="fa-solid fa-circle-dot me-4"></i>Completed Requests</a></li>{% endif  %}
+      </ul>
+    </li>
+    {% endif %}{% if perms.auth.view_roles or perms.auser.can_list_college_deans %}
     <li class="nav-item has-submenu">
       <a class="nav-link" href="#"><i class="fa-solid fa-users me-4"></i>User</a>
       <ul class="submenu collapse ps-3">{% if perms.auth.views_roles %}
@@ -14,13 +29,47 @@
         <li><a class="nav-link" href="{% url 'auser:college_deans_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>College Deans</a></li>{% endif %}
       </ul>
     </li>
-    {% endif %}{% if perms.auser.can_list_departments or perms.auser.can_list_department_heads %}
+    {% endif %}{% if perms.auser.can_list_departments or perms.auser.can_list_department_heads or perms.auser.can_list_store_officers or perm.auser.can_list_staff_member %}
     <li class="nav-item has-submenu">
       <a class="nav-link" href="#"><i class="fa-solid fa-school me-4"></i>Department</a>
       <ul class="submenu collapse ps-3">{% if perms.auser.can_list_departments %}
-        <li><a class="nav-link" href="{% url 'auser:departments_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Departments</a></li>{% endif %}{% if perms.auser.can_list_department_heads %}
-        <li><a class="nav-link" href="{% url 'auser:all_department_heads_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Department Heads</a></li>{% endif %}
+        <li><a class="nav-link" href="{% url 'auser:departments_list' %}">
+          <i class="fa-solid fa-circle-dot me-4"></i>Departments</a></li>{% endif %}{% if perms.auser.can_list_department_heads %}
+        <li><a class="nav-link" href="{% url 'auser:all_department_heads_list' %}">
+          <i class="fa-solid fa-circle-dot me-4"></i>Department Heads</a></li>{% endif %}{% if perms.auser.can_list_store_officers %}
+          <li>
+            <a  class="nav-link" href="{% url 'auser:all_store_officer_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Store Officers</a>
+          </li>{% endif %}{% if perms.auser.can_list_staff_member %}
+          <li>
+            <a  class="nav-link" href="{% url 'auser:all_staff_member_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Staff Member</a>
+          </li>{% endif %}{% if perms.auser.can_list_lab_assistant %}
+          <li><a class="nav-link" href="{% url 'auser:all_lab_assistants_list' %}"><i class="fa-solid fa-circle-dot me-4" ></i>Lab Assistant</a></li>
+          {% endif %}
       </ul>
     </li>{% endif %}
-  </ul>
+    {% if perms.auth.view_roles or perms.auser.can_list_college_deans %}
+    <li class="nav-item has-submenu">
+      <a class="nav-link" href="#"><i class="fa-solid fa-store me-4"></i>Inventory</a>
+      <ul class="submenu collapse ps-3">{% if perms.inventory.view_store %}
+        <li><a class="nav-link" href="{% url 'inventory:stores_list' %}"><i class="fa-solid fa-circle-dot me-4">
+        </i>Stores</a></li>{% endif %}{% if perms.inventory.view_lab %}
+        <li><a class="nav-link" href="{% url 'inventory:labs_list' %}"><i class="fa-solid fa-circle-dot me-4">
+        </i>Labs</a></li>{% endif  %}{% if perms.inventory.view_product %}
+        <li><a class="nav-link" href="{% url 'inventory:products_list' %}"><i class="fa-solid fa-circle-dot me-4">
+
+        </i>Products</a></li>{% endif %}{% if perms.inventory.view_item %}
+        <li><a class="nav-link" href="{% url 'inventory:items_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Items</a></li>{% endif  %}
+      </ul>
+    </li>
+    <li class="nav-item has-submenu">
+      <a class="nav-link" href="#"><i class="fa-solid fa-gears me-4"></i>Configuration</a>
+      <ul class="submenu collapse ps-3">
+        {% if perms.inventory.view_specificationtype %}<li><a class="nav-link" href="{% url 'inventory:specification_types_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Specification Types</a></li>{% endif  %}{% if perms.inventory.view_category %}
+        <li><a class="nav-link" href="{% url 'inventory:categories_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Categories</a></li>{% endif  %}{% if perms.inventory.view_subcategory %}
+        <li><a class="nav-link" href="{% url 'inventory:sub_categories_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Sub Categories</a></li>{% endif  %}{% if perms.inventory.view_measurement %}
+        <li><a class="nav-link" href="{% url 'inventory:measurments_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Measurments</a></li>{% endif  %}{% if perms.help.view_help %}
+        <li><a class="nav-link" href="{% url 'help:helps_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Helps</a></li>{% endif  %}
+      </ul>
+    </li>
+  </ul>{% endif %}
 </nav>
