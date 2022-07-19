@@ -9,8 +9,18 @@ from .category import (
     UpdateSubCategoryView,
 )
 from .item import AddItemView, DeleteItemView, ImportItemsView, ListItemsView, UpdateItemView
-from .lab import AddLabView, DeleteLabView, ListLabsView, SpecificLabListView, UpdateLabView
-from .product import AddProductView, DeleteProductView, ImportProductsView, ListProductsView, UpdateProductView
+from .lab import AddLabView, DeleteLabView, ListLabsView, UpdateLabView
+from .product import (
+    AddProductImageView,
+    AddProductView,
+    DeleteProductImageView,
+    DeleteProductView,
+    ListProductImageView,
+    ListProductsView,
+    UpdateProductView,
+    ImportProductsView
+)
+
 from .shelf import AddShelfView, DeleteShelfView, ListShelvesView, UpdateShelfView
 from .specification import (
     AddItemSpecificationView,
@@ -76,12 +86,15 @@ __all__ = [
     "ListMeasurmentsView",
     "UpdateMeasurmentView",
     "DeleteMeasurmentView",
+    "AddProductImageView",
     # Product
     "AddProductView",
     "ImportProductsView",
     "ListProductsView",
     "UpdateProductView",
     "DeleteProductView",
+    "ListProductImageView",
+    "DeleteProductImageView",
     # Item
     "AddItemView",
     "ImportItemsView",

@@ -4,11 +4,11 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
-
 from astu_inventory.apps.auser.models import Department
 from astu_inventory.apps.core.views import ImportView
-from astu_inventory.apps.inventory.forms import AddProductForm, ImportProductForm, UpdateProductForm
-from astu_inventory.apps.inventory.models import Measurment, Product, SubCategory
+from astu_inventory.apps.inventory.forms import AddProductForm, ImportProductForm, UpdateProductForm, AddProductImageForm
+from astu_inventory.apps.inventory.models import Measurment, Product, SubCategory, ProductImage
+
 
 
 class AddProductView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
@@ -66,6 +66,67 @@ class DeleteProductView(PermissionRequiredMixin, DeleteView):
             return qs
         return qs.filter(Q(department=user.department))
 
+
+
+class AddProductImageView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    model = ProductImage
+    form_class = AddProductImageForm
+    permission_required = ("inventory.add_image",)
+    success_message = _("Image added successfully.")
+    template_name = "inventory/product/image/add.html"
+    context_object_name = "images"
+    extra_context = {"title": _("Add Image")}
+
+    def get_initial(self):
+        return self.kwargs
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "inventory:product_image_list",
+            kwargs=self.kwargs,
+        )
+
+
+class ListProductImageView(PermissionRequiredMixin, ListView):
+    model = ProductImage
+    permission_required = ("inventory.view_image",)
+    context_object_name = "images"
+    template_name = "inventory/product/image/list.html"
+    extra_context = {"title": _("Product Images")}
+
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .filter(
+                product__slug=self.kwargs.get("slug"),
+                product__department__short_name__iexact=self.kwargs["short_name"],
+            )
+        )
+
+
+class DeleteProductImageView(PermissionRequiredMixin, DeleteView):
+    model = ProductImage
+    permission_required = ("inventory.delete_image",)
+    http_method_names = ["post"]
+    pk_url_kwarg = "img_pk"
+
+    def get_success_url(self):
+        self.kwargs.pop("img_pk")
+        return reverse_lazy(
+            "inventory:product_image_list",
+            kwargs=self.kwargs,
+        )
+
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .filter(
+                product__slug=self.kwargs.get("slug"),
+                product__department__short_name__iexact=self.kwargs["short_name"],
+            )
+        )
 
 class ImportProductsView(PermissionRequiredMixin, ImportView):
     model = Product
@@ -165,4 +226,5 @@ class ImportProductsView(PermissionRequiredMixin, ImportView):
                 "error_title": "Invalid critical number",
                 "error_message": "Critical number must be greater than or equals to 0.",
             },
+
         )
