@@ -1,0 +1,43 @@
+{% extends "layouts/main.html" %}{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
+<div class="row">
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="help_list" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0" style="max-width: 25px;"></th>
+                    <th class="border-bottom border-0">App name</th>
+                    <th class="border-bottom border-0">View name</th>
+                    <th class="border-bottom border-0">Is Visible</th>
+                    <th class="border-bottom border-0"></th>
+                </tr>
+            </thead>
+            <tbody>{% if helps %}{% for help in helps %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td>{{ help.app_name }}</td>
+                    <td>{{ help.view_name }}</td>
+                    <td>{{ help.is_visible }}</td>
+                    <td class="text-center">
+                        <div class="dropdown">
+                          <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-gears fs-4"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                            {% if perms.help.change_help %}
+                            <li><a class="dropdown-item py-2" href="{% url 'help:update_help' help.pk %}"><i class="fa-solid fa-pen me-2"></i>Update</a></li>{% endif %}
+                          </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

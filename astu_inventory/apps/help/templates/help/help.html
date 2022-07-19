@@ -1,0 +1,17 @@
+
+<div class="offcanvas offcanvas-end w-50 border-start border-warning border-3"  tabindex="-1" id="helpPage" aria-labelledby="HelpPage">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="HelpPage"></h5>
+    <i class="fa-solid fa-xmark me-2" data-bs-dismiss="offcanvas"></i>
+  </div>
+  {% if help and help.is_visible and help.content %}
+  <div class="offcanvas-body container-fluid">{{ help.content|safe }}</div>
+  {% else %}
+  <div class="container-fluid py-5">
+    <p>Sorry, help content is not available for this page</p>
+  </div>
+  {% endif %}
+  <div class="offcanvas-footer p-4">
+  {% if user_has_perm and help %}<a class="nav-link float-end" href="{% url 'help:update_help' help.pk %}"><i class="fa-solid fa-edit me-2"></i> Update this help</a>{% endif %}
+  </div>
+</div>

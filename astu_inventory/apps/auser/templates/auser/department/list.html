@@ -1,0 +1,167 @@
+{% extends "layouts/main.html" %}
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
+<div class="row">
+    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3 d-flex justify-content-end">
+        {% if perms.auser.add_department %}<a href="{% url 'auser:add_department' %}" class="btn btn-md btn-success rounded-3 shadow-none"><i class="fa-solid fa-circle-plus me-2"></i>Add Department</a>{% endif %}
+    </div>
+    <hr />
+    <div class="container-fluid p-sm-3">
+        <table id="departments_list" class="table responsive nowrap">
+            <thead>
+                <th class="border-bottom border-0">Name</th>
+                <th class="border-bottom border-0">Short name</th>
+                <th class="border-bottom border-0 text-center">Status</th>
+                <th class="border-bottom border-0 text-center">Department Heads</th>
+                <th class="border-bottom border-0 text-center">Staffs Members</th>
+                <th class="border-bottom border-0 text-center">Store Officers</th>
+                <th class="border-bottom border-0 text-center">Lab Assistants</th>
+                <th class="border-bottom border-0 text-center">Stores</th>
+                <th class="border-bottom border-0 text-center">Labs</th>
+                <th class="border-bottom border-0">Actions</th>
+            </thead>
+            <tbody>{% if departments %}{% for department in departments %}
+                <tr>
+                    <td>{{ department.name }}</td>
+                    <td>{{ department.short_name }}</td>
+                    <td><span class="badge bg-{% if department.is_active %}success{% else %}danger{% endif %} w-100">{{ department.get_status_display }}</span></td>
+                    <td><a class="nav-link" href="{% url 'auser:department_heads_list' department.short_name %}"><i class="fa fa-person me-2"></i>Department Head</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:staff_members_list' department.short_name %}"><i class="fa fa-user-group me-2"></i>Staff Member</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:store_officers_list' department.short_name %}"><i class="fa fa-person-shelter me-2"></i>Store Officer</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:lab_assistants_list' department.short_name %}"><i class="fa fa-person-shelter me-2"></i>TBD</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:list_specific_store' department.short_name %}"><i class="fa fa-store me-2"></i>Store</a></td></a></td>
+                    <td><a class="nav-link" href="{% url 'auser:list_labs' department.short_name %}"><i class="fa fa-person-shelter me-2"></i>TBD</a></td>
+                    <td>
+                       <div class="dropdown">
+                          <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-gears fs-4"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                            {% if perms.auser.change_department %}
+                            <li><a class="dropdown-item py-2" href="{% url 'auser:update_department' department.short_name %}"><i class="fa-solid fa-pen me-3"></i>Update </a></li>{% endif %}
+                            {% if perms.auser.delete_department %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item fw-bolder" data-bs-toggle="modal" data-bs-target="#ImportData-{{ department.short_name }}"><i class="fa-solid fa-trash-can me-3"></i>Import Staff</button></li>
+                            {% endif %}
+                            {% if perms.auser.can_activate_department or perms.auser.can_deactivate_department %}{% if department.is_active and perms.auser.can_deactivate_department%}
+                            <li><button class="dropdown-item py-2 text-warning" data-bs-toggle="modal" data-bs-target="#change-status-{{ department.short_name }}">
+                              <i class="fa-solid fa-toggle-off me-3"></i>Deactivate</button></li>{% elif not department.is_active and perms.auser.can_activate_department  %}
+                            <li><button class="dropdown-item py-2 text-success" data-bs-toggle="modal" data-bs-target="#change-status-{{ department.short_name }}">
+                              <i class="fa-solid fa-toggle-on me-3"></i>Activate</button></li>
+                            {% endif %}{% endif %}{% if perms.auser.delete_department %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-department-{{ department.short_name }}">
+                              <i class="fa-solid fa-trash-can me-3"></i>Delete</button></li>
+                            {% endif %}
+                          </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% if perms.auser.can_import_staff_member %}
+                <div class="modal fade" id="ImportData-{{ department.short_name }}" tabindex="-1" aria-labelledby="ImportData" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Import data from xlsx fiel.</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="{% url 'auser:import_staff_member' department.short_name %}" method="post" id="ImportDataForm-{{department.short_name}}" data-department="{{department.short_name}}" enctype="multipart/form-data"> {% csrf_token%}
+                          <input type="hidden" name="next" value="{{ request.path }}">
+                          <label for="FileImport">Select file</label>
+                          <input type="file" class="form-control shadow-none" name="file" id="FileImport" aria-describedby="FileImport" placeholder="Upload file" required>
+                          <div class="rounded my-3" role="group" aria-label="import buttons">
+                            <button type="button" class="btn btn-sm btn-danger shadow-none" data-bs-dismiss="modal"><i class="fa fa-cancel me-2"></i> Cancel</button>
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-upload me-2 shadow-none"></i> Import</button>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <a href="{% url 'auser:import_staff_member' department.short_name %}">Download template</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if perms.auser.delete_department %}<div class="modal fade" id="delete-department-{{ department.short_name }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2"></i> This action is irreversable.</span>
+                      </div>
+                      <div class="modal-body">
+                       Do you really wants to delete <strong>{{ department.name }}</strong> department?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                        <form action="{% url 'auser:delete_department' department.short_name %}" method="post">{% csrf_token %}
+                           <button class="btn btn-outline-danger btn-sm shadow-none" type="submit"><i class="fa-solid fa-trash-can me-2"></i>I understand, delete!</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>{% endif %}{% if perms.auser.can_activate_department or perms.auser.can_deactivate_department %}<div class="modal fade" id="change-status-{{ department.short_name }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                       Do you really wants to {% if department.is_active %}deactivate{% else %}activate{% endif %} <strong>{{ department.name }}</strong> department?{% if department.is_active %}
+                            <div class="alert alert-warning show mt-3">
+                              <div class="row">
+                                  <div class="col-12"><i class="fa-solid fa-circle-info me-2"></i>Note that, deactivating department will also deactivate it's decendants (store, lab, staffs)
+                              </div>
+                            </div>{% endif %}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                        <form action="{% if department.is_active %}{% url 'auser:deactivate_department' department.short_name %}{% else %}{% url 'auser:activate_department' department.short_name %}{% endif %}" method="post">{% csrf_token %}
+                           <button class="btn btn-outline-{% if department.is_active %}warning{% else %}success{% endif %} btn-sm shadow-none" type="submit"><i class="fa-solid fa-check-circle me-2"></i>Confirm</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>{% endif %}
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}{% block js %}{{ block.super }}
+<script type="text/javascript">
+  document.querySelectorAll('[id^="ImportDataForm"]').forEach(from => {
+    from.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      let submitBtn = from[4];
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp;&nbsp;Importing ... '
+      let xhr = new XMLHttpRequest();
+      department = from.dataset.department
+      xhr.open('POST', from.action);
+      xhr.setRequestHeader("X-CSRFToken", from[0].value);
+      let formData = new FormData(from);
+      this.responseType = 'blob';
+      xhr.send(formData);
+      xhr.onload = function(e) {
+          if (this.status == 200) {
+              let responseContentType = this.getResponseHeader('content-type');
+              if (responseContentType == "text/csv"){
+                var blob = new Blob([this.response], {type: responseContentType});
+                let a = document.createElement("a");
+                a.style = "display: none";
+                document.body.appendChild(a);
+                let url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = 'invalid_data.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+              }
+          }
+          window.location.reload();
+        };
+    });
+  });
+</script>{% endblock js %}

@@ -1,0 +1,35 @@
+{% extends "layouts/main.html" %}{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
+<div class="row">
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="completed_borrow_request" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0"></th>
+                    <th class="border-bottom border-0 text-center">Product</th>
+                    <th class="border-bottom border-0 text-center">Quantity</th>
+                    <th class="border-bottom border-0 text-center">Start&nbsp;Date</th>
+                    <th class="border-bottom border-0 text-center">End&nbsp;Date</th>
+                    <th class="border-bottom border-0 text-center">Status</th>
+                </tr>
+            </thead>
+            <tbody>{% if borrow_requests %}{% for borrow_request in borrow_requests %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td>{{ borrow_request.product__name }}</td>
+                    <td class="text-center">{{ borrow_request.quantity }}</td>
+                    <td class="text-center">{{ borrow_request.start_date|date:" d M, Y" }}</td>
+                    <td class="text-center">{{ borrow_request.end_date|date:"d M, Y" }}</td>
+                    <td><span class="badge bg-{% if borrow_request.status == 1 or borrow_request.status == 6 %}success{% elif borrow_request.status == 0 or borrow_request.status == 4 %}warning{% elif borrow_request.status == 7 %}dark{% else %}danger{% endif %} w-100">{% with status=borrow_request.status %}{% if status == 0 %}Pending{% elif status == 1 %}Approved{% elif status == 2 %}Declined{% elif status == 3 %}Cancelled{% elif status == 4 %}Processed{% elif status == 5 %}Revoked{% elif status == 6 %}Completed{% elif status == 7 %}Returned{% endif %}{% endwith %}</span></td>
+                </tr>
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

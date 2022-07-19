@@ -1,0 +1,174 @@
+{% extends "layouts/main.html" %}{% load static %}{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    {% if perms.core.can_list_active_borrow_request %}<li class="breadcrumb-item"><a href="{% url 'core:active_borrow_requests_list' %}">Active Borrow Requests List</a></li>{% endif %}
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
+
+<div class="container pt-4">
+    {% if borrow_request.product.is_under_critical %}<div class="container-fluid my-2 px-0">
+        <div class="alert alert-danger show">
+            <div class="row">
+                <div class="col-12"><i class="fa-solid fa-triangle-exclamation me-2"></i>This Product is under critical number!</div>
+            </div>
+        </div>
+    </div>{% elif borrow_request.quantity > borrow_request.product.availables %}<div class="container-fluid my-2 px-0">
+        <div class="alert alert-danger show">
+            <div class="row">
+                <div class="col-12"><i class="fa-solid fa-circle-info me-2"></i>This request cann't be approved, since currently there is no enough quantity item available.</div>
+            </div>
+        </div>
+    </div>{% elif borrow_request.leads_under_critical %}<div class="container-fluid my-2 px-0">
+        <div class="alert alert-warning show">
+            <div class="row">
+                <div class="col-12"><i class="fa-solid fa-circle-info me-2"></i>Approving this product leads the product to be under critical number!</div>
+            </div>
+        </div>
+    </div>{% endif %}
+    <div class="row py-4">
+        <div class="col-12 col-sm-4 d-flex justify-content-center align-item-center">
+            <img src="{{ borrow_request.user.profile_picture.url }}" class="img-fluid border-0" style="width: 12rem; height: 12rem; object-fit: cover; border-radius: 5px;">
+        </div>
+        <div class="col-12 col-sm-4 offset-2">{% with user=borrow_request.user %}
+            <table class="table responsive table-bordered table-secondary table-striped">
+                <tbody>
+                    <tr>
+                        <td>First name</td>
+                        <td>{{ user.first_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Last name</td>
+                        <td>{{ user.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Staff ID</td>
+                        <td>{{ user.staff_id }}</td>
+                    </tr>
+                    <tr>
+                        <td>Department</td>
+                        <td>{{ user.department.short_name }}</td>
+                    </tr>
+                </tbody>
+            </table>{% endwith %}
+        </div>
+    </div>
+    <div class="container fs-5" style="text-align: justify;">
+        <p>Dear {{ user.get_full_nam }}.</p>
+        <p>I request you to kindly approve my request for borrowing {{ borrow_request.quantity }} {{ borrow_request.product.measurment }} or {{ borrow_request.product }} {{ borrow_request.product.sub_category }}. I need to get this items form {{ borrow_request.start_date|date:"d M, Y" }} to {{ borrow_request.end_date|date:"d M, Y" }} because </p>
+        <p class="mx-3"> {{ borrow_request.reason|safe }}</p>
+        <p class="fw-bolder">Thank you.</p>
+    </div>
+    <h4 class="fw-bold mb-4">Requested Product</h4>
+    <div>
+        <table class="table responsive table-bordered table-secondary table-striped">{% with product=borrow_request.product %}
+            <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>{{ product.name }}</td>
+                </tr>
+                <tr>
+                    <td>Category</td>
+                    <td>{{ product.category }}</td>
+                </tr>
+                <tr>
+                    <td>Sub Category</td>
+                    <td>{{ product.sub_category }}</td>
+                </tr>
+                <tr>
+                    <td>Kind</td>
+                    <td>{{ product.get_kind_display }}</td>
+                </tr>
+                <tr>
+                    <td>Department</td>
+                    <td>{{ product.department }}</td>
+                </tr>
+                <tr class="fw-bolder">
+                    <td>Quantity Available</td>
+                    <td>{{ product.availables }}</td>
+                </tr>
+            </tbody>
+            {% endwith %}
+        </table>
+        <h4 class="fw-bold my-5">Requested Summary</h4>
+        <table class="table responsive table-bordered table-secondary table-striped">{% with borrow_request=borrow_request %}
+            <tbody>
+                <tr>
+                    <td>Quantity</td>
+                    <td>{{ borrow_request.quantity }}</td>
+                </tr>
+                <tr>
+                    <td>Start date</td>
+                    <td>{{ borrow_request.start_date|date:"d M, Y" }}</td>
+                </tr>
+                <tr>
+                    <td>End date</td>
+                    <td>{{ borrow_request.end_date|date:"d M, Y" }}</td>
+                </tr>
+            </tbody>
+            {% endwith %}
+        </table>
+    </div>
+    {% if perms.core.can_approve_borrow_request or perms.core.can_declined_borrow_request %}
+    <div class="row">
+        <div class="col-12 p-5">
+            <div class="btn-group float-end" role="group" aria-label="manageMenu">
+              {% if perms.core.can_approve_borrow_request %}
+              {% if borrow_request.quantity <= borrow_request.product.availables %}
+              <button type="button" class="btn btn-success shadow-none mx-1" data-bs-toggle="modal" data-bs-target="#approve-borrow-request"><i class="fa-solid fa-check-circle me-2" ></i>Approve</button>{% else %}<button type="button" class="btn btn-secondary shadow-none mx-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Requested quantity is larger than currently available quantity.">Can't be approved!</button>{% endif %}{% endif %}{% if perms.core.can_declined_borrow_request %}
+              <button type="button" class="btn btn-danger shadow-none mx-1" data-bs-toggle="modal" data-bs-target="#decline-borrow-request"><i class="fa-solid fa-trash-can me-2"></i>Decline</button>{% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if perms.core.can_approve_borrow_request and borrow_request.quantity <= borrow_request.product.availables %}
+    <div class="modal fade" id="approve-borrow-request" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2"></i> This action is irreversable.</span>
+          </div>
+          <div class="modal-body">
+           Do you really wants to approve requst for {{ borrow_request.quantity }} {{ borrow_request.product.measurment }} or {{ borrow_request.product }} {{ borrow_request.product.sub_category }}?
+           {% if borrow_request.product.is_under_critical %}
+            <div class="alert alert-danger show mt-3">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i>This Product is under critical number
+            </div>{% elif borrow_request.leads_under_critical %}
+            <div class="alert alert-warning show mt-3">
+                <i class="fa-solid fa-circle-info me-2"></i>Approving this product leads the product to be under critical number!
+            </div>{% endif %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+            <form action="{% url 'core:approve_borrow_request' borrow_request.pk %}" method="post">{% csrf_token %}
+               <button class="btn btn-sm btn-outline-success shadow-none mx-1" type="submit"><i class="fa-solid fa-check-circle me-2"></i>Approve</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>{% endif %}{% if perms.core.can_declined_borrow_request %}
+    <div class="modal fade" id="decline-borrow-request" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form action="{% url 'core:decline_borrow_request' borrow_request.pk %}" method="post">{% csrf_token %}
+            <div class="modal-header">
+                <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2"></i> This action is irreversable.</span>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                  <label for="id_reason" class="form-label fw-bold">Reason</label>
+                  <textarea class="form-control shadow-none" id="id_reason" name="reason" rows="5" placeholder="I'm declining this request because of ..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                <button class="btn btn-sm btn-outline-danger shadow-none mx-1" type="submit"><i class="fa-solid fa-trash-can me-2"></i>Decline</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>{% endif %}
+</div>
+{% endblock content %}

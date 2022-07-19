@@ -1,0 +1,106 @@
+{% extends "layouts/main.html" %}{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
+<div class="row">
+    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3">
+        {% if perms.inventory.add_item %}<a href="{% url 'inventory:add_item' %}" class="btn btn-md btn-success rounded-3 shadow-none float-end"><i class="fa-solid fa-circle-plus me-2"></i>Add Item</a>{% endif %}
+      {% if perms.inventory.can_import_items %}
+          <button class="btn btn-md btn-info rounded-3 shadow-none fw-bolder float-end mx-3" data-bs-toggle="modal" data-bs-target="#ImportData"><i class="fa fa-upload me-2"></i> Import Items</button>
+          <div class="modal fade" id="ImportData" tabindex="-1" aria-labelledby="ImportData" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Import data from xlsx fiel.</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="{% url 'inventory:import_items' %}" method="post" enctype="multipart/form-data"> {% csrf_token%}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <label for="FileImport">Select file</label>
+                    <input type="file" class="form-control shadow-none" name="file" id="FileImport" aria-describedby="FileImport" placeholder="Upload file" required>
+                    <div class="rounded my-3" role="group" aria-label="import buttons">
+                      <button type="button" class="btn btn-sm btn-danger shadow-none" data-bs-dismiss="modal"><i class="fa fa-cancel me-2"></i> Cancel</button>
+                      <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-upload me-2"></i> Import</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <a href="{% url 'inventory:import_items' %}">Download template</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+    <hr />
+    <div class="container-fluid p-1 p-sm-3">
+        <table id="items_list" class="table w-100 rounded-3">
+            <thead>
+                <tr>
+                    <th class="border-bottom border-0 text-center">Product</th>
+                    <th class="border-bottom border-0 text-center">DSN</th>
+                    <th class="border-bottom border-0 text-center">Quantity</th>
+                    <th class="border-bottom border-0 text-center">Purpose</th>
+                    <th class="border-bottom border-0 text-center">Store/Lab</th>
+                    <th class="border-bottom border-0 text-center">Shelf/Table</th>
+                    <th class="border-bottom border-0 text-center">Expiration&nbsp;Date</th>
+                    <th class="border-bottom border-0 text-center">Year&nbsp;of&nbsp;Purchase</th>
+                    <th class="border-bottom border-0 text-center">Status</th>
+                    <th class="border-bottom border-0 text-center">Supplier</th>
+                    <th class="border-bottom border-0"></th>
+                </tr>
+            </thead>
+            <tbody>{% if items %}{% for item in items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.dead_stock_number }}</td>
+                    <td>{{ item.quantity }} {{ item.product.measurment }}</td>
+                    <td>{{ item.get_purpose_display }}</td>
+                    <td>{% if item.store %}{{ item.store }}{% else %}{{ item.lab }}{% endif %}</td>
+                    <td>{% if item.shelf %}{{ item.shelf }}{% else %}{{ item.table }}{% endif %}</td>
+                    <td>{{ item.expiration_date|default:"-" }}</td>
+                    <td>{{ item.year_of_purchase|default:"-" }}</td>
+                    <td>{{ item.get_status_display }}</td>
+                    <td>{{ item.supplier|default:"-" }}</td>
+                    <td class="text-center">
+                        <div class="dropdown">
+                          <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-gears fs-4"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                            {% if perms.inventory.view_specification %}
+                            <li><a class="dropdown-item py-2" href="{% url 'inventory:item_specifications_list' item.pk %}"><i class="fa-solid fa-list me-2"></i>Specifications</a></li>
+                            {% endif %}{% if perms.inventory.change_item %}
+                            <li><a class="dropdown-item py-2" href="{% url 'inventory:update_item' item.pk %}"><i class="fa-solid fa-pen me-2"></i>Update</a></li>{% endif %} {% if perms.inventory.delete_item %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-item-{{ item.pk }}"><i class="fa-solid fa-circle-minus me-2"></i>Delete</button></li>{% endif %}
+                          </ul>
+                        </div>
+                        {% if perms.inventory.delete_item %}
+                        <div class="modal fade" id="delete-item-{{ item.pk }}" tabindex="-1" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-body">
+                               Do you really wants to delete <strong>{{item.name }}</strong>? This action is irreversable.
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-primary shadow-none" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                <form action="{% url 'inventory:delete_item' item.pk %}" method="post">{% csrf_token %}
+                                  <input class="btn btn-danger btn-sm shadow-none" type="submit" value="I understand, delete!" />
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
