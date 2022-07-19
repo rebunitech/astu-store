@@ -355,6 +355,7 @@ class ReturnedBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, Up
         signals.borrow_request_returned.send(sender=self.model, instance=self.object)
         return response
 
+
 class ListBorrowRequestHistoryView(PermissionRequiredMixin, SuccessMessageMixin, ListView):
     model = BorrowRequest
     permission_required = "core.can_list_borrow_request_history"

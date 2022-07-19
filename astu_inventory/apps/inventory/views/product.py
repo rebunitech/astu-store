@@ -4,11 +4,16 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+
 from astu_inventory.apps.auser.models import Department
 from astu_inventory.apps.core.views import ImportView
-from astu_inventory.apps.inventory.forms import AddProductForm, ImportProductForm, UpdateProductForm, AddProductImageForm
-from astu_inventory.apps.inventory.models import Measurment, Product, SubCategory, ProductImage
-
+from astu_inventory.apps.inventory.forms import (
+    AddProductForm,
+    AddProductImageForm,
+    ImportProductForm,
+    UpdateProductForm,
+)
+from astu_inventory.apps.inventory.models import Measurment, Product, ProductImage, SubCategory
 
 
 class AddProductView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
@@ -65,7 +70,6 @@ class DeleteProductView(PermissionRequiredMixin, DeleteView):
         if user.is_superuser or user.is_college_dean:
             return qs
         return qs.filter(Q(department=user.department))
-
 
 
 class AddProductImageView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
@@ -127,6 +131,7 @@ class DeleteProductImageView(PermissionRequiredMixin, DeleteView):
                 product__department__short_name__iexact=self.kwargs["short_name"],
             )
         )
+
 
 class ImportProductsView(PermissionRequiredMixin, ImportView):
     model = Product
@@ -226,5 +231,4 @@ class ImportProductsView(PermissionRequiredMixin, ImportView):
                 "error_title": "Invalid critical number",
                 "error_message": "Critical number must be greater than or equals to 0.",
             },
-
         )
