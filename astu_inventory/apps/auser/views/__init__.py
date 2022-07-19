@@ -1,3 +1,19 @@
+from .assistant import (
+    AddAllLabAssistantView,
+    AddLabAssistantView,
+    AllLabAssistantActivateView,
+    AllLabAssistantDeactivateView,
+    AllLabAssistantDeleteView,
+    AllLabAssistantListView,
+    AllLabAssistantUpdateView,
+    AllRemoveFromLabAssistantView,
+    LabAssistantActivateView,
+    LabAssistantDeactivateView,
+    LabAssistantDeleteView,
+    LabAssistantListView,
+    LabAssistantUpdateView,
+    RemoveFromLabAssistantView,
+)
 from .department import (
     ActivateDepartmentView,
     AddAllDepartmentHeadView,
@@ -39,6 +55,21 @@ from .officer import (
     StoreOfficerUpdateView,
 )
 from .role import ListRolesView, UpdateRoleView
+from .staff_member import (
+    ActivateStaffMemberView,
+    AddStaffMemberView,
+    AllAddStaffMemberView,
+    AllDeactivateStaffMemberView,
+    AllStaffMemberActivateView,
+    AllStaffMemberDeleteView,
+    AllStaffMemberListView,
+    AllUpdateStaffMemberView,
+    DeactivateStaffMemberView,
+    DeleteStaffMemberView,
+    DetailStaffMemberView,
+    StaffMemberListView,
+    UpdateStaffMemberView,
+)
 from .user import (
     AddCollegeDeanView,
     CollegeDeanActivateView,
@@ -91,7 +122,7 @@ __all__ = [
     "DepartmentHeadDeleteView",
     "AllSelectDepartmentHeadView",
     "SelectDepartmentHeadView",
-    # Officer
+    # store officer
     "AddAllStoreOfficerView",
     "AddStoreOfficerView",
     "AllRemoveFromStoreOfficerView",
@@ -106,6 +137,34 @@ __all__ = [
     "StoreOfficerDeleteView",
     "StoreOfficersListView",
     "StoreOfficerUpdateView",
-    # Staff Member
+    # staff member
+    "AllAddStaffMemberView",
+    "AllStaffMemberListView",
+    "AllUpdateStaffMemberView",
+    "UpdateStaffMemberView",
+    "StaffMemberListView",
+    "AddStaffMemberView",
+    "AllStaffMemberActivateView",
+    "ActivateStaffMemberView",
+    "DeactivateStaffMemberView",
+    "AllDeactivateStaffMemberView",
+    "AllStaffMemberDeleteView",
+    "DeleteStaffMemberView",
     "ImportStaffMembersView",
+    "DetailStaffMemberView",
+    # assistant
+    "AddAllLabAssistantView",
+    "AddLabAssistantView",
+    "AllRemoveFromLabAssistantView",
+    "AllLabAssistantActivateView",
+    "AllLabAssistantDeactivateView",
+    "AllLabAssistantDeleteView",
+    "AllLabAssistantListView",
+    "AllLabAssistantUpdateView",
+    "RemoveFromLabAssistantView",
+    "LabAssistantActivateView",
+    "LabAssistantDeactivateView",
+    "LabAssistantDeleteView",
+    "LabAssistantListView",
+    "LabAssistantUpdateView",
 ]

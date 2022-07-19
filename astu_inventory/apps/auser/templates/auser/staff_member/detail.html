@@ -1,0 +1,121 @@
+{% extends "layouts/main.html" %}{% load widget_tweaks static %}{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    {% if perms.core.can_list_staff_members %}<li class="breadcrumb-item"><a href="{% url 'auser:all_staff_member_list' %}">Staff Member List</a></li>{% endif %}
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
+
+<div class="container pt-4">
+    <div class="row py-4">
+        <div class="col-12 col-sm-4 d-flex justify-content-center align-item-center">
+            <img src="{% get_media_prefix %}{{ staff_member.profile_picture }}" class="img-fluid border-0" style="width: 12rem; height: 12rem; object-fit: cover; border-radius: 5px;">
+        </div>
+        <div class="col-12 col-sm-4 offset-2">{% with user=borrow_request.user %}
+            <table class="table responsive table-bordered table-secondary table-striped">
+                <tbody>
+                    <tr>
+                        <td>First name</td>
+                        <td>{{ staff_member.first_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Last name</td>
+                        <td>{{ staff_member.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Staff ID</td>
+                        <td>{{ staff_member.staff_id }}</td>
+                    </tr>
+                    <tr>
+                      <td>Email</td>
+                      <td>{{ staff_member.email }}</td>
+                  </tr>
+                    <tr>
+                        <td>Department</td>
+                        <td>{{ staff_member.department__short_name }}</td>
+                    </tr>
+                </tbody>
+            </table>{% endwith %}
+        </div>
+    </div>
+
+
+    <h4 class="fw-bold mb-4">Non Returned Products</h4>
+    <div class="container-fluid p-sm-3">
+        <table class="table responsive table-bordered table-secondary table-striped">{% with product=borrow_request.product %}
+          <thead class="text-center">
+            <tr>
+              <th>No</th>
+              <th>Product</th>
+              <th>Department</th>
+              <th>Quantity</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>{% for borrow_request in non_returned_requests %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ borrow_request.product__name }}</td>
+              <td>{{ borrow_request.product__department__short_name }}</td>
+              <td>{{ borrow_request.quantity }} {{ borrow_request.product__measurment__name }}</td>
+              <td class="text-center">{{ borrow_request.get_status_display }}</td>
+              <td class="text-center">{{ borrow_request.date_updated|date:"d M, Y" }}</td>
+            </tr>{% endfor %}
+          </tbody>
+            {% endwith %}
+        </table>
+    </div>
+
+    <h4 class="fw-bold mb-4">Request History</h4>
+    <div class="container-fluid p-sm-3">
+        <table class="table responsive table-bordered table-secondary table-striped">{% with product=borrow_request.product %}
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Product</th>
+              <th>Department</th>
+              <th>Store</th>
+              <th>Measurment</th>
+              <th>Quantity</th>
+              <th>Date</th>
+              <th>Status </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+
+            </tr>
+          </tbody>
+            {% endwith %}
+        </table>
+    </div>
+    {% if perms.core.can_approve_borrow_request and borrow_request.quantity <= borrow_request.product.availables %}
+    <div class="modal fade" id="approve-borrow-request" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2"></i> This action is irreversable.</span>
+          </div>
+          <div class="modal-body">
+           Do you really wants to approve requst for {{ borrow_request.quantity }} {{ borrow_request.product.measurment }} or {{ borrow_request.product }} {{ borrow_request.product.sub_category }}?
+           {% if borrow_request.product.is_under_critical %}
+            <div class="alert alert-danger show mt-3">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i>This Product is under critical number
+            </div>{% elif borrow_request.leads_under_critical %}
+            <div class="alert alert-warning show mt-3">
+                <i class="fa-solid fa-circle-info me-2"></i>Approving this product leads the product to be under critical number!
+            </div>{% endif %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+            <form action="{% url 'core:approve_borrow_request' borrow_request.pk %}" method="post">{% csrf_token %}
+               <button class="btn btn-sm btn-outline-success shadow-none mx-1" type="submit"><i class="fa-solid fa-check-circle me-2"></i>Approve</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}{% endblock content %}
