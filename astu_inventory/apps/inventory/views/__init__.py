@@ -10,18 +10,16 @@ from .category import (
 )
 from .item import AddItemView, DeleteItemView, ImportItemsView, ListItemsView, UpdateItemView
 from .lab import AddLabView, DeleteLabView, ListLabsView, UpdateLabView
-
 from .product import (
     AddProductImageView,
     AddProductView,
     DeleteProductImageView,
     DeleteProductView,
+    ImportProductsView,
     ListProductImageView,
     ListProductsView,
     UpdateProductView,
-    ImportProductsView
 )
-
 from .shelf import AddShelfView, DeleteShelfView, ListShelvesView, UpdateShelfView
 from .specification import (
     AddItemSpecificationView,

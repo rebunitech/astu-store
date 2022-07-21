@@ -7,22 +7,32 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('inventory', '0002_auto_20220713_1111'),
+        ("inventory", "0002_auto_20220713_1111"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ProductImage',
+            name="ProductImage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, null=True, upload_to='uploads/', verbose_name='image')),
-                ('remark', models.CharField(blank=True, max_length=250, verbose_name='remark')),
-                ('product', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='images', to='inventory.product', verbose_name='product')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("image", models.ImageField(blank=True, null=True, upload_to="uploads/", verbose_name="image")),
+                ("remark", models.CharField(blank=True, max_length=250, verbose_name="remark")),
+                (
+                    "product",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="images",
+                        to="inventory.product",
+                        verbose_name="product",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'image',
-                'verbose_name_plural': 'images',
-                'db_table': 'product_image',
+                "verbose_name": "image",
+                "verbose_name_plural": "images",
+                "db_table": "product_image",
             },
         ),
     ]
