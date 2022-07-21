@@ -27,6 +27,7 @@ class ListAvailableProductsView(PermissionRequiredMixin, ListView):
             .values(
                 "name",
                 "slug",
+                "availables",
                 "critical_no",
                 "category__name",
                 "sub_category__name",

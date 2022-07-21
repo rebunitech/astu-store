@@ -89,7 +89,7 @@ urlpatterns = [
                     ),
                 ),
                 re_path(
-                    r"^(?P<slug>[-a-zA-Z0-9_]+)/borrow/request/",
+                    r"^(?P<short_name>[a-zA-Z0-9\_\-]+)/(?P<slug>[-a-zA-Z0-9_]+)/borrow/request/",
                     include(
                         [
                             re_path(

@@ -3,8 +3,6 @@ import os
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Q, Sum
-from django.db.models.functions import Coalesce
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
@@ -247,6 +245,7 @@ class Product(models.Model):
     kind = models.CharField(max_length=25, verbose_name=_("kind"), choices=KindChoices.choices)
     measurment = models.ForeignKey(Measurment, verbose_name=_("measurement"), on_delete=models.PROTECT)
     critical_no = models.IntegerField(help_text=_("Min number of item that must be in store."))
+    availables = models.IntegerField(_("Availables"), help_text=_("Currently number of available items."), default=0)
 
     class Meta:
         db_table = "product"
@@ -265,14 +264,6 @@ class Product(models.Model):
         """Save slug field."""
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-
-    @property
-    def availables(self):
-        total_item = self.items.aggregate(total_item=Coalesce(Sum("quantity"), 0))["total_item"]
-        total_borrow_request = self.borrow_requests.aggregate(
-            total_borrow_request=Coalesce(Sum("quantity", filter=Q(status=1) | Q(status=6)), 0)
-        )["total_borrow_request"]
-        return total_item - total_borrow_request
 
 
 class ProductImage(models.Model):
