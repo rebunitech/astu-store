@@ -10,6 +10,8 @@ from astu_inventory.apps.inventory.models import Store
 
 
 class AddStoreView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+    """Add store to the system (all list of store)"""
+
     model = Store
     fields = ("department", "block", "room", "remark")
     permission_required = "inventory.add_store"
@@ -40,6 +42,23 @@ class ListStoresView(PermissionRequiredMixin, ListView):
         if user.is_superuser or user.is_college_dean:
             return qs
         return qs.filter(Q(department=user.department))
+
+
+class SpecificListStoreView(PermissionRequiredMixin, SuccessMessageMixin, ListView):
+    """List stores for specific department."""
+
+    model = Store
+    permission_required = "auser.can_list_stores"
+    template_name = "inventory/store/specific/list.html"
+    context_object_name = "stores"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data.update({"title": f"{self.kwargs['short_name'].upper()} stores."})
+        return context_data
+
+    def get_queryset(self):
+        return super().get_queryset().filter(Q(department__short_name__iexact=self.kwargs["short_name"]))
 
 
 class UpdateStoreView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):

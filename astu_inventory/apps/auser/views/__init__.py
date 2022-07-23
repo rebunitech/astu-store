@@ -55,6 +55,21 @@ from .officer import (
     StoreOfficerUpdateView,
 )
 from .role import ListRolesView, UpdateRoleView
+from .staff_member import (
+    ActivateStaffMemberView,
+    AddStaffMemberView,
+    AllAddStaffMemberView,
+    AllDeactivateStaffMemberView,
+    AllStaffMemberActivateView,
+    AllStaffMemberDeleteView,
+    AllStaffMemberListView,
+    AllUpdateStaffMemberView,
+    DeactivateStaffMemberView,
+    DeleteStaffMemberView,
+    DetailStaffMemberView,
+    StaffMemberListView,
+    UpdateStaffMemberView,
+)
 from .user import (
     AddCollegeDeanView,
     CollegeDeanActivateView,
@@ -107,7 +122,7 @@ __all__ = [
     "DepartmentHeadDeleteView",
     "AllSelectDepartmentHeadView",
     "SelectDepartmentHeadView",
-    # Officer
+    # store officer
     "AddAllStoreOfficerView",
     "AddStoreOfficerView",
     "AllRemoveFromStoreOfficerView",
@@ -122,6 +137,22 @@ __all__ = [
     "StoreOfficerDeleteView",
     "StoreOfficersListView",
     "StoreOfficerUpdateView",
+
+    # staff member
+    "AllAddStaffMemberView",
+    "AllStaffMemberListView",
+    "AllUpdateStaffMemberView",
+    "UpdateStaffMemberView",
+    "StaffMemberListView",
+    "AddStaffMemberView",
+    "AllStaffMemberActivateView",
+    "ActivateStaffMemberView",
+    "DeactivateStaffMemberView",
+    "AllDeactivateStaffMemberView",
+    "AllStaffMemberDeleteView",
+    "DeleteStaffMemberView",
+    "ImportStaffMembersView",
+    "DetailStaffMemberView",
     # assistant
     "AddAllLabAssistantView",
     "AddLabAssistantView",
@@ -137,6 +168,4 @@ __all__ = [
     "LabAssistantDeleteView",
     "LabAssistantListView",
     "LabAssistantUpdateView",
-    # Staff Member
-    "ImportStaffMembersView",
 ]

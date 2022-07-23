@@ -1,0 +1,99 @@
+{% extends "layouts/main.html" %}{% load widget_tweaks static %}{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    {% if perms.core.can_list_staff_members %}<li class="breadcrumb-item"><a href="{% url 'auser:all_staff_member_list' %}">Staff Member List</a></li>{% endif %}
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
+
+<div class="container pt-4">
+    <div class="row py-4">
+        <div class="col-12 col-sm-4 d-flex justify-content-center align-item-center">
+            <img src="{% get_media_prefix %}{{ staff_member.profile_picture }}" class="img-fluid border-0" style="width: 12rem; height: 12rem; object-fit: cover; border-radius: 5px;">
+        </div>
+        <div class="col-12 col-sm-4 offset-2">{% with user=borrow_request.user %}
+            <table class="table responsive table-bordered table-secondary table-striped">
+                <tbody>
+                    <tr>
+                        <td>First name</td>
+                        <td>{{ staff_member.first_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Last name</td>
+                        <td>{{ staff_member.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Staff ID</td>
+                        <td>{{ staff_member.staff_id }}</td>
+                    </tr>
+                    <tr>
+                      <td>Email</td>
+                      <td>{{ staff_member.email }}</td>
+                  </tr>
+                    <tr>
+                        <td>Department</td>
+                        <td>{{ staff_member.department__short_name }}</td>
+                    </tr>
+                </tbody>
+            </table>{% endwith %}
+        </div>
+    </div>
+
+    <h4 class="fw-bold mb-4">Non Returned Products</h4>
+    <div class="container-fluid p-sm-3">
+        <table class="table responsive table-bordered table-secondary table-striped">
+          <thead class="text-center">
+            <tr>
+              <th class="border-bottom border-0">No</th>
+              <th class="border-bottom border-0">Product</th>
+              <th class="border-bottom border-0">Department</th>
+              <th class="border-bottom border-0">Quantity</th>
+              <th class="border-bottom border-0">Date</th>
+            </tr>
+          </thead>
+          <tbody>{% for borrow_request in non_returned_requests %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ borrow_request.product__name }}</td>
+              <td>{{ borrow_request.product__department__short_name }}</td>
+              <td>{{ borrow_request.quantity }} {{ borrow_request.product__measurment__name }}</td>
+              <td class="text-center">{{ borrow_request.date_updated|date:"d M, Y" }}</td>
+            </tr>{% endfor %}
+          </tbody>
+        </table>
+    </div>
+
+    <h4 class="fw-bold mb-4 mt-6">Request History</h4>
+    <div class="container-fluid p-sm-3">
+        <table class="table responsive table-bordered table-secondary table-striped">
+          <thead class="text-center">
+            <tr>
+              <th class="border-bottom border-0">No</th>
+              <th class="border-bottom border-0">Product</th>
+              <th class="border-bottom border-0">Department</th>
+              <th class="border-bottom border-0">Measurment</th>
+              <th class="border-bottom border-0">Quantity</th>
+              <th class="border-bottom border-0">Date</th>
+              <th class="border-bottom border-0">Status </th>
+            </tr>
+          </thead>
+          <tbody>{% for history in requests %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ history.product__name }}</td>
+              <td>{{ history.product__department__short_name }}</td>
+              <td>{{ history.quantity }} {{history.product__measurment__name }}</td>
+              <td>{{ history.date_updated|date:"d M, Y" }}</td>
+
+              <td><span class="badge bg-{% if borrow_request.status == 1 or borrow_request.status == 6 %}success{% elif borrow_request.status == 0 or borrow_request.status == 4 %}warning{% elif borrow_request.status == 7 %}dark{% else %}danger{% endif %} w-100">{% with status=borrow_request.status %}{% if status == 0 %}Pending{% elif status == 1 %}Approved{% elif status == 2 %}Declined{% elif status == 3 %}Cancelled{% elif status == 4 %}Processed{% elif status == 5 %}Revoked{% elif status == 6 %}Completed{% elif status == 7 %}Returned{% endif %}{% endwith %}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
+    </div>
+
+
+  {% endblock content %}

@@ -32,11 +32,11 @@
                     <td>{{ department.short_name }}</td>
                     <td><span class="badge bg-{% if department.is_active %}success{% else %}danger{% endif %} w-100">{{ department.get_status_display }}</span></td>
                     <td><a class="nav-link" href="{% url 'auser:department_heads_list' department.short_name %}"><i class="fa fa-person me-2"></i>Department Head</a></td>
-                    <td><a class="nav-link" href=""><i class="fa fa-user-group me-2"></i>Staff Member</a></td>
-                    <td><a class="nav-link" href=""><i class="fa fa-person-shelter me-2"></i>Store Officer</a></td>
-                    <td><a class="nav-link" href=""><i class="fa fa-person-shelter me-2"></i>TBD</a></td>
-                    <td><a class="nav-link" href=""><i class="fa fa-store me-2"></i>Store</a></td></a></td>
-                    <td><a class="nav-link" href="#"><i class="fa fa-person-shelter me-2"></i>TBD</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:staff_members_list' department.short_name %}"><i class="fa fa-user-group me-2"></i>Staff Member</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:store_officers_list' department.short_name %}"><i class="fa fa-person-shelter me-2"></i>Store Officer</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:lab_assistants_list' department.short_name %}"><i class="fa fa-person-shelter me-2"></i>TBD</a></td>
+                    <td><a class="nav-link" href="{% url 'auser:list_specific_store' department.short_name %}"><i class="fa fa-store me-2"></i>Store</a></td></a></td>
+                    <td><a class="nav-link" href="{% url 'auser:list_labs' department.short_name %}"><i class="fa fa-person-shelter me-2"></i>TBD</a></td>
                     <td>
                        <div class="dropdown">
                           <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,11 +50,14 @@
                             <li><button class="dropdown-item fw-bolder" data-bs-toggle="modal" data-bs-target="#ImportData-{{ department.short_name }}"><i class="fa-solid fa-trash-can me-3"></i>Import Staff</button></li>
                             {% endif %}
                             {% if perms.auser.can_activate_department or perms.auser.can_deactivate_department %}{% if department.is_active and perms.auser.can_deactivate_department%}
-                            <li><button class="dropdown-item py-2 text-warning" data-bs-toggle="modal" data-bs-target="#change-status-{{ department.short_name }}"><i class="fa-solid fa-toggle-off me-3"></i>Deactivate</button></li>{% elif not department.is_active and perms.auser.can_activate_department  %}
-                            <li><button class="dropdown-item py-2 text-success" data-bs-toggle="modal" data-bs-target="#change-status-{{ department.short_name }}"><i class="fa-solid fa-toggle-on me-3"></i>Activate</button></li>
+                            <li><button class="dropdown-item py-2 text-warning" data-bs-toggle="modal" data-bs-target="#change-status-{{ department.short_name }}">
+                              <i class="fa-solid fa-toggle-off me-3"></i>Deactivate</button></li>{% elif not department.is_active and perms.auser.can_activate_department  %}
+                            <li><button class="dropdown-item py-2 text-success" data-bs-toggle="modal" data-bs-target="#change-status-{{ department.short_name }}">
+                              <i class="fa-solid fa-toggle-on me-3"></i>Activate</button></li>
                             {% endif %}{% endif %}{% if perms.auser.delete_department %}
                             <li><hr class="dropdown-divider"></li>
-                            <li><button class="dropdown-item text-danger fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-department-{{ department.short_name }}"><i class="fa-solid fa-trash-can me-3"></i>Delete</button></li>
+                            <li><button class="dropdown-item text-danger fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-department-{{ department.short_name }}">
+                              <i class="fa-solid fa-trash-can me-3"></i>Delete</button></li>
                             {% endif %}
                           </ul>
                         </div>

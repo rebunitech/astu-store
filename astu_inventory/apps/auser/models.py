@@ -2,6 +2,7 @@
 
     Date Created: 3 July, 2022
     Author: Wendirad Demelash(@wendirad)
+    updated by : Ashenafi Zeneb -)
 """
 from django.apps import apps
 from django.contrib.auth.hashers import make_password
@@ -148,7 +149,7 @@ class User(AbstractUser, Address):
     staff_id = models.CharField(
         _("staff ID"),
         unique=True,
-        max_length=15,
+        max_length=250,
         help_text=_("Unique staff ID number, that the college use to identify. "),
         error_messages={
             "unique": _("A user with that staff ID already exists."),
@@ -200,6 +201,27 @@ class User(AbstractUser, Address):
             ("can_deactivate_department_head", "Can deactivate department head"),
             ("can_remove_department_head", "Can remove department head"),
             ("can_delete_department_head", "Can delete department head"),
+            ("can_add_store_officer", "Can add store officer"),
+            ("can_list_store_officers", "Can list store officer"),
+            ("can_change_store_officer", "Can change store officer"),
+            ("can_activate_store_officer", "Can activate store officer"),
+            ("can_deactivate_store_officer", "Can deactivate store officer"),
+            ("can_remove_store_officer", "Can remove store officer"),
+            ("can_delete_store_officer", "Can delete store officer"),
+            ("can_list_staff_members", "Can list staff member"),
+            ("can_add_staff_member", "Can add staff member"),
+            ("can_change_staff_member", "Can change staff member"),
+            ("can_activate_staff_member", "Can activate staff member"),
+            ("can_deactivate_staff_member", "Can deactivate staff member"),
+            ("can_delete_staff_member", "Can delete staff member"),
+            ("can_list_lab_assistant", "Can list lab assistant"),
+            ("can_add_lab_assistant", "Can add lab assistant"),
+            ("can_change_lab_assistant", "Can change lab assistant"),
+            ("can_activate_lab_assistant", "Can activate lab assistant"),
+            ("can_deactivate_lab_assistant", "Can deactivate lab assistant"),
+            ("can_remove_lab_assistant", "Can remove lab assistant"),
+            ("can_delete_lab_assistant", "Can delete lab assistant"),
+            ("can_view_detail_staff_member", "Can view detail staff memeber"),
         ]
 
     def __str__(self):
