@@ -290,7 +290,7 @@ class Item(models.Model):
 
     description = models.TextField(_("description"), blank=True, null=True)
     quantity = models.IntegerField(_("quantity"), validators=[MinValueValidator(1)])
-    dead_stock_number = models.CharField(_("dead stock number"), max_length=50)
+    dead_stock_number = models.CharField(_("dead stock number"), max_length=250)
     purpose = models.CharField(
         _("purpose"),
         max_length=10,
