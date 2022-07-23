@@ -4,7 +4,7 @@ $(document).ready(function() {
     })
     // Basic DataTables
     $('#roles_table,  #deapartment_heads_list, #staff_members_list, #store_officers_list').DataTable({
-        dom: "t",
+        dom: "QBfltipr",
         columnDefs: [{
             orderable: false,
             targets: -1
@@ -38,7 +38,8 @@ $(document).ready(function() {
         ]
     })
     $('#departments_list, #college_deans_list').DataTable({
-        dom: "t",
+        // dom: "t",
+        dom: "QBfltipr",
         columnDefs: [{
             orderable: false,
             targets: -1
@@ -50,11 +51,11 @@ $(document).ready(function() {
         ]
     })
     $('#help_list').DataTable({
-        dom: 'Qfltipr'
+        dom: 'QBfltipr'
     })
 
     $('#colleges_list, #items_list').DataTable({
-        dom: 'Qfltipr',
+        dom: 'QBfltipr',
         responsive: true,
         columnDefs: [{
             orderable: false,
