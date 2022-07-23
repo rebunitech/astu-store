@@ -41,18 +41,16 @@
         </div>
     </div>
 
-
     <h4 class="fw-bold mb-4">Non Returned Products</h4>
     <div class="container-fluid p-sm-3">
-        <table class="table responsive table-bordered table-secondary table-striped">{% with product=borrow_request.product %}
+        <table class="table responsive table-bordered table-secondary table-striped">
           <thead class="text-center">
             <tr>
-              <th>No</th>
-              <th>Product</th>
-              <th>Department</th>
-              <th>Quantity</th>
-              <th>Status</th>
-              <th>Date</th>
+              <th class="border-bottom border-0">No</th>
+              <th class="border-bottom border-0">Product</th>
+              <th class="border-bottom border-0">Department</th>
+              <th class="border-bottom border-0">Quantity</th>
+              <th class="border-bottom border-0">Date</th>
             </tr>
           </thead>
           <tbody>{% for borrow_request in non_returned_requests %}
@@ -61,61 +59,41 @@
               <td>{{ borrow_request.product__name }}</td>
               <td>{{ borrow_request.product__department__short_name }}</td>
               <td>{{ borrow_request.quantity }} {{ borrow_request.product__measurment__name }}</td>
-              <td class="text-center">{{ borrow_request.get_status_display }}</td>
               <td class="text-center">{{ borrow_request.date_updated|date:"d M, Y" }}</td>
             </tr>{% endfor %}
           </tbody>
-            {% endwith %}
         </table>
     </div>
 
-    <h4 class="fw-bold mb-4">Request History</h4>
+    <h4 class="fw-bold mb-4 mt-6">Request History</h4>
     <div class="container-fluid p-sm-3">
-        <table class="table responsive table-bordered table-secondary table-striped">{% with product=borrow_request.product %}
-          <thead>
+        <table class="table responsive table-bordered table-secondary table-striped">
+          <thead class="text-center">
             <tr>
-              <th>No</th>
-              <th>Product</th>
-              <th>Department</th>
-              <th>Store</th>
-              <th>Measurment</th>
-              <th>Quantity</th>
-              <th>Date</th>
-              <th>Status </th>
+              <th class="border-bottom border-0">No</th>
+              <th class="border-bottom border-0">Product</th>
+              <th class="border-bottom border-0">Department</th>
+              <th class="border-bottom border-0">Measurment</th>
+              <th class="border-bottom border-0">Quantity</th>
+              <th class="border-bottom border-0">Date</th>
+              <th class="border-bottom border-0">Status </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody>{% for history in requests %}
             <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ history.product__name }}</td>
+              <td>{{ history.product__department__short_name }}</td>
+              <td>{{ history.quantity }} {{history.product__measurment__name }}</td>
+              <td>{{ history.date_updated|date:"d M, Y" }}</td>
 
+              <td><span class="badge bg-{% if borrow_request.status == 1 or borrow_request.status == 6 %}success{% elif borrow_request.status == 0 or borrow_request.status == 4 %}warning{% elif borrow_request.status == 7 %}dark{% else %}danger{% endif %} w-100">{% with status=borrow_request.status %}{% if status == 0 %}Pending{% elif status == 1 %}Approved{% elif status == 2 %}Declined{% elif status == 3 %}Cancelled{% elif status == 4 %}Processed{% elif status == 5 %}Revoked{% elif status == 6 %}Completed{% elif status == 7 %}Returned{% endif %}{% endwith %}</span></td>
             </tr>
+            {% endfor %}
           </tbody>
-            {% endwith %}
+
         </table>
     </div>
-    {% if perms.core.can_approve_borrow_request and borrow_request.quantity <= borrow_request.product.availables %}
-    <div class="modal fade" id="approve-borrow-request" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2"></i> This action is irreversable.</span>
-          </div>
-          <div class="modal-body">
-           Do you really wants to approve requst for {{ borrow_request.quantity }} {{ borrow_request.product.measurment }} or {{ borrow_request.product }} {{ borrow_request.product.sub_category }}?
-           {% if borrow_request.product.is_under_critical %}
-            <div class="alert alert-danger show mt-3">
-                <i class="fa-solid fa-triangle-exclamation me-2"></i>This Product is under critical number
-            </div>{% elif borrow_request.leads_under_critical %}
-            <div class="alert alert-warning show mt-3">
-                <i class="fa-solid fa-circle-info me-2"></i>Approving this product leads the product to be under critical number!
-            </div>{% endif %}
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
-            <form action="{% url 'core:approve_borrow_request' borrow_request.pk %}" method="post">{% csrf_token %}
-               <button class="btn btn-sm btn-outline-success shadow-none mx-1" type="submit"><i class="fa-solid fa-check-circle me-2"></i>Approve</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  {% endif %}{% endblock content %}
+
+
+  {% endblock content %}

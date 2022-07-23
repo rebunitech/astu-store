@@ -409,7 +409,7 @@ class DetailStaffMemberView(PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data.update({"title": f"Detail of {self.object['staff_id']}"})
-        non_returned_requests = BorrowRequest.objects.filter(user__staff_id=self.object["staff_id"], status=0).values(
+        non_returned_requests = BorrowRequest.objects.filter(user__staff_id=self.object["staff_id"], status=6).values(
             "product__name", "product__department__short_name", "quantity", "product__measurment__name", "date_updated"
         )
         requests = BorrowRequest.objects.filter(Q(user__staff_id=self.object["staff_id"]) & ~Q(status=0)).values(
