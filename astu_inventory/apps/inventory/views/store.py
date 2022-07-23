@@ -48,7 +48,7 @@ class SpecificListStoreView(PermissionRequiredMixin, SuccessMessageMixin, ListVi
     """List stores for specific department."""
 
     model = Store
-    permission_required = "auser.can_list_store"
+    permission_required = "auser.can_list_stores"
     template_name = "inventory/store/specific/list.html"
     context_object_name = "stores"
 
