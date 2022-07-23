@@ -227,7 +227,7 @@ class Product(models.Model):
         CONSUMABLE = "CONSUMABLE", _("Consumable")
         NON_CONSUMABLE = "NON_CONSUMABLE", _("Non-Consumable")
 
-    name = models.CharField(max_length=50, verbose_name=_("name"))
+    name = models.CharField(max_length=255, verbose_name=_("name"))
     slug = models.SlugField(max_length=100, verbose_name=_("slug"))
     category = models.ForeignKey(Category, verbose_name=_("category"), on_delete=models.PROTECT)
     sub_category = ChainedForeignKey(
@@ -302,7 +302,7 @@ class Item(models.Model):
 
     description = models.TextField(_("description"), blank=True, null=True)
     quantity = models.IntegerField(_("quantity"), validators=[MinValueValidator(1)])
-    dead_stock_number = models.CharField(_("dead stock number"), max_length=50)
+    dead_stock_number = models.CharField(_("dead stock number"), max_length=255)
     purpose = models.CharField(
         _("purpose"),
         max_length=10,
