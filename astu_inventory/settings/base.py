@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     "widget_tweaks",
     "smart_selects",
     "django_summernote",
-    
     # Local apps
     "astu_inventory.apps.auser",
     "astu_inventory.apps.inventory",
