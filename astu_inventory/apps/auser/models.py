@@ -149,7 +149,7 @@ class User(AbstractUser, Address):
     staff_id = models.CharField(
         _("staff ID"),
         unique=True,
-        max_length=15,
+        max_length=250,
         help_text=_("Unique staff ID number, that the college use to identify. "),
         error_messages={
             "unique": _("A user with that staff ID already exists."),
