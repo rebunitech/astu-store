@@ -9,7 +9,7 @@
 {% endblock breadcrumbs %}{% block content %}{% with WIDGET_ERROR_CLASS="is-invalid" %}
 <form method="post" class="py-5" enctype="multipart/form-data">{% csrf_token %}
   {% if form.non_field_errors %}{% include 'layouts/error.html' with error=form.non_field_errors|first %}{% endif %}
-  <span class="text-danger">*</span> Requeired
+  <span class="text-danger">*</span> Required
   {% for field in form.hidden_fields %}{{ field }}{% endfor %}<div class="row">{% for field in form.visible_fields %}
     <div class="col-md-10 col-lg-8">
       <div class="form-group my-3 row">
