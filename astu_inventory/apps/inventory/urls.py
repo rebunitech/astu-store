@@ -331,7 +331,7 @@ urlpatterns = [
         ),
     ),
     re_path(
-        r"^lab/",  # TODO:
+        r"^lab/",
         include(
             [
                 re_path(r"^$", views.ListLabsView.as_view(), name="labs_list"),
