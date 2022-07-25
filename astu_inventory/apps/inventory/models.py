@@ -3,8 +3,6 @@ import os
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Q, Sum
-from django.db.models.functions import Coalesce
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
@@ -229,7 +227,7 @@ class Product(models.Model):
         CONSUMABLE = "CONSUMABLE", _("Consumable")
         NON_CONSUMABLE = "NON_CONSUMABLE", _("Non-Consumable")
 
-    name = models.CharField(max_length=50, verbose_name=_("name"))
+    name = models.CharField(max_length=255, verbose_name=_("name"))
     slug = models.SlugField(max_length=100, verbose_name=_("slug"))
     category = models.ForeignKey(Category, verbose_name=_("category"), on_delete=models.PROTECT)
     sub_category = ChainedForeignKey(
@@ -247,6 +245,7 @@ class Product(models.Model):
     kind = models.CharField(max_length=25, verbose_name=_("kind"), choices=KindChoices.choices)
     measurment = models.ForeignKey(Measurment, verbose_name=_("measurement"), on_delete=models.PROTECT)
     critical_no = models.IntegerField(help_text=_("Min number of item that must be in store."))
+    availables = models.IntegerField(_("Availables"), help_text=_("Currently number of available items."), default=0)
 
     class Meta:
         db_table = "product"
@@ -266,13 +265,26 @@ class Product(models.Model):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
-    @property
-    def availables(self):
-        total_item = self.items.aggregate(total_item=Coalesce(Sum("quantity"), 0))["total_item"]
-        total_borrow_request = self.borrow_requests.aggregate(
-            total_borrow_request=Coalesce(Sum("quantity", filter=Q(status=1) | Q(status=6)), 0)
-        )["total_borrow_request"]
-        return total_item - total_borrow_request
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(
+        Product,
+        verbose_name="product",
+        related_name="images",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    image = models.ImageField(_("image"), upload_to="uploads/", null=True, blank=True)
+    remark = models.CharField(_("remark"), max_length=250, blank=True)
+
+    class Meta:
+        db_table = "product_image"
+        verbose_name = _("image")
+        verbose_name_plural = _("images")
+
+    def __str__(self):
+        return f"{self.product} - Image"
 
 
 class Item(models.Model):
@@ -290,7 +302,7 @@ class Item(models.Model):
 
     description = models.TextField(_("description"), blank=True, null=True)
     quantity = models.IntegerField(_("quantity"), validators=[MinValueValidator(1)])
-    dead_stock_number = models.CharField(_("dead stock number"), max_length=250)
+    dead_stock_number = models.CharField(_("dead stock number"), max_length=255)
     purpose = models.CharField(
         _("purpose"),
         max_length=10,

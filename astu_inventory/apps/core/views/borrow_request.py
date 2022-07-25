@@ -1,8 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import Q, Sum
-from django.db.models.functions import Coalesce
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -49,27 +48,28 @@ class InitiateBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, Cr
 
     def is_quantify_valid(self, form):
         quantity = form.cleaned_data["quantity"]
-        if quantity > self.availables:
+        if quantity > self.product.availables:
             form.add_error(
                 "quantity",
-                f"There is only {self.availables} items, please consider lowering your quantity.",
+                f"There is only {self.product.availables} items, please consider lowering your quantity.",
             )
             return False
         return True
 
     def get_initial(self):
-        return {"quantity": self.availables}
+        return {"quantity": self.product.availables}
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
         form["reason"].field = SummernoteTextFormField()
-        form["quantity"].field.widget.attrs.update({"max": self.availables, "min": 0})
+        form["quantity"].field.widget.attrs.update({"max": self.product.availables, "min": 0})
         return form
 
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
-        self.product = get_object_or_404(Product, slug=self.kwargs["slug"])
-        self.availables = self.product.items.aggregate(total=Coalesce(Sum("quantity"), 0))["total"]
+        self.product = get_object_or_404(
+            Product, slug=self.kwargs["slug"], department__short_name__iexact=self.kwargs["short_name"]
+        )
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -145,6 +145,8 @@ class ApproveBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, Upd
         self.object = form.save(commit=False)
         if self.is_quantify_valid(self.object.quantity, self.object.product.availables):
             response = super().form_valid(form)
+            self.object.product.availables -= self.object.quantity
+            self.object.product.save()
             signals.borrow_request_approved.send(sender=self.model, instance=self.object)
             return response
         messages.error(
@@ -352,5 +354,24 @@ class ReturnedBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, Up
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        self.object.product.availables += self.object.quantity
+        self.object.product.save()
         signals.borrow_request_returned.send(sender=self.model, instance=self.object)
         return response
+
+
+class ListBorrowRequestHistoryView(PermissionRequiredMixin, SuccessMessageMixin, ListView):
+    model = BorrowRequest
+    permission_required = "core.can_list_borrow_request_history"
+    context_object_name = "borrow_requests"
+    extra_context = {"title": "Borrow Requests History List"}
+    template_name = "core/borrow_request/history_list.html"
+
+    def get_queryset(self):
+        current_user = self.request.user
+        return (
+            super()
+            .get_queryset()
+            .filter(user=current_user)
+            .values("product__name", "quantity", "start_date", "end_date", "status")
+        )

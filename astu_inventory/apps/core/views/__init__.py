@@ -8,6 +8,7 @@ from .borrow_request import (
     InitiateBorrowRequestView,
     ListActiveBorrowRequestView,
     ListApprovedBorrowRequestView,
+    ListBorrowRequestHistoryView,
     ListCompletedBorrowRequestView,
     ReturnedBorrowRequestView,
     RevokeBorrowRequestView,
@@ -30,6 +31,7 @@ __all__ = [
     "ListCompletedBorrowRequestView",
     "CompletedBorrowRequestDetailView",
     "ReturnedBorrowRequestView",
+    "ListBorrowRequestHistoryView",
     # Import View
     "ImportView",
 ]
