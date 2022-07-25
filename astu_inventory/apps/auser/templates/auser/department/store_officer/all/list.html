@@ -55,7 +55,7 @@
                             <li><hr class="dropdown-divider"></li>
                             {% if perms.auser.can_remove_store_officer %}
                             <li><button class="dropdown-item text-danger py-2" data-bs-toggle="modal" data-bs-target="#remove-{{ store_officer.staff_id|slugify }}">
-                              <i class="fa-solid fa-circle-minus me-3"></i>Remove from head</button></li>
+                              <i class="fa-solid fa-circle-minus me-3"></i>Remove from store officer</button></li>
                             {% endif %}{% if perms.auser.can_delete_store_officer %}
                             <li><button class="dropdown-item text-danger py-2 fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-{{ store_officer.staff_id|slugify }}">
                               <i class="fa-solid fa-trash-can me-3"></i>Delete</button></li>

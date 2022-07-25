@@ -3,8 +3,9 @@ $(document).ready(function() {
         $('.course-title').toggle();
     })
     // Basic DataTables
-    $('#roles_table,  #deapartment_heads_list, #staff_members_list, #store_officers_list').DataTable({
+    $('#roles_table,  #deapartment_heads_list, #lab_assistant_lists, #staff_members_list, #store_officers_list').DataTable({
         dom: "QBfltipr",
+        responsive: true,
         columnDefs: [{
             orderable: false,
             targets: -1
@@ -12,6 +13,7 @@ $(document).ready(function() {
     })
 
     $('#specification_type_list, #active_borrow_request, #approved_borrow_request,#completed_borrow_request, #shelf_list, #store_list, #categories_list, #products_list, #labs_list, #table_list,  #specification_list').DataTable({
+        dom: "QBfltipr",
         columnDefs: [{
             orderable: false,
             targets: [0, -1]
