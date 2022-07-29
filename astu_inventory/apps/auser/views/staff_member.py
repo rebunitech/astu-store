@@ -28,7 +28,7 @@ class AllStaffMemberListView(PermissionRequiredMixin, SuccessMessageMixin, ListV
 
     model = UserModel
     template_name = "auser/staff_member/all/list.html"
-    permission_required = "auser.can_list_staff_members"
+    permission_required = "auser.can_list_all_staff_members" 
     context_object_name = "staff_members"
     extra_context = {"title": "All Staff Members List"}
 
