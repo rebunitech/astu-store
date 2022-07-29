@@ -8,10 +8,10 @@ from .borrow_request import (
     InitiateBorrowRequestView,
     ListActiveBorrowRequestView,
     ListApprovedBorrowRequestView,
+    ListBorrowRequestHistoryView,
     ListCompletedBorrowRequestView,
     ReturnedBorrowRequestView,
     RevokeBorrowRequestView,
-    ListBorrowRequestHistoryView,
 )
 from .view import ImportView, ListAvailableProductsView
 

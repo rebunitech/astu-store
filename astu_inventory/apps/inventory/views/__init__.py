@@ -15,12 +15,11 @@ from .product import (
     AddProductView,
     DeleteProductImageView,
     DeleteProductView,
+    ImportProductsView,
     ListProductImageView,
     ListProductsView,
     UpdateProductView,
-    ImportProductsView
 )
-
 from .shelf import AddShelfView, DeleteShelfView, ListShelvesView, UpdateShelfView
 from .specification import (
     AddItemSpecificationView,

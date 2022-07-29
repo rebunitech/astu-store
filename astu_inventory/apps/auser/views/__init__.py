@@ -137,6 +137,7 @@ __all__ = [
     "StoreOfficerDeleteView",
     "StoreOfficersListView",
     "StoreOfficerUpdateView",
+
     # staff member
     "AllAddStaffMemberView",
     "AllStaffMemberListView",
