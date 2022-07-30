@@ -30,7 +30,9 @@
                           </button>
                           <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
                             {% if perms.inventory.view_specification %}
-                            <li><button class="dropdown-item py-2" data-bs-toggle="modal" data-bs-target="#view-product-specification-{{ product.slug }}"><i class="fa-solid fa-list me-2"></i>Specifications</button></li>{% endif %}{% if perms.core.can_initiate_borrow_request %}{% if product.availables > 0 %}
+                            <li><button class="dropdown-item py-2" data-bs-toggle="modal" data-bs-target="#view-product-specification-{{ product.slug }}"><i class="fa-solid fa-list me-2"></i>Specifications</button></li>{% endif %}
+
+                            {% if perms.core.can_initiate_borrow_request %}{% if product.availables > 0 %}
                             <li><a class="dropdown-item py-2 text-success" href="{% url 'core:initiate_borrow_request' product.slug %}"><i class="fa-solid fa-pen me-2"></i>Request Product</a></li>{% else %}<li class="text-secondary py-2 px-3"><i class="fa-solid fa-stop me-2"></i>Out Of Stock</li>{% endif %}{% endif %}
                           </ul>
                         </div>

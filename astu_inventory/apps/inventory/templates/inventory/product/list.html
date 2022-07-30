@@ -71,7 +71,11 @@
                             {% if perms.inventory.view_specification %}
                             <li><a class="dropdown-item py-2" href="{% url 'inventory:product_specifications_list' product.department.short_name product.slug %}"><i class="fa-solid fa-list me-2"></i>Specifications</a></li>
                             {% endif %}
-                            {% if perms.inventory.change_product %}
+                            {% if perms.inventory.view_image %}
+                            <li>
+                                <a class="dropdown-item py-2" href="{% url 'inventory:product_image_list' product.department.short_name product.slug %}"><i class="fa-regular fa-image-landscape"></i>Image</a>
+                            </li>
+                            {% endif %}{% if perms.inventory.change_product %}
                             <li><a class="dropdown-item py-2" href="{% url 'inventory:update_product' product.department.short_name product.slug %}"><i class="fa-solid fa-pen me-2"></i>Update</a></li>{% endif %} {% if perms.inventory.delete_product %}
                             <li><hr class="dropdown-divider"></li>
                             <li><button class="dropdown-item text-danger fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-product-{{ product.slug }}"><i class="fa-solid fa-circle-minus me-2"></i>Delete</button></li>{% endif %}
