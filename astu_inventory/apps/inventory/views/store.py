@@ -25,7 +25,7 @@ class AddStoreView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
         user = self.request.user
         if user.is_superuser or user.is_college_dean:
             return form
-        form["department"].field.queryset = Department.objects.filter(Q(department=user.department))
+        form["department"].field.queryset = user.department
         return form
 
 
@@ -48,7 +48,7 @@ class SpecificListStoreView(PermissionRequiredMixin, SuccessMessageMixin, ListVi
     """List stores for specific department."""
 
     model = Store
-    permission_required = "auser.can_list_stores"
+    permission_required = "inventory.can_list_stores"
     template_name = "inventory/store/specific/list.html"
     context_object_name = "stores"
 
