@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('inventory', '0005_merge_20220729_2116'),
+        ("inventory", "0005_merge_20220729_2116"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='item',
-            name='dead_stock_number',
-            field=models.CharField(max_length=255, verbose_name='dead stock number'),
+            model_name="item",
+            name="dead_stock_number",
+            field=models.CharField(max_length=255, verbose_name="dead stock number"),
         ),
         migrations.AlterField(
-            model_name='product',
-            name='name',
-            field=models.CharField(max_length=255, verbose_name='name'),
+            model_name="product",
+            name="name",
+            field=models.CharField(max_length=255, verbose_name="name"),
         ),
     ]
