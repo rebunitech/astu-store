@@ -66,7 +66,22 @@ from .user import (
     RemoveFromCollegeDeanView,
     SelectCollegeDeanView,
 )
-
+from .assistant import (
+    AllLabAssistantActivateView,
+    AllLabAssistantDeactivateView,
+    AllLabAssistantDeleteView,
+    AllLabAssistantListView,
+    AllLabAssistantUpdateView,
+    AddAllLabAssistantView,
+    AllRemoveFromLabAssistantView,
+    AddLabAssistantView,
+    LabAssistantActivateView,
+    LabAssistantDeactivateView,
+    LabAssistantDeleteView,
+    LabAssistantListView,
+    LabAssistantUpdateView,
+    RemoveFromLabAssistantView,
+)
 __all__ = [
     # User
     "ProfileEditView",
