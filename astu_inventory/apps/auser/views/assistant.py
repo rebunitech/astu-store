@@ -26,7 +26,7 @@ class AllLabAssistantListView(PermissionRequiredMixin, ListView):
 
     model = UserModel
     context_object_name = "lab_assistants"
-    permission_required = "auser.can_list_lab_assistant"
+    permission_required = "auser.can_list_all_lab_assistant"
     extra_context = {"title": "All Lab Assistant"}
     template_name = "auser/department/lab_assistant/all/list.html"
 
