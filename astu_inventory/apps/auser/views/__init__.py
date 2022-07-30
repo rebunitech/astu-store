@@ -1,3 +1,19 @@
+from .assistant import (
+    AddAllLabAssistantView,
+    AddLabAssistantView,
+    AllLabAssistantActivateView,
+    AllLabAssistantDeactivateView,
+    AllLabAssistantDeleteView,
+    AllLabAssistantListView,
+    AllLabAssistantUpdateView,
+    AllRemoveFromLabAssistantView,
+    LabAssistantActivateView,
+    LabAssistantDeactivateView,
+    LabAssistantDeleteView,
+    LabAssistantListView,
+    LabAssistantUpdateView,
+    RemoveFromLabAssistantView,
+)
 from .department import (
     ActivateDepartmentView,
     AddAllDepartmentHeadView,
@@ -66,22 +82,7 @@ from .user import (
     RemoveFromCollegeDeanView,
     SelectCollegeDeanView,
 )
-from .assistant import (
-    AllLabAssistantActivateView,
-    AllLabAssistantDeactivateView,
-    AllLabAssistantDeleteView,
-    AllLabAssistantListView,
-    AllLabAssistantUpdateView,
-    AddAllLabAssistantView,
-    AllRemoveFromLabAssistantView,
-    AddLabAssistantView,
-    LabAssistantActivateView,
-    LabAssistantDeactivateView,
-    LabAssistantDeleteView,
-    LabAssistantListView,
-    LabAssistantUpdateView,
-    RemoveFromLabAssistantView,
-)
+
 __all__ = [
     # User
     "ProfileEditView",
