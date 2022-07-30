@@ -1,0 +1,5 @@
+<div class="container-fluid my-2 px-0">
+  {% for message in messages %}<div class="alert {{ message.tags }} alert-dismissible show fade d-flex flex-row justify-content-between">
+    <div>{{ message }}</div>
+    <div data-bs-dismiss="alert" aria-label="Close"><i class="fa-solid fa-xmark"></i></div>
+</div>{% endfor %}</div>

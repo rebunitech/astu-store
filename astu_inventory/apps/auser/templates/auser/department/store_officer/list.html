@@ -1,0 +1,111 @@
+{% extends "layouts/main.html" %}
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+    {% if perms.auser.can_list_departments %}<li class="breadcrumb-item"><a href="{% url 'auser:departments_list' %}">Departments</a></li>{% endif %}
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}{% block content %}
+<div class="row">
+    <div class="offset-md-6 offset-lg-7 col-12 col-md-6 col-lg-5 my-3 d-flex justify-content-end">
+        {% if perms.auser.can_add_store_officer %}<a href="{% url 'auser:add_store_officer' view.kwargs.short_name %}" class="btn
+        btn-md btn-success rounded-3 shadow-none me-3"><i class="fa-solid fa-circle-plus me-2">
+        </i>Add Store Officer</a>{% endif %}
+    </div>
+    <hr />
+    <div class="container-fluid p-sm-3">
+        <table id="store_officers_list" class="table responsive">
+            <thead>
+                <th class="border-bottom border-0">First name</th>
+                <th class="border-bottom border-0">Last name</th>
+                <th class="border-bottom border-0">Staff ID</th>
+                <th class="border-bottom border-0">Email</th>
+                <th class="border-bottom border-0">Phone number</th>
+                <th class="border-bottom border-0">Sex</th>
+                <th class="border-bottom border-0">Status</th>
+                <th class="border-bottom border-0">Actions</th>
+            </thead>
+            <tbody>{% if store_officers %}{% for store_officer in store_officers %}{% with store_officer=store_officer %}
+                <tr>
+                    <td>{{ store_officer.first_name|default:"-" }}</td>
+                    <td>{{ store_officer.last_name|default:"-" }}</td>
+                    <td>{{ store_officer.staff_id }}</td>
+                    <td>{{ store_officer.email }}</td>
+                    <td>{{ store_officer.phone_number }}</td>
+                    <td>{{ store_officer.get_sex_display }}</td>
+                    <td><span class="badge bg-{% if store_officer.is_active %}success{% else %}danger{% endif %} w-100">{% if store_officer.is_active %}Active{% else %}Deactivated{% endif %}</span></td>
+                    <td>
+
+                        <div class="dropdown">
+                          <button class="btn shadow-none" type="button" id="manageMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-gears fs-4"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-dark manageMenu" aria-labelledby="manageMenu">
+                            {% if perms.auser.can_change_store_officer %}
+                            <li><a class="dropdown-item py-2" href="{% url 'auser:update_store_officer' view.kwargs.short_name store_officer.pk %}"><i class="fa-solid fa-pen me-3"></i>Update</a></li>{% endif %}{% if perms.auser.can_deactivate_store_officer and store_officer.is_active %}
+                            <li><button class="dropdown-item py-2 text-warning" data-bs-toggle="modal" data-bs-target="#change-status-{{ store_officer.staff_id|slugify }}"><i class="fa-solid fa-toggle-off me-3"></i>Deactivate</button></li>{% elif perms.auser.can_activate_store_officer and not store_officer.is_active %}
+                            <li><button class="dropdown-item py-2 text-success" data-bs-toggle="modal" data-bs-target="#change-status-{{ store_officer.staff_id|slugify }}"><i class="fa-solid fa-toggle-on me-3"></i>Activate</button></li>
+                            {% endif %}{% if perms.auser.can_remove_store_officer or perms.auser.can_delete_store_officer %}
+                            <li><hr class="dropdown-divider"></li>
+                            {% if perms.auser.can_remove_store_officer %}
+                            <li><button class="dropdown-item text-danger py-2" data-bs-toggle="modal" data-bs-target="#remove-{{ store_officer.staff_id|slugify }}"><i class="fa-solid fa-circle-minus me-3"></i>Remove from store officer?</button></li>
+                            {% endif %}{% if perms.auser.can_delete_store_officer %}
+                            <li><button class="dropdown-item text-danger py-2 fw-bolder" data-bs-toggle="modal" data-bs-target="#delete-{{ store_officer.staff_id|slugify }}"><i class="fa-solid fa-trash-can me-3"></i>Delete</button></li>
+                            {% endif %}{% endif %}
+                          </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% if perms.auser.can_delete_store_officer %}<div class="modal fade" id="delete-{{ store_officer.staff_id|slugify }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <span class="text-danger fw-bolder"><i class="fa-solid fa-triangle-exclamation me-2"></i> This action is irreversable.</span>
+                      </div>
+                      <div class="modal-body">
+                       Do you really wants to delete <strong>{{ store_officer.staff_id }}</strong>?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                        <form action="{% url 'auser:delete_store_officer' view.kwargs.short_name store_officer.pk %}" method="post">{% csrf_token %}
+                           <button class="btn btn-outline-danger btn-sm shadow-none" type="submit"><i class="fa-solid fa-trash-can me-2"></i>I understand, delete!</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>{% endif %}{% if perms.auser.can_activate_store_officer or perms.auser.can_deactivate_store_officer %}<div class="modal fade" id="change-status-{{ store_officer.staff_id|slugify }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                       Do you really wants to {% if store_officer.is_active %}deactivate{% else %}activate{% endif %} <strong>{{ store_officer.staff_id|slugify }}</strong>?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                        <form action="{% if store_officer.is_active %}{% url 'auser:deactivate_store_officer' view.kwargs.short_name store_officer.pk %}{% else %}{% url 'auser:activate_store_officer' view.kwargs.short_name store_officer.pk %}{% endif %}" method="post">{% csrf_token %}
+                           <button class="btn btn-outline-{% if store_officer.is_active %}warning{% else %}success{% endif %} btn-sm shadow-none" type="submit"><i class="fa-solid fa-check-circle me-2"></i>Confirm</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>{% endif %}{% if perms.auser.can_remove_store_officer %}<div class="modal fade" id="remove-{{ store_officer.staff_id|slugify }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                       Do you really wants to remove <strong>{{ store_officer.staff_id }}</strong> from store officer?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary shadow-none" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark me-2"></i>Cancel</button>
+                        <form action="{% url 'auser:remove_store_officer' view.kwargs.short_name store_officer.pk %}" method="post">{% csrf_token %}
+                           <button class="btn btn-outline-warning btn-sm shadow-none" type="submit"><i class="fa-solid fa-check-circle me-2"></i>Confirm</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>{% endif %}{% endwith %}
+                {% endfor %}{% endif %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
