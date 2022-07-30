@@ -1,14 +1,13 @@
 {% extends "layouts/main.html" %} {% load widget_tweaks %}
-
 {% block breadcrumbs %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
     {% if perms.auser.can_list_departments %}<li class="breadcrumb-item"><a href="{% url 'auser:departments_list' %}">Departments</a></li>{% endif %}
-    {% if perms.auser.can_list_department_heads %}<li class="breadcrumb-item"><a href="{% url 'auser:department_heads_list' view.kwargs.short_name %}">{{ view.kwargs.short_name }} department heads</a></li>{% endif %}
+    {% if perms.auser.can_list_lab_assistant %}<li class="breadcrumb-item"><a href="{% url 'auser:lab_assistants_list' view.kwargs.short_name %}">{{ view.kwargs.short_name }} lab assistants</a></li>{% endif %}
     <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
   </ol>
-</nav>Sinper
+</nav>
 {% endblock breadcrumbs %}{% block content %}
 {% with WIDGET_ERROR_CLASS="is-invalid" %}
 <form method="post" class="py-5" enctype="multipart/form-data">{% csrf_token %}
