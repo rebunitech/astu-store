@@ -30,7 +30,7 @@ class AddItemView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
         user = self.request.user
         if user.is_superuser or user.is_college_dean:
             return form
-        form["product"].field.queryset = form["user"].field.queryset.filter(department=user.department)
+        form["product"].field.queryset = form["product"].field.queryset.filter(department=user.department)
         return form
 
 
