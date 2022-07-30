@@ -222,6 +222,9 @@ class User(AbstractUser, Address):
             ("can_remove_lab_assistant", "Can remove lab assistant"),
             ("can_delete_lab_assistant", "Can delete lab assistant"),
             ("can_view_detail_staff_member", "Can view detail staff memeber"),
+            ("can_list_all_staff_members", "Can list all staff member"),
+            ("can_list_all_store_officers", "Can list all store officer"),
+            ("can_list_all_lab_assistant", "Can list all lab assistant"),
         ]
 
     def __str__(self):

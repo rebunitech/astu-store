@@ -6,7 +6,7 @@
   </div>
   <ul class="nav flex-column" id="nav_accordion">
     {% if perms.core.can_list_available_product %}<li class="nav-item">
-      <a class="nav-link" href="{% url 'core:dashboard' %}"><i class="fa-solid fa-tent-arrow-turn-left me-4"></i>Create Rrequest</a>
+      <a class="nav-link" href="{% url 'core:dashboard' %}"><i class="fa-solid fa-tent-arrow-turn-left me-4"></i>Create Request</a>
     </li>{% endif %}
     {% if perms.core.can_list_active_borrow_request or perms.core.can_list_approved_borrow_request or perms.core.can_list_completed_borrow_request%}
     <li class="nav-item has-submenu">
@@ -31,20 +31,20 @@
         <li><a class="nav-link" href="{% url 'auser:college_deans_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>College Deans</a></li>{% endif %}
       </ul>
     </li>
-    {% endif %}{% if perms.auser.can_list_departments or perms.auser.can_list_department_heads or perms.auser.can_list_store_officers or perm.auser.can_list_staff_member %}
+    {% endif %}{% if perms.auser.can_list_departments or perms.auser.can_list_department_heads or perms.auser.can_list_store_officers or perm.auser.can_list_all_staff_members %}
     <li class="nav-item has-submenu">
       <a class="nav-link" href="#"><i class="fa-solid fa-school me-4"></i>Department</a>
       <ul class="submenu collapse ps-3">{% if perms.auser.can_list_departments %}
         <li><a class="nav-link" href="{% url 'auser:departments_list' %}">
           <i class="fa-solid fa-circle-dot me-4"></i>Departments</a></li>{% endif %}{% if perms.auser.can_list_department_heads %}
         <li><a class="nav-link" href="{% url 'auser:all_department_heads_list' %}">
-          <i class="fa-solid fa-circle-dot me-4"></i>Department Heads</a></li>{% endif %}{% if perms.auser.can_list_store_officers %}
+          <i class="fa-solid fa-circle-dot me-4"></i>Department Heads</a></li>{% endif %}{% if perms.auser.can_list_all_store_officers %}
           <li>
             <a  class="nav-link" href="{% url 'auser:all_store_officer_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Store Officers</a>
-          </li>{% endif %}{% if perms.auser.can_list_staff_members %}
+          </li>{% endif %}{% if perms.auser.can_list_all_staff_members %}
           <li>
             <a  class="nav-link" href="{% url 'auser:all_staff_member_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Staff Member</a>
-          </li>{% endif %}{% if perms.auser.can_list_lab_assistant %}
+          </li>{% endif %}{% if perms.auser.can_list_all_lab_assistant %}
           <li><a class="nav-link" href="{% url 'auser:all_lab_assistants_list' %}"><i class="fa-solid fa-circle-dot me-4" ></i>Lab Assistant</a></li>
           {% endif %}
       </ul>

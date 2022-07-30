@@ -19,6 +19,12 @@ class AddItemView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = _("Item is successfully added!")
     extra_context = {"title": _("Add Item")}
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.object.product.availables += self.object.quantity
+        self.object.product.save()
+        return response
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class=form_class)
         user = self.request.user
@@ -53,6 +59,14 @@ class UpdateItemView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
     permission_required = "inventory.change_item"
     success_message = _("Item is updated successfully!")
     extra_context = {"title": _("Update Item")}
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if form.has_changed() and "quantity" in form.changed_data:
+            difference = form.instance.quantity - form.initial.get("quantity")
+            self.object.product.availables += difference
+            self.object.product.save()
+        return response
 
     def get_queryset(self):
         user = self.request.user

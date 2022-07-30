@@ -9,7 +9,7 @@ from .category import (
     UpdateSubCategoryView,
 )
 from .item import AddItemView, DeleteItemView, ImportItemsView, ListItemsView, UpdateItemView
-from .lab import AddLabView, DeleteLabView, ListLabsView, UpdateLabView
+from .lab import AddLabView, DeleteLabView, ListLabsView, SpecificLabListView, UpdateLabView
 from .product import (
     AddProductImageView,
     AddProductView,
