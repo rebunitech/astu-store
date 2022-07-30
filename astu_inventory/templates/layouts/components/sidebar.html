@@ -12,12 +12,14 @@
     <li class="nav-item has-submenu">
       <a class="nav-link" href="#"><i class="fa-solid fa-laptop-code me-4"></i>Request</a>
       <ul class="submenu collapse ps-3">{% if perms.core.can_list_active_borrow_request %}
-        <li><a class="nav-link" href="{% url 'core:active_borrow_requests_list' %}">
-          <i class="fa-solid fa-circle-dot me-4"></i>Active Requests</a></li>{% endif  %}{% if perms.core.can_list_approved_borrow_request %}
-        <li><a class="nav-link" href="{% url 'core:approved_borrow_requests_list' %}">
-          <i class="fa-solid fa-circle-dot me-4"></i>Approved Requests</a></li>{% endif  %}{% if perms.core.can_list_completed_borrow_request %}
-        <li><a class="nav-link" href="{% url 'core:completed_borrow_requests_list' %}">
-          <i class="fa-solid fa-circle-dot me-4"></i>Completed Requests</a></li>{% endif  %}
+        <li><a class="nav-link" href="{% url 'core:active_borrow_requests_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Active Requests</a></li>{% endif  %}{% if perms.core.can_list_approved_borrow_request %}
+        <li><a class="nav-link" href="{% url 'core:approved_borrow_requests_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Approved Requests</a></li>{% endif  %}{% if perms.core.can_list_completed_borrow_request %}
+        <li><a class="nav-link" href="{% url 'core:completed_borrow_requests_list' %}"><i class="fa-solid fa-circle-dot me-4"></i>Completed Requests</a></li>{% endif  %}
+        {% if perms.inventory.can_list_borrow_request_history %}
+          <li>
+            <a href="{%  url 'core:borrow_request_history_list' %}" class="nav-link"><i class="fa-solid fa-circle-dot me-4"></i>Borrow History</a>
+          </li>
+        {% endif %}
       </ul>
     </li>
     {% endif %}{% if perms.auth.view_roles or perms.auser.can_list_college_deans %}

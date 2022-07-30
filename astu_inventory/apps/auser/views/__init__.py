@@ -1,19 +1,3 @@
-from .assistant import (
-    AddAllLabAssistantView,
-    AddLabAssistantView,
-    AllLabAssistantActivateView,
-    AllLabAssistantDeactivateView,
-    AllLabAssistantDeleteView,
-    AllLabAssistantListView,
-    AllLabAssistantUpdateView,
-    AllRemoveFromLabAssistantView,
-    LabAssistantActivateView,
-    LabAssistantDeactivateView,
-    LabAssistantDeleteView,
-    LabAssistantListView,
-    LabAssistantUpdateView,
-    RemoveFromLabAssistantView,
-)
 from .department import (
     ActivateDepartmentView,
     AddAllDepartmentHeadView,
