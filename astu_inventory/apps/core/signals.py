@@ -27,3 +27,11 @@ def declined(sender, instance=None, **kwargs):
     subject = "Your request has been declined."
     template_name = "email_responses/declined.txt"
     send_notification(recipients, subject, template_name, **{"borrow_request": instance})
+
+
+@receiver(borrow_request_cancelled, sender=BorrowRequest)
+def proccessed(sender, instance=None, **kwargs):
+    recipients = (instance.user.email,)
+    subject = "Your request is directed to the department."
+    template_name = "email_responses/proccessed.txt"
+    send_notification(recipients, subject, template_name, **{"borrow_request": instance})
