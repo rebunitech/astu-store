@@ -1,0 +1,6 @@
+Your borrow request for {{ borrow_request.product }} {{ borrow_request.product.measurment }}
+is REVOKED and You can request again.
+
+Thank you!
+{{ borrow_request.product.college.name }}
+{{ borrow_request.product.department.name }}

@@ -1,0 +1,6 @@
+Your Borrow request for {{ borrow_request.product }} {{ borrow_request.product.measurment }}
+is completed now you can take it from store.
+
+Thank you!
+{{ borrow_request.product.college.name }}
+{{ borrow_request.product.department.name }}
