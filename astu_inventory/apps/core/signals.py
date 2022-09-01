@@ -15,7 +15,7 @@ borrow_request_returned = Signal()
 
 @receiver(borrow_request_initialized, sender=BorrowRequest)
 def initialized(sender, instance=None, **kwargs):
-    recipients = (instance.user.email, )
+    recipients = (instance.user.email,)
     subject = "You initialized borrow request."
     template_name = "emails_responses/initialized.txt"
     send_notification(recipients, subject, template_name, **{"borrow_request": instance})
@@ -47,7 +47,7 @@ def proccessed(sender, instance=None, **kwargs):
 
 @receiver(borrow_request_completed, sender=BorrowRequest)
 def completed(sender, instance=None, **kwargs):
-    recipients = (instance.user.email, )
+    recipients = (instance.user.email,)
     subject = "Your borrow request is completed."
     template_name = "email_responses/completed.txt"
     send_notification(recipients, subject, template_name, **{"borrow_request": instance})
@@ -55,15 +55,15 @@ def completed(sender, instance=None, **kwargs):
 
 @receiver(borrow_request_revoked, sender=BorrowRequest)
 def revekod(sender, instance=None, **kwargs):
-    recipients = (instance.user.email, )
+    recipients = (instance.user.email,)
     subject = "Your borrow request is REVOKED."
     template_name = "email_responses/revoked.txt"
     send_notification(recipients, subject, template_name, **{"borrow_request": instance})
 
 
-@receiver(borrow_request_returned, sender=BorrowRequest )
+@receiver(borrow_request_returned, sender=BorrowRequest)
 def returned(sender, instance=None, **kwargs):
-    recipients = (instance.user.email, )
+    recipients = (instance.user.email,)
     subject = "You returned the item to the store."
     template_name = "emails_responses/returned.txt"
     send_notification(recipients, subject, template_name, **{"borrow_request": instance})
