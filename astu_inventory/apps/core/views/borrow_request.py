@@ -147,7 +147,7 @@ class ApproveBorrowRequestView(PermissionRequiredMixin, SuccessMessageMixin, Upd
             response = super().form_valid(form)
             self.object.product.availables -= self.object.quantity
             self.object.product.save()
-            if self.has_next_process:
+            if self.has_next_process():
                 signals.borrow_request_proccessed.send(sender=self.model, instance=self.object)
             else:
                 signals.borrow_request_approved.send(sender=self.model, instance=self.object)
