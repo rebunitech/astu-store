@@ -1,0 +1,6 @@
+You initialized item request for {{ borrow_request.product }} {{ borrow_request.product.measurment }}
+and we notify you soon.
+
+Thank you!
+{{ borrow_request.product.college }}
+{{ borrow_request.product.department.name }}
