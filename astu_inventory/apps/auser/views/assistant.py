@@ -29,6 +29,7 @@ class AllLabAssistantListView(PermissionRequiredMixin, ListView):
     permission_required = "auser.can_list_all_lab_assistant"
     extra_context = {"title": "All Lab Assistant"}
     template_name = "auser/department/lab_assistant/all/list.html"
+    paginated_by = 50
 
     def get_queryset(self):
         return (
@@ -46,6 +47,7 @@ class LabAssistantListView(PermissionRequiredMixin, ListView):
     context_object_name = "lab_assistants"
     permission_required = "auser.can_list_lab_assistant"
     template_name = "auser/department/lab_assistant/list.html"
+    paginated_by = 50
 
     def get_queryset(self):
         return (
