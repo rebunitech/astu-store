@@ -31,6 +31,7 @@ class AllStaffMemberListView(PermissionRequiredMixin, SuccessMessageMixin, ListV
     permission_required = "auser.can_list_all_staff_members"
     context_object_name = "staff_members"
     extra_context = {"title": "All Staff Members List"}
+    paginated_by = 50
 
     def get_queryset(self):
         return super().get_queryset().filter(groups__name="staff member").exclude(Q(groups__name="college dean"))
@@ -43,6 +44,7 @@ class StaffMemberListView(ListView, PermissionRequiredMixin, SuccessMessageMixin
     template_name = "auser/staff_member/list.html"
     permission_requeried = "auser.can_list_staff_member"
     context_object_name = "staff_members"
+    paginated_by = 50
 
     def get_queryset(self):
         return (
