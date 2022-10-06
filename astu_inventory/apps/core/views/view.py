@@ -19,6 +19,7 @@ class ListAvailableProductsView(PermissionRequiredMixin, ListView):
     permission_required = "core.can_list_available_product"
     extra_context = {"title": "Products"}
     template_name = "core/product_list.html"
+    paginated_by = 50
 
     def get_queryset(self):
         return (
