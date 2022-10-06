@@ -49,6 +49,7 @@ class ListProductsView(PermissionRequiredMixin, ListView):
     permission_required = "inventory.view_product"
     extra_context = {"title": _("Products")}
     template_name = "inventory/product/list.html"
+    paginated_by = 50
 
     def get_queryset(self):
         user = self.request.user

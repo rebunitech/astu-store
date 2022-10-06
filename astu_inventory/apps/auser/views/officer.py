@@ -32,6 +32,7 @@ class AllStoreOfficersListView(PermissionRequiredMixin, ListView):
     permission_required = "auser.can_list_all_store_officers"
     extra_context = {"title": "All store ofiicers"}
     template_name = "auser/department/store_officer/all/list.html"
+    paginated_by = 50
 
     def get_queryset(self):
         return (
@@ -49,6 +50,7 @@ class StoreOfficersListView(PermissionRequiredMixin, ListView):
     context_object_name = "store_officers"
     permission_required = "auser.can_list_store_officers"
     template_name = "auser/department/store_officer/list.html"
+    paginated_by = 50
 
     def get_queryset(self):
         return (
