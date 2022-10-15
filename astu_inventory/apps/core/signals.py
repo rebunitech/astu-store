@@ -17,7 +17,7 @@ borrow_request_returned = Signal()
 def initialized(sender, instance=None, **kwargs):
     recipients = (instance.user.email,)
     subject = "You initialized borrow request."
-    template_name = "emails_responses/initialized.txt"
+    template_name = "email_responses/initialized.txt"
     send_notification(recipients, subject, template_name, **{"borrow_request": instance})
 
 
